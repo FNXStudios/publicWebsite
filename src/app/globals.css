@@ -1,0 +1,324 @@
+@import 'tailwindcss';
+
+/* ==========================================================================
+   FNX design tokens — the canonical visual values. Components consume these
+   through the Tailwind theme below or directly via var(--token).
+   ========================================================================== */
+:root {
+  /* Surfaces: ~85% of the interface lives here. */
+  --color-bg: #060708;
+  --color-bg-elevated: #0a0c0e;
+  --color-surface: #0e1115;
+  --color-surface-raised: #13171c;
+
+  /* Type */
+  --color-text: #f3f2ef;
+  --color-text-secondary: #a4a6ac;
+  --color-text-muted: #7c7f87;
+
+  /* Lines */
+  --color-border-subtle: rgb(255 255 255 / 0.07);
+  --color-border: rgb(255 255 255 / 0.11);
+  --color-border-active: rgb(255 255 255 / 0.2);
+
+  /* FNX violet — used sparingly: primary actions, focus, small signals. */
+  --color-accent: #6f52ee;
+  --color-accent-hover: #7c61f3;
+  --color-accent-soft: rgb(111 82 238 / 0.14);
+  --color-accent-text: #b3a4ff;
+  --color-focus: #a896ff;
+
+  /* Warm architectural light, for atmosphere only. */
+  --color-warm: #e9a86d;
+
+  --color-danger: #ff8f8f;
+  --color-success: #8fdcb4;
+
+  /* Layout */
+  --container-max: 86rem; /* 1376px */
+  --container-wide: 100rem; /* 1600px, full-bleed art only */
+  --gutter: clamp(1.25rem, 0.6rem + 2.8vw, 3rem);
+  --header-height: 4.5rem;
+  --section-space: clamp(4.5rem, 2.75rem + 4.4vw, 7.5rem);
+
+  /* Radii */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+
+  /* Motion — mirrored in src/motion/tokens.ts */
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --duration-micro: 180ms;
+  --duration-standard: 300ms;
+  --duration-editorial: 600ms;
+
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--color-bg);
+  --color-bg-elevated: var(--color-bg-elevated);
+  --color-surface: var(--color-surface);
+  --color-surface-raised: var(--color-surface-raised);
+  --color-text: var(--color-text);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+  --color-border-subtle: var(--color-border-subtle);
+  --color-border: var(--color-border);
+  --color-border-active: var(--color-border-active);
+  --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-accent-soft: var(--color-accent-soft);
+  --color-accent-text: var(--color-accent-text);
+  --color-focus: var(--color-focus);
+  --color-warm: var(--color-warm);
+  --color-danger: var(--color-danger);
+  --color-success: var(--color-success);
+
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+
+  --ease-premium: var(--ease-premium);
+  --ease-standard: var(--ease-standard);
+}
+
+@theme {
+  /* Layout-driven breakpoints: <640 | 640–899 | 900–1199 | 1200–1599 | 1600+ */
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 56.25rem;
+  --breakpoint-lg: 75rem;
+  --breakpoint-xl: 100rem;
+  --breakpoint-2xl: initial;
+
+  /* Editorial type scale. Fluid between ~375px and ~1600px viewports. */
+  --text-display-xl: clamp(2.625rem, 1.55rem + 4.4vw, 5.75rem);
+  --text-display-xl--line-height: 0.98;
+  --text-display-xl--letter-spacing: -0.038em;
+  --text-display-xl--font-weight: 600;
+
+  --text-display-lg: clamp(2.25rem, 1.55rem + 2.9vw, 4.25rem);
+  --text-display-lg--line-height: 1.02;
+  --text-display-lg--letter-spacing: -0.034em;
+  --text-display-lg--font-weight: 600;
+
+  --text-display-md: clamp(1.75rem, 1.35rem + 1.7vw, 2.75rem);
+  --text-display-md--line-height: 1.08;
+  --text-display-md--letter-spacing: -0.028em;
+  --text-display-md--font-weight: 600;
+
+  --text-title: clamp(1.1875rem, 1.1rem + 0.35vw, 1.4375rem);
+  --text-title--line-height: 1.25;
+  --text-title--letter-spacing: -0.012em;
+  --text-title--font-weight: 600;
+
+  --text-lead: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --text-lead--line-height: 1.6;
+
+  --text-body: 1rem;
+  --text-body--line-height: 1.65;
+
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.55;
+
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--line-height: 1.2;
+  --text-eyebrow--letter-spacing: 0.16em;
+  --text-eyebrow--font-weight: 600;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+@layer base {
+  html {
+    background: var(--color-bg);
+    color: var(--color-text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-padding-top: calc(var(--header-height) + 1rem);
+  }
+
+  body {
+    min-height: 100dvh;
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    font-feature-settings: 'ss01' on;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: rgb(111 82 238 / 0.45);
+    color: var(--color-text);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+/* ==========================================================================
+   Shared utilities that read better as CSS than as class strings
+   ========================================================================== */
+@utility container-fnx {
+  width: 100%;
+  max-width: calc(var(--container-max) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+@utility section-space {
+  padding-block: var(--section-space);
+}
+
+/* Art-directed headline lines: break on wider screens, flow naturally on phones. */
+@utility headline-line {
+  display: inline;
+  @media (min-width: 40rem) {
+    display: block;
+  }
+}
+
+@utility hairline {
+  border-color: var(--color-border-subtle);
+}
+
+/* Arrow nudge shared by buttons, text links and cards. */
+@utility arrow-nudge {
+  transition: transform var(--duration-micro) var(--ease-premium);
+}
+
+/* ==========================================================================
+   Entrance — CSS-only so above-the-fold content never waits for hydration.
+   ========================================================================== */
+@keyframes fnx-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fnx-settle {
+  from {
+    opacity: 0;
+    transform: scale(1.012);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@utility enter-rise {
+  animation: fnx-rise var(--duration-editorial) var(--ease-premium) both;
+  animation-delay: calc(var(--enter-step, 0) * 90ms + 80ms);
+}
+
+@utility enter-settle {
+  animation: fnx-settle 1400ms var(--ease-premium) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   Mobile menu (native <dialog>): focus trap, Esc and inert background come
+   from the platform; the transition degrades to instant where unsupported.
+   ========================================================================== */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
+.mobile-menu {
+  opacity: 0;
+  transform: translateY(-8px);
+  transition:
+    opacity var(--duration-standard) var(--ease-premium),
+    transform var(--duration-standard) var(--ease-premium),
+    overlay var(--duration-standard) allow-discrete,
+    display var(--duration-standard) allow-discrete;
+}
+
+.mobile-menu[open] {
+  opacity: 1;
+  transform: none;
+}
+
+@starting-style {
+  .mobile-menu[open] {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+/* Game player: indeterminate progress hairline. */
+@keyframes fnx-progress {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+
+.player-progress {
+  position: relative;
+  display: block;
+  width: 7.5rem;
+  height: 1px;
+  overflow: hidden;
+  background: var(--color-border);
+}
+
+.player-progress::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  background: var(--color-accent-text);
+  animation: fnx-progress 1.3s var(--ease-standard) infinite;
+}
+
+/* Scroll reveal (see src/motion/Reveal.tsx). Only below-the-fold elements opt in. */
+[data-reveal] {
+  transition:
+    opacity var(--duration-editorial) var(--ease-premium) var(--reveal-delay, 0ms),
+    transform var(--duration-editorial) var(--ease-premium) var(--reveal-delay, 0ms);
+}
+
+[data-reveal='pending'] {
+  opacity: 0;
+  transform: translate3d(0, 14px, 0);
+}

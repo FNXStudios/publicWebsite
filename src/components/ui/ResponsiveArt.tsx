@@ -1,0 +1,68 @@
+import Image, { getImageProps } from 'next/image';
+import { cn } from '@/lib/cn';
+
+interface ResponsiveArtProps {
+  src: string;
+  /** A separately composed image for narrow screens (art direction, not a crop). */
+  mobileSrc?: string;
+  /** Viewport width below which `mobileSrc` is used. Defaults to the md breakpoint. */
+  mobileMaxWidth?: number;
+  /** "" for decorative art. */
+  alt: string;
+  sizes: string;
+  mobileSizes?: string;
+  /** Above-the-fold art: fetched eagerly at high priority. */
+  priority?: boolean;
+  quality?: 70 | 80;
+  className?: string;
+  imgClassName?: string;
+}
+
+/**
+ * Artwork that fills a positioned parent. The parent reserves the space (aspect
+ * ratio or explicit height), so art never shifts layout.
+ *
+ * With `mobileSrc`, a <picture> is built from Next's optimizer output via
+ * getImageProps(): each breakpoint gets its own composition and srcset, and the
+ * browser only downloads the one it needs.
+ */
+export function ResponsiveArt({
+  src,
+  mobileSrc,
+  mobileMaxWidth = 899,
+  alt,
+  sizes,
+  mobileSizes = '100vw',
+  priority = false,
+  quality = 70,
+  className,
+  imgClassName,
+}: ResponsiveArtProps) {
+  const loading = priority ? 'eager' : 'lazy';
+  const fetchPriority = priority ? 'high' : 'auto';
+  const common = { fill: true, quality, loading, fetchPriority } as const;
+
+  const imgClass = cn('object-cover', imgClassName);
+
+  if (!mobileSrc) {
+    return (
+      <div className={cn('absolute inset-0', className)}>
+        <Image {...common} src={src} alt={alt} sizes={sizes} className={imgClass} />
+      </div>
+    );
+  }
+
+  const { props: desktop } = getImageProps({ ...common, src, alt, sizes });
+
+  const {
+    props: { srcSet: mobileSrcSet },
+  } = getImageProps({ ...common, src: mobileSrc, alt, sizes: mobileSizes });
+
+  return (
+    <picture className={cn('absolute inset-0', className)}>
+      <source media={`(max-width: ${mobileMaxWidth}px)`} srcSet={mobileSrcSet} sizes={mobileSizes} />
+      <source media={`(min-width: ${mobileMaxWidth + 1}px)`} srcSet={desktop.srcSet} sizes={sizes} />
+      <img {...desktop} alt={alt} className={imgClass} />
+    </picture>
+  );
+}
