@@ -13,6 +13,7 @@ export type AnalyticsEvent =
   | { name: 'game_iframe_loaded'; props: { slug: string; ms: number } }
   | { name: 'game_iframe_failed'; props: { slug: string; reason: 'timeout' | 'reported' } }
   | { name: 'partner_cta_clicked'; props: { placement: string } }
+  | { name: 'contact_opened'; props: { interest: string; placement: string } }
   | { name: 'contact_submit_started'; props: { interest: string } }
   | { name: 'contact_submit_success'; props: { interest: string } }
   | { name: 'contact_submit_failed'; props: { interest: string; status: number | 'network' } };

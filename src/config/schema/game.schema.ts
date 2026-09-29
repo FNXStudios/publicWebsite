@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { imagePathSchema, slugSchema, svgPathSchema } from './primitives';
+import { hexColorSchema, imagePathSchema, slugSchema, svgPathSchema } from './primitives';
 
 export const VOLATILITY_LEVELS = ['low', 'medium', 'medium-high', 'high', 'very-high'] as const;
 export const GAME_STATUSES = ['available', 'coming-soon', 'hidden'] as const;
@@ -21,6 +21,11 @@ export const gameSchema = z
     category: z.enum(GAME_CATEGORIES),
     featured: z.boolean(),
     order: z.number().int().min(0),
+    /**
+     * Design fixture, never a shipped FNX title. Demo games render as non-linking cards,
+     * are excluded from routes, sitemap and SEO, and only appear when demo content is enabled.
+     */
+    isDemo: z.boolean().optional(),
 
     artwork: z
       .object({
@@ -75,6 +80,22 @@ export const gameSchema = z
       })
       .strict()
       .default({}),
+
+    /**
+     * The game's own colours. Game pages let these dominate (FNX only frames them);
+     * cards use the glow for a hint of light. Omit to fall back to neutral graphite.
+     */
+    theme: z
+      .object({
+        /** Bright signature colour, e.g. the gold of a logo. */
+        accent: hexColorSchema,
+        /** Saturated atmosphere colour used for light and gradients. */
+        glow: hexColorSchema,
+        /** Very dark tone of the world, used behind content on the game page. */
+        deep: hexColorSchema,
+      })
+      .strict()
+      .optional(),
 
     seo: z
       .object({

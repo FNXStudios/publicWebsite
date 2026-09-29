@@ -3,6 +3,7 @@ import { gameCollectionSchema, gameSchema, type GameInput } from '@/config/schem
 import { parseConfig } from '@/config/schema/parse';
 import { games } from '@/config/games.config';
 import { jobs } from '@/config/careers.config';
+import { demoGames as visualFixtureGames } from '@/content/visual-fixtures/games';
 import { fixtureGames } from '../fixtures/games.fixture';
 
 const base = (): GameInput => structuredClone(fixtureGames[0]!);
@@ -12,6 +13,10 @@ describe('game configuration schema', () => {
     expect(Array.isArray(games)).toBe(true);
     expect(Array.isArray(jobs)).toBe(true);
     expect(gameCollectionSchema.safeParse(fixtureGames).success).toBe(true);
+  });
+
+  it('accepts the visual-fixture demo games', () => {
+    expect(gameCollectionSchema.safeParse(visualFixtureGames).success).toBe(true);
   });
 
   it('rejects unknown volatility values', () => {

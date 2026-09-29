@@ -1,4 +1,7 @@
-/** The only place route strings are assembled. */
+/**
+ * The only place route strings are assembled. Top-level pages are fixed: /, /games,
+ * /studio, /careers. Contact is a global dialog (see ContactProvider), not a page.
+ */
 export const routes = {
   home: '/',
   games: '/games',
@@ -6,7 +9,5 @@ export const routes = {
   play: (slug: string) => `/games/${slug}/play`,
   studio: '/studio',
   careers: '/careers',
-  contact: '/contact',
-  contactAbout: (interest: string) => `/contact?interest=${encodeURIComponent(interest)}`,
   contactApi: '/api/contact',
 } as const;

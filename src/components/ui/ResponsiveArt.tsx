@@ -1,4 +1,5 @@
 import Image, { getImageProps } from 'next/image';
+import { resolveArtSrc } from '@/lib/art/resolve';
 import { cn } from '@/lib/cn';
 
 interface ResponsiveArtProps {
@@ -27,8 +28,8 @@ interface ResponsiveArtProps {
  * browser only downloads the one it needs.
  */
 export function ResponsiveArt({
-  src,
-  mobileSrc,
+  src: rawSrc,
+  mobileSrc: rawMobileSrc,
   mobileMaxWidth = 899,
   alt,
   sizes,
@@ -38,6 +39,8 @@ export function ResponsiveArt({
   className,
   imgClassName,
 }: ResponsiveArtProps) {
+  const src = resolveArtSrc(rawSrc);
+  const mobileSrc = rawMobileSrc ? resolveArtSrc(rawMobileSrc) : undefined;
   const loading = priority ? 'eager' : 'lazy';
   const fetchPriority = priority ? 'high' : 'auto';
   const common = { fill: true, quality, loading, fetchPriority } as const;

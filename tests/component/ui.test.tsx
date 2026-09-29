@@ -51,7 +51,8 @@ describe('GameCard', () => {
     expect(screen.getByRole('link')).toHaveAttribute('href', '/games/lantern-quarter');
     expect(screen.getByRole('heading', { name: 'Lantern Quarter' })).toBeInTheDocument();
     expect(screen.getByAltText('Lantern Quarter key art')).toBeInTheDocument();
-    expect(screen.getByText('Slot · High volatility')).toBeInTheDocument();
+    expect(screen.getByText(/5 × 3/)).toBeInTheDocument();
+    expect(screen.getByText(/243 ways/)).toBeInTheDocument();
   });
 
   it('marks coming-soon games and omits unconfigured metadata', () => {
@@ -59,6 +60,33 @@ describe('GameCard', () => {
     expect(screen.getByText('Coming soon')).toBeInTheDocument();
     render(<GameCard game={tide!} placement="games" sizes="100vw" />);
     expect(screen.getByText('Instant game')).toBeInTheDocument();
+  });
+});
+
+describe('GameCard', () => {
+  it('is one link to the game, with every fact announced', () => {
+    render(<GameCard game={lantern!} placement="home" sizes="100vw" />);
+    const link = screen.getByRole('link');
+    expect(link).toHaveAttribute('href', '/games/lantern-quarter');
+    expect(link).toHaveTextContent('Lantern Quarter');
+  });
+
+  it('never leaves a dangling separator when facts are hidden on phones', () => {
+    const { container } = render(<GameCard game={lantern!} placement="home" sizes="100vw" />);
+    const facts = [...container.querySelectorAll('p > span')];
+    // Separators belong to the fact that follows them, so hiding a fact hides its separator.
+    expect(facts[0]?.querySelector('[aria-hidden="true"]')).toBeNull();
+    for (const fact of facts.slice(1)) expect(fact.querySelector('[aria-hidden="true"]')).not.toBeNull();
+  });
+});
+
+describe('GameCard (design fixtures)', () => {
+  it('presents fixtures like real cards: linked, and without a fixture label outside development', () => {
+    const demo = gameSchema.parse({ ...fixtureGames[0], id: 'demo-x', slug: 'demo-x', isDemo: true, status: 'coming-soon' });
+    render(<GameCard game={demo} placement="home" sizes="100vw" />);
+    expect(screen.getByRole('link')).toHaveAttribute('href', '/games/demo-x');
+    expect(screen.queryByText(/fixture|placeholder|demo/i)).not.toBeInTheDocument();
+    expect(screen.queryByText('Coming soon')).not.toBeInTheDocument();
   });
 });
 

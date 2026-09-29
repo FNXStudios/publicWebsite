@@ -10,6 +10,26 @@ export const E2E_GAME_ORIGIN = 'http://127.0.0.1:4455';
 
 const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE;
 
+/**
+ * Most specs test the site behind the age gate, so every context starts as a visitor
+ * who has already confirmed. tests/e2e/age-gate.spec.ts opts out to test the gate itself.
+ * (Mirrors src/lib/age-gate/storage.ts and the configured version.)
+ */
+export const AGE_VERIFIED_STATE = {
+  cookies: [],
+  origins: [
+    {
+      origin: `http://localhost:${E2E_PORT}`,
+      localStorage: [
+        {
+          name: 'fnx_age_verified',
+          value: JSON.stringify({ version: 1, verifiedAt: Date.now(), expiresAt: Date.now() + 864e5 }),
+        },
+      ],
+    },
+  ],
+};
+
 export default defineConfig({
   testDir: './tests/e2e',
   fullyParallel: true,
@@ -18,6 +38,7 @@ export default defineConfig({
   reporter: process.env.CI ? 'github' : 'list',
   use: {
     baseURL: `http://localhost:${E2E_PORT}`,
+    storageState: AGE_VERIFIED_STATE,
     trace: 'retain-on-failure',
     ...(executablePath ? { launchOptions: { executablePath } } : {}),
   },

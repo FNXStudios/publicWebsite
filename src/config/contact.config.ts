@@ -1,21 +1,24 @@
-import type { HeadlineLines } from './content.types';
+import type { ContactDialogCopy } from '@/components/contact/ContactProvider';
 import { contactConfigSchema } from './schema/contact.schema';
 import { parseConfig } from './schema/parse';
 
 export const contactOptions = parseConfig('contact', contactConfigSchema, {
   interests: [
+    { value: 'original-content', label: 'Original content' },
     { value: 'operator-partnership', label: 'Operator partnership' },
-    { value: 'game-development', label: 'Game development' },
+    { value: 'studio-partnership', label: 'A new concept or studio partnership' },
     { value: 'integration', label: 'Integration' },
     { value: 'careers', label: 'Careers' },
-    { value: 'other', label: 'Other' },
+    { value: 'other', label: 'Something else' },
   ],
 });
 
-export const contactPageContent = {
-  eyebrow: 'Contact',
-  headline: ['Let’s build something', 'worth playing.'],
-  body: 'Whether you run a platform, have a game in mind or want to join the studio — tell us a little about it and we will get back to you.',
+/** Copy for the global "Get in touch" dialog (there is no /contact page). */
+export const contactDialogContent = {
+  eyebrow: 'Let’s talk',
+  title: 'Have something worth building?',
+  body: 'Original content, a new concept, a studio partner or a place on the team — tell us a little about it and we’ll take it from there.',
+  note: 'Every message is read by the people who make the games. We reply to the address you give us.',
   directHeading: 'Direct',
   form: {
     submit: 'Send message',
@@ -28,16 +31,4 @@ export const contactPageContent = {
     failure: 'We couldn’t send your message. Your details are still here — please try again in a moment.',
     unavailable: 'Our contact form is temporarily unavailable. Please try again later.',
   },
-} satisfies {
-  eyebrow: string;
-  headline: HeadlineLines;
-  body: string;
-  directHeading: string;
-  form: {
-    submit: string;
-    submitting: string;
-    success: { title: string; body: string; again: string };
-    failure: string;
-    unavailable: string;
-  };
-};
+} satisfies ContactDialogCopy;

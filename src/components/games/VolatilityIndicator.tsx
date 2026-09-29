@@ -11,7 +11,7 @@ export function VolatilityIndicator({ value, className }: { value: Volatility; c
         {Array.from({ length: VOLATILITY_SCALE_MAX }, (_, i) => (
           <span
             key={i}
-            className={cn('w-[5px] rounded-[1px]', i < level ? 'bg-accent-text' : 'bg-white/12')}
+            className={cn('w-[5px] rounded-[1px]', i < level ? 'bg-violet-400' : 'bg-white/12')}
             style={{ height: `${6 + i * 3}px` }}
           />
         ))}

@@ -1,81 +1,136 @@
 @import 'tailwindcss';
 
 /* ==========================================================================
-   FNX design tokens — the canonical visual values. Components consume these
-   through the Tailwind theme below or directly via var(--token).
+   FNX design tokens — the canonical visual values.
+   Quiet brand frame, loud games: graphite surfaces, precise type, violet used
+   sparingly (primary action, focus, small signals). Components consume tokens
+   through the Tailwind theme below or via var(--token); no inline magic colours.
    ========================================================================== */
 :root {
-  /* Surfaces: ~85% of the interface lives here. */
-  --color-bg: #060708;
-  --color-bg-elevated: #0a0c0e;
-  --color-surface: #0e1115;
-  --color-surface-raised: #13171c;
+  /* Graphite ladder */
+  --fnx-black-950: #030405;
+  --fnx-black-900: #050607;
+  --fnx-black-850: #07090c;
+  --fnx-black-800: #0a0c10;
+  --fnx-black-750: #0d1015;
+  --fnx-black-700: #12151b;
+  --fnx-black-650: #171a21;
 
   /* Type */
-  --color-text: #f3f2ef;
-  --color-text-secondary: #a4a6ac;
-  --color-text-muted: #7c7f87;
+  --fnx-white: #f5f4f7;
+  --fnx-text-primary: #f2f1f4;
+  --fnx-text-secondary: #a8a5ae;
+  /* Tuned up from #706d77 so small muted text still clears WCAG AA on every surface. */
+  --fnx-text-muted: #817e89;
 
   /* Lines */
-  --color-border-subtle: rgb(255 255 255 / 0.07);
-  --color-border: rgb(255 255 255 / 0.11);
-  --color-border-active: rgb(255 255 255 / 0.2);
+  --fnx-border: rgb(255 255 255 / 0.075);
+  --fnx-border-hover: rgb(255 255 255 / 0.16);
+  --fnx-border-strong: rgb(255 255 255 / 0.22);
 
-  /* FNX violet — used sparingly: primary actions, focus, small signals. */
-  --color-accent: #6f52ee;
-  --color-accent-hover: #7c61f3;
-  --color-accent-soft: rgb(111 82 238 / 0.14);
-  --color-accent-text: #b3a4ff;
-  --color-focus: #a896ff;
+  /* FNX violet */
+  --fnx-violet-700: #6026d9;
+  --fnx-violet-600: #7134f4;
+  --fnx-violet-500: #8247ff;
+  --fnx-violet-400: #9a68ff;
+  --fnx-violet-300: #b99bff;
+  --fnx-violet-soft: rgb(130 71 255 / 0.13);
+  --fnx-violet-border: rgb(130 71 255 / 0.34);
+  --fnx-violet-glow: rgb(113 52 244 / 0.2);
 
-  /* Warm architectural light, for atmosphere only. */
-  --color-warm: #e9a86d;
+  /* Warm architectural light — atmosphere and imagery only */
+  --fnx-warm-light: #f0bd72;
+  --fnx-warm-soft: rgb(240 189 114 / 0.12);
 
-  --color-danger: #ff8f8f;
-  --color-success: #8fdcb4;
+  --fnx-danger: #ff8f8f;
+  --fnx-success: #8fdcb4;
+
+  /* Depth: page → section → raised → featured */
+  --depth-page: var(--fnx-black-900);
+  --depth-page-deep: var(--fnx-black-950);
+  --depth-section: var(--fnx-black-850);
+  --depth-section-alt: var(--fnx-black-800);
+  --depth-raised: var(--fnx-black-750);
+  --depth-raised-hover: var(--fnx-black-700);
+
+  /* Homepage rhythm: tone changes carry transitions, not divider lines */
+  --tone-hero: var(--fnx-black-900);
+  --tone-featured: var(--fnx-black-850);
+  --tone-made: var(--fnx-black-900);
+  --tone-idea: var(--fnx-black-800);
+  --tone-operators: var(--fnx-black-900);
+  --tone-footer: var(--fnx-black-950);
+
+  /* Shadows — used deliberately, not on every component */
+  --shadow-soft: 0 16px 50px rgb(0 0 0 / 0.28);
+  --shadow-card-hover: 0 24px 70px rgb(0 0 0 / 0.38);
+  --shadow-violet: 0 12px 36px rgb(95 45 220 / 0.16);
 
   /* Layout */
   --container-max: 86rem; /* 1376px */
-  --container-wide: 100rem; /* 1600px, full-bleed art only */
-  --gutter: clamp(1.25rem, 0.6rem + 2.8vw, 3rem);
-  --header-height: 4.5rem;
-  --section-space: clamp(4.5rem, 2.75rem + 4.4vw, 7.5rem);
+  --gutter: clamp(1rem, 0.4rem + 2.8vw, 3rem);
+  --header-height: 4rem; /* 64px; 76px from md */
+  --space-tight: clamp(3rem, 2rem + 2.6vw, 5rem);
+  --space-medium: clamp(4.5rem, 3rem + 4vw, 7.5rem);
+  --space-large: clamp(5.5rem, 3.5rem + 5.5vw, 9.5rem);
 
   /* Radii */
-  --radius-sm: 0.375rem;
-  --radius-md: 0.625rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.5rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.6875rem; /* 11px — buttons */
+  --radius-lg: 0.875rem; /* 14px — cards */
+  --radius-xl: 1.0625rem; /* 17px — contained surfaces, dialogs */
 
   /* Motion — mirrored in src/motion/tokens.ts */
   --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
-  --duration-micro: 180ms;
-  --duration-standard: 300ms;
-  --duration-editorial: 600ms;
+  --duration-micro: 170ms;
+  --duration-interaction: 260ms;
+  --duration-standard: 340ms;
+  --duration-editorial: 550ms;
+  --duration-hero: 850ms;
 
   color-scheme: dark;
+  scrollbar-color: rgb(255 255 255 / 0.2) var(--fnx-black-950);
+  scrollbar-width: thin;
+  scrollbar-gutter: stable;
+}
+
+@media (min-width: 56.25rem) {
+  :root {
+    --header-height: 4.75rem;
+  }
 }
 
 @theme inline {
-  --color-bg: var(--color-bg);
-  --color-bg-elevated: var(--color-bg-elevated);
-  --color-surface: var(--color-surface);
-  --color-surface-raised: var(--color-surface-raised);
-  --color-text: var(--color-text);
-  --color-text-secondary: var(--color-text-secondary);
-  --color-text-muted: var(--color-text-muted);
-  --color-border-subtle: var(--color-border-subtle);
-  --color-border: var(--color-border);
-  --color-border-active: var(--color-border-active);
-  --color-accent: var(--color-accent);
-  --color-accent-hover: var(--color-accent-hover);
-  --color-accent-soft: var(--color-accent-soft);
-  --color-accent-text: var(--color-accent-text);
-  --color-focus: var(--color-focus);
-  --color-warm: var(--color-warm);
-  --color-danger: var(--color-danger);
-  --color-success: var(--color-success);
+  --color-page: var(--depth-page);
+  --color-deep: var(--depth-page-deep);
+  --color-section: var(--depth-section);
+  --color-section-alt: var(--depth-section-alt);
+  --color-raised: var(--depth-raised);
+  --color-raised-hover: var(--depth-raised-hover);
+
+  --color-text: var(--fnx-text-primary);
+  --color-text-secondary: var(--fnx-text-secondary);
+  --color-text-muted: var(--fnx-text-muted);
+  --color-white: var(--fnx-white);
+
+  --color-line: var(--fnx-border);
+  --color-line-hover: var(--fnx-border-hover);
+  --color-line-strong: var(--fnx-border-strong);
+
+  --color-violet-700: var(--fnx-violet-700);
+  --color-violet-600: var(--fnx-violet-600);
+  --color-violet-500: var(--fnx-violet-500);
+  --color-violet-400: var(--fnx-violet-400);
+  --color-violet-300: var(--fnx-violet-300);
+  --color-violet-soft: var(--fnx-violet-soft);
+  --color-violet-border: var(--fnx-violet-border);
+  --color-violet-glow: var(--fnx-violet-glow);
+
+  --color-warm: var(--fnx-warm-light);
+  --color-warm-soft: var(--fnx-warm-soft);
+  --color-danger: var(--fnx-danger);
+  --color-success: var(--fnx-success);
 
   --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
 
@@ -84,37 +139,41 @@
   --radius-lg: var(--radius-lg);
   --radius-xl: var(--radius-xl);
 
+  --shadow-soft: var(--shadow-soft);
+  --shadow-card-hover: var(--shadow-card-hover);
+  --shadow-violet: var(--shadow-violet);
+
   --ease-premium: var(--ease-premium);
   --ease-standard: var(--ease-standard);
 }
 
 @theme {
-  /* Layout-driven breakpoints: <640 | 640–899 | 900–1199 | 1200–1599 | 1600+ */
+  /* Layout breakpoints: <640 | 640–899 | 900–1199 | 1200–1599 | 1600+ */
   --breakpoint-sm: 40rem;
   --breakpoint-md: 56.25rem;
   --breakpoint-lg: 75rem;
   --breakpoint-xl: 100rem;
   --breakpoint-2xl: initial;
 
-  /* Editorial type scale. Fluid between ~375px and ~1600px viewports. */
-  --text-display-xl: clamp(2.625rem, 1.55rem + 4.4vw, 5.75rem);
-  --text-display-xl--line-height: 0.98;
-  --text-display-xl--letter-spacing: -0.038em;
-  --text-display-xl--font-weight: 600;
+  /* Editorial type scale (fluid). */
+  --text-hero: clamp(2.75rem, 1.1rem + 4.55vw, 5.5rem);
+  --text-hero--line-height: 0.96;
+  --text-hero--letter-spacing: -0.035em;
+  --text-hero--font-weight: 600;
 
-  --text-display-lg: clamp(2.25rem, 1.55rem + 2.9vw, 4.25rem);
-  --text-display-lg--line-height: 1.02;
-  --text-display-lg--letter-spacing: -0.034em;
-  --text-display-lg--font-weight: 600;
+  --text-display: clamp(2.25rem, 1.35rem + 3.1vw, 4rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.032em;
+  --text-display--font-weight: 600;
 
-  --text-display-md: clamp(1.75rem, 1.35rem + 1.7vw, 2.75rem);
-  --text-display-md--line-height: 1.08;
-  --text-display-md--letter-spacing: -0.028em;
-  --text-display-md--font-weight: 600;
+  --text-display-sm: clamp(1.875rem, 1.35rem + 1.8vw, 2.875rem);
+  --text-display-sm--line-height: 1.05;
+  --text-display-sm--letter-spacing: -0.028em;
+  --text-display-sm--font-weight: 600;
 
-  --text-title: clamp(1.1875rem, 1.1rem + 0.35vw, 1.4375rem);
-  --text-title--line-height: 1.25;
-  --text-title--letter-spacing: -0.012em;
+  --text-title: clamp(1.375rem, 1.2rem + 0.55vw, 1.75rem);
+  --text-title--line-height: 1.18;
+  --text-title--letter-spacing: -0.02em;
   --text-title--font-weight: 600;
 
   --text-lead: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
@@ -128,7 +187,7 @@
 
   --text-eyebrow: 0.75rem;
   --text-eyebrow--line-height: 1.2;
-  --text-eyebrow--letter-spacing: 0.16em;
+  --text-eyebrow--letter-spacing: 0.2em;
   --text-eyebrow--font-weight: 600;
 }
 
@@ -137,8 +196,8 @@
    ========================================================================== */
 @layer base {
   html {
-    background: var(--color-bg);
-    color: var(--color-text);
+    background: var(--depth-page);
+    color: var(--fnx-text-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -147,10 +206,10 @@
 
   body {
     min-height: 100dvh;
+    background: var(--depth-page);
     font-family: var(--font-sans);
     font-size: var(--text-body);
     line-height: var(--text-body--line-height);
-    font-feature-settings: 'ss01' on;
   }
 
   h1,
@@ -165,19 +224,34 @@
   }
 
   ::selection {
-    background: rgb(111 82 238 / 0.45);
-    color: var(--color-text);
+    background: rgb(130 71 255 / 0.45);
+    color: var(--fnx-white);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-focus);
-    outline-offset: 3px;
-    border-radius: 2px;
+    outline: 2px solid var(--fnx-violet-400);
+    outline-offset: 2px;
+  }
+
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-track {
+    background: var(--fnx-black-950);
+  }
+  *::-webkit-scrollbar-thumb {
+    border: 2px solid var(--fnx-black-950);
+    border-radius: 999px;
+    background-color: rgb(255 255 255 / 0.2);
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: var(--fnx-violet-400);
   }
 }
 
 /* ==========================================================================
-   Shared utilities that read better as CSS than as class strings
+   Utilities
    ========================================================================== */
 @utility container-fnx {
   width: 100%;
@@ -186,11 +260,7 @@
   padding-inline: var(--gutter);
 }
 
-@utility section-space {
-  padding-block: var(--section-space);
-}
-
-/* Art-directed headline lines: break on wider screens, flow naturally on phones. */
+/* Art-directed headline lines: break on wider screens, flow on phones. */
 @utility headline-line {
   display: inline;
   @media (min-width: 40rem) {
@@ -198,47 +268,162 @@
   }
 }
 
-@utility hairline {
-  border-color: var(--color-border-subtle);
+@utility pt-tight {
+  padding-top: var(--space-tight);
+}
+@utility pt-medium {
+  padding-top: var(--space-medium);
+}
+@utility pt-large {
+  padding-top: var(--space-large);
+}
+@utility pb-tight {
+  padding-bottom: var(--space-tight);
+}
+@utility pb-medium {
+  padding-bottom: var(--space-medium);
+}
+@utility pb-large {
+  padding-bottom: var(--space-large);
 }
 
 /* Arrow nudge shared by buttons, text links and cards. */
 @utility arrow-nudge {
-  transition: transform var(--duration-micro) var(--ease-premium);
+  transition: transform var(--duration-interaction) var(--ease-premium);
+}
+
+/* Underline that draws in from the left on hover / keyboard focus of the parent link. */
+@utility link-rule {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  padding-bottom: 2px;
+  transition: background-size var(--duration-standard) var(--ease-premium);
+  :where(a, button):hover > &,
+  :where(a, button):focus-visible > & {
+    background-size: 100% 1px;
+  }
+}
+
+/* Barely-there texture for large dark surfaces. Opt in with `grain`. */
+@utility grain {
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+/* Faint FNX diagonal geometry, for contained surfaces. */
+@utility fnx-diagonals {
+  background-image:
+    linear-gradient(115deg, transparent 49.85%, rgb(255 255 255 / 0.045) 50%, transparent 50.15%),
+    linear-gradient(65deg, transparent 49.85%, rgb(154 104 255 / 0.06) 50%, transparent 50.15%);
+  background-size: 100% 100%;
+}
+
+/* Art fades — images melt into the page instead of sitting in rectangles. */
+@utility fade-bottom {
+  mask-image: linear-gradient(180deg, #000 55%, transparent);
+}
+@utility fade-edges {
+  mask-image: radial-gradient(120% 100% at 50% 45%, #000 55%, transparent 100%);
 }
 
 /* ==========================================================================
-   Entrance — CSS-only so above-the-fold content never waits for hydration.
+   Motion. Above-the-fold entrances are CSS so LCP never waits for JavaScript.
+   Content is never hidden waiting for script: every keyframe ends visible, and
+   reduced motion collapses them to their end state.
    ========================================================================== */
 @keyframes fnx-rise {
   from {
     opacity: 0;
-    transform: translate3d(0, 14px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: none;
+    transform: translate3d(0, 16px, 0);
   }
 }
 
 @keyframes fnx-settle {
   from {
-    opacity: 0;
-    transform: scale(1.012);
+    opacity: 0.82;
+    transform: scale(1.015);
   }
-  to {
+}
+
+@keyframes fnx-breathe {
+  0%,
+  100% {
+    opacity: 0.86;
+  }
+  50% {
     opacity: 1;
-    transform: none;
+  }
+}
+
+@keyframes fnx-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.01);
+  }
+  50% {
+    transform: translate3d(-0.6%, -0.4%, 0) scale(1.018);
+  }
+}
+
+@keyframes fnx-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fnx-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fnx-dialog-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) scale(0.985);
+  }
+}
+
+@keyframes fnx-dialog-out {
+  to {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0) scale(0.99);
+  }
+}
+
+@keyframes fnx-sheet-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 2%, 0);
   }
 }
 
 @utility enter-rise {
   animation: fnx-rise var(--duration-editorial) var(--ease-premium) both;
-  animation-delay: calc(var(--enter-step, 0) * 90ms + 80ms);
+  animation-delay: calc(var(--enter-step, 0) * 70ms + 120ms);
 }
 
 @utility enter-settle {
-  animation: fnx-settle 1400ms var(--ease-premium) both;
+  animation: fnx-settle var(--duration-hero) var(--ease-premium) both;
+}
+
+@utility ambient-breathe {
+  animation: fnx-breathe 7s ease-in-out infinite;
+}
+
+@utility ambient-drift {
+  animation: fnx-drift 24s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -253,37 +438,91 @@
   }
 }
 
-/* ==========================================================================
-   Mobile menu (native <dialog>): focus trap, Esc and inert background come
-   from the platform; the transition degrades to instant where unsupported.
-   ========================================================================== */
-html:has(dialog[open]) {
-  overflow: hidden;
-}
-
-.mobile-menu {
-  opacity: 0;
-  transform: translateY(-8px);
+/* Scroll reveal (src/motion/Reveal.tsx). Content is server-rendered visible; only
+   elements still below the fold after hydration are armed. */
+[data-reveal] {
   transition:
-    opacity var(--duration-standard) var(--ease-premium),
-    transform var(--duration-standard) var(--ease-premium),
-    overlay var(--duration-standard) allow-discrete,
-    display var(--duration-standard) allow-discrete;
+    opacity var(--duration-editorial) var(--ease-premium) var(--reveal-delay, 0ms),
+    transform var(--duration-editorial) var(--ease-premium) var(--reveal-delay, 0ms);
 }
 
-.mobile-menu[open] {
-  opacity: 1;
-  transform: none;
+[data-reveal='pending'] {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
 }
 
-@starting-style {
-  .mobile-menu[open] {
-    opacity: 0;
-    transform: translateY(-8px);
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 
-/* Game player: indeterminate progress hairline. */
+/* ==========================================================================
+   Dialog surfaces (Radix Dialog: contact, mobile menu, age gate).
+   Radix keeps content mounted until the exit animation ends.
+   ========================================================================== */
+.fnx-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgb(3 4 5 / 0.66);
+  backdrop-filter: blur(17px) saturate(0.8);
+}
+.fnx-overlay[data-state='open'] {
+  animation: fnx-fade-in var(--duration-standard) var(--ease-standard) both;
+}
+.fnx-overlay[data-state='closed'] {
+  animation: fnx-fade-out 220ms var(--ease-standard) both;
+}
+
+.fnx-dialog[data-state='open'] {
+  animation: fnx-dialog-in 420ms var(--ease-premium) both;
+}
+.fnx-dialog[data-state='closed'] {
+  animation: fnx-dialog-out 200ms var(--ease-standard) both;
+}
+
+.fnx-sheet[data-state='open'] {
+  animation: fnx-sheet-in var(--duration-standard) var(--ease-premium) both;
+}
+.fnx-sheet[data-state='closed'] {
+  animation: fnx-fade-out 200ms var(--ease-standard) both;
+}
+
+.fnx-sheet[data-state='open'] [data-menu-item] {
+  animation: fnx-rise 460ms var(--ease-premium) both;
+  animation-delay: calc(var(--i, 0) * 45ms + 60ms);
+}
+
+/* Radix Select popover */
+.fnx-select-content[data-state='open'] {
+  animation: fnx-dialog-in 220ms var(--ease-premium) both;
+}
+
+/* ---- Age gate ----------------------------------------------------------- */
+/* Pre-hydration scrim: painted by CSS alone as soon as the head script marks the
+   visitor as unverified, so the page is never usable before the dialog mounts. */
+.age-gate-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: none;
+  background: rgb(3 4 5 / 0.7);
+  backdrop-filter: blur(17px) saturate(0.75);
+}
+html[data-age-gate='pending'] .age-gate-scrim {
+  display: block;
+}
+html[data-age-gate='leaving'] .age-gate-scrim {
+  display: block;
+  animation: fnx-fade-out 260ms var(--ease-standard) both;
+}
+html[data-age-gate='pending'],
+html[data-age-gate='pending'] body {
+  overflow: hidden;
+}
+
+/* ---- Game player: indeterminate progress hairline ------------------------ */
 @keyframes fnx-progress {
   from {
     transform: translateX(-100%);
@@ -299,7 +538,7 @@ html:has(dialog[open]) {
   width: 7.5rem;
   height: 1px;
   overflow: hidden;
-  background: var(--color-border);
+  background: var(--fnx-border-hover);
 }
 
 .player-progress::after {
@@ -307,18 +546,35 @@ html:has(dialog[open]) {
   position: absolute;
   inset: 0;
   width: 40%;
-  background: var(--color-accent-text);
+  background: var(--fnx-violet-300);
   animation: fnx-progress 1.3s var(--ease-standard) infinite;
 }
 
-/* Scroll reveal (see src/motion/Reveal.tsx). Only below-the-fold elements opt in. */
-[data-reveal] {
-  transition:
-    opacity var(--duration-editorial) var(--ease-premium) var(--reveal-delay, 0ms),
-    transform var(--duration-editorial) var(--ease-premium) var(--reveal-delay, 0ms);
+/* ---- Operators: network arcs ------------------------------------------- */
+@keyframes fnx-dash {
+  to {
+    stroke-dashoffset: 0;
+  }
 }
-
-[data-reveal='pending'] {
-  opacity: 0;
-  transform: translate3d(0, 14px, 0);
+@keyframes fnx-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.net-arc {
+  stroke-dasharray: 6 10;
+  stroke-dashoffset: 160;
+  animation: fnx-dash 9s linear infinite;
+}
+.net-node {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: fnx-pulse 4.8s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
 }

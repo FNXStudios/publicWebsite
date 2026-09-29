@@ -13,6 +13,9 @@ export const imagePathSchema = z
     'must be a /public path to an avif, webp, png or jpg image (e.g. "/games/slug/thumb.jpg")',
   );
 
+/** #rrggbb */
+export const hexColorSchema = z.string().regex(/^#[0-9a-fA-F]{6}$/, 'must be a #rrggbb colour');
+
 /** A /public path to an SVG (logos only). */
 export const svgPathSchema = z
   .string()

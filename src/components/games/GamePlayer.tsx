@@ -132,7 +132,7 @@ export function GamePlayer({
 
   return (
     <div ref={rootRef} className="fixed inset-0 flex flex-col bg-black text-text">
-      <div className="flex h-12 shrink-0 items-center gap-3 border-b border-white/[0.06] bg-bg px-2 sm:h-14 sm:px-4">
+      <div className="flex h-12 shrink-0 items-center gap-3 border-b border-white/[0.06] bg-page px-2 sm:h-14 sm:px-4">
         <Link
           href={backHref}
           className="group/back inline-flex h-10 items-center gap-2 rounded-md px-2 text-small font-medium text-text-secondary transition-colors hover:text-text"
@@ -189,13 +189,13 @@ export function GamePlayer({
           role="status"
           aria-live="polite"
           className={cn(
-            'absolute inset-0 grid place-items-center bg-bg transition-opacity duration-(--duration-editorial) ease-premium',
+            'absolute inset-0 grid place-items-center bg-page transition-opacity duration-(--duration-editorial) ease-premium',
             status === 'loading' ? 'opacity-100' : 'pointer-events-none opacity-0',
           )}
         >
           {status === 'loading' ? (
             <div className="flex flex-col items-center text-center">
-              <Wordmark />
+              <Wordmark className="h-5" />
               <p className="mt-6 text-small text-text-secondary">
                 <span className="sr-only">Loading </span>
                 {title}
@@ -206,9 +206,9 @@ export function GamePlayer({
         </div>
 
         {status === 'error' ? (
-          <div role="alert" className="absolute inset-0 grid place-items-center bg-bg px-6">
+          <div role="alert" className="absolute inset-0 grid place-items-center bg-page px-6">
             <div className="flex max-w-sm flex-col items-center text-center">
-              <Wordmark />
+              <Wordmark className="h-5" />
               <p className="mt-8 text-title text-text">We couldn’t load the game.</p>
               <p className="mt-3 text-small text-text-secondary">Check your connection and try again.</p>
               <div className="mt-8 flex flex-wrap justify-center gap-3">

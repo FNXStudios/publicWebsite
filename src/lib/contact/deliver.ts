@@ -25,7 +25,7 @@ export async function deliverContactSubmission(
         'content-type': 'application/json',
         ...(env.CONTACT_SUBMIT_TOKEN ? { authorization: `Bearer ${env.CONTACT_SUBMIT_TOKEN}` } : {}),
       },
-      body: JSON.stringify({ ...submission, source: 'fnxstudio.com/contact', submittedAt: new Date().toISOString() }),
+      body: JSON.stringify({ ...submission, source: 'fnxstudio.com/contact-dialog', submittedAt: new Date().toISOString() }),
       signal: AbortSignal.timeout(10_000),
       cache: 'no-store',
     });

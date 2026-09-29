@@ -1,5 +1,4 @@
-import { routes } from '@/lib/routes';
-import type { HeadlineLines } from './content.types';
+import type { ContactAction, HeadlineLines } from './content.types';
 import { gameCollectionSchema, type GameInput } from './schema/game.schema';
 import { parseConfig } from './schema/parse';
 
@@ -19,16 +18,25 @@ export const games = parseConfig('games', gameCollectionSchema, gamesInput);
 
 export const gamesPageContent = {
   eyebrow: 'Games',
-  headline: ['Original worlds.', 'Built to play.'],
-  body: 'Every FNX title is an original — its own world, its own rhythm, its own reason to play.',
+  headline: ['Original worlds.', 'Different reasons to play.'],
+  body: 'Every FNX title starts with its own hook, rhythm and visual identity.',
+  portfolioLabel: 'Portfolio',
   empty: {
     headline: 'Our first titles are on their way.',
     body: 'Games will appear here as they are released. For partnership or early-access conversations, get in touch.',
-    cta: { label: 'Get in touch', href: routes.contact },
+    cta: { label: 'Get in touch', interest: 'original-content' },
+  },
+  closing: {
+    eyebrow: 'Original content',
+    headline: 'Looking for something original?',
+    body: 'Talk to us about the portfolio, upcoming titles or a game built around your players.',
+    cta: { label: 'Talk to us', interest: 'original-content' },
   },
 } satisfies {
   eyebrow: string;
   headline: HeadlineLines;
   body: string;
-  empty: { headline: string; body: string; cta: { label: string; href: string } };
+  portfolioLabel: string;
+  empty: { headline: string; body: string; cta: ContactAction };
+  closing: { eyebrow: string; headline: string; body: string; cta: ContactAction };
 };

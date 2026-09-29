@@ -20,8 +20,12 @@
     "check": "pnpm validate:config && pnpm lint && pnpm typecheck && pnpm test"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.23",
+    "@radix-ui/react-select": "^2.3.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "lucide-react": "^1.48.0",
+    "motion": "^13.4.5",
     "next": "16.3.6",
     "react": "19.3.0",
     "react-dom": "19.3.0",

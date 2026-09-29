@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
+import { AGE_VERIFIED_STATE } from '../../playwright.config';
 
-const PAGES = ['/', '/games', '/games/lantern-quarter', '/games/ember-crown', '/studio', '/careers', '/contact'];
+const PAGES = ['/', '/games', '/games/lantern-quarter', '/games/ember-crown', '/studio', '/careers'];
 
 test('pages render without console errors or hydration warnings', async ({ page }) => {
   const problems: string[] = [];
@@ -26,7 +27,7 @@ test('scroll reveals finish showing content', async ({ page }) => {
 });
 
 test('reduced motion keeps everything static and visible', async ({ browser }) => {
-  const context = await browser.newContext({ reducedMotion: 'reduce' });
+  const context = await browser.newContext({ reducedMotion: 'reduce', storageState: AGE_VERIFIED_STATE });
   const page = await context.newPage();
   await page.goto('/studio');
   await expect(page.locator('[data-reveal]')).toHaveCount(0);
@@ -36,7 +37,7 @@ test('reduced motion keeps everything static and visible', async ({ browser }) =
 
 test('images reserve their space and responsive sources are served', async ({ page }) => {
   await page.goto('/');
-  const hero = page.locator('section[aria-labelledby="hero-title"] img');
+  const hero = page.locator('section[aria-labelledby="hero-title"] img').first();
   await expect(hero).toHaveAttribute('fetchpriority', 'high');
   const srcset = await hero.getAttribute('srcset');
   expect(srcset).toContain('/_next/image');

@@ -1,6 +1,8 @@
 'use client';
 
-import { useEffect, useId, useMemo, useRef, useState, useSyncExternalStore, type FormEvent, type ReactNode } from 'react';
+import * as Select from '@radix-ui/react-select';
+import { Check, ChevronDown } from 'lucide-react';
+import { useEffect, useId, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import type { ContactInterest } from '@/config/schema/contact.schema';
 import { track } from '@/lib/analytics';
 import { cn } from '@/lib/cn';
@@ -14,15 +16,13 @@ type Phase = 'idle' | 'submitting' | 'success' | 'failure';
 const EMPTY: Values = { name: '', email: '', company: '', interest: '', message: '', website: '' };
 
 const fieldClass = cn(
-  'block w-full appearance-none rounded-none border-0 border-b border-border bg-transparent px-0 py-3 text-body text-text',
-  'transition-[border-color,box-shadow] duration-(--duration-micro) ease-premium',
-  'placeholder:text-text-muted hover:border-border-active',
-  'focus:border-focus focus:shadow-[0_1px_0_0_var(--color-focus)] focus:outline-none',
-  'aria-invalid:border-danger aria-invalid:focus:shadow-[0_1px_0_0_var(--color-danger)]',
+  'block h-12 w-full appearance-none rounded-[0.625rem] border border-white/[0.1] bg-white/[0.02] px-4 text-body text-text',
+  'shadow-[inset_0_1px_0_rgb(255_255_255/0.025)]',
+  'transition-[border-color,box-shadow,background-color] duration-(--duration-micro) ease-premium',
+  'placeholder:text-text-muted hover:border-white/[0.18] hover:bg-white/[0.035]',
+  'focus:border-violet-500 focus:bg-white/[0.04] focus:shadow-[0_0_0_3px_rgb(130_71_255/0.22)] focus:outline-none',
+  'aria-invalid:border-danger/80 aria-invalid:focus:shadow-[0_0_0_3px_rgb(255_143_143/0.2)]',
 );
-
-const noopSubscribe = () => () => {};
-const readInterestParam = () => new URLSearchParams(window.location.search).get('interest') ?? '';
 
 export interface ContactFormCopy {
   submit: string;
@@ -35,10 +35,12 @@ export interface ContactFormCopy {
 interface ContactFormProps {
   interests: readonly ContactInterest[];
   copy: ContactFormCopy;
+  /** Preselected topic (e.g. "careers" from the careers page) until the visitor picks one. */
+  defaultInterest?: string;
 }
 
 /** Content arrives as props so this client module never bundles configuration or full Zod. */
-export function ContactForm({ interests, copy: form }: ContactFormProps) {
+export function ContactForm({ interests, copy: form, defaultInterest = '' }: ContactFormProps) {
   const schema = useMemo(() => createContactSchema(interests.map((i) => i.value)), [interests]);
   const uid = useId();
   const [values, setValues] = useState<Values>(EMPTY);
@@ -49,9 +51,7 @@ export function ContactForm({ interests, copy: form }: ContactFormProps) {
   const inFlight = useRef(false);
   const successRef = useRef<HTMLHeadingElement>(null);
 
-  // ?interest=… (e.g. from the careers page) preselects the topic until the visitor picks one.
-  const requestedParam = useSyncExternalStore(noopSubscribe, readInterestParam, () => '');
-  const requestedInterest = interests.some((option) => option.value === requestedParam) ? requestedParam : '';
+  const requestedInterest = interests.some((option) => option.value === defaultInterest) ? defaultInterest : '';
   const current: Values = { ...values, interest: values.interest || requestedInterest };
 
   useEffect(() => {
@@ -117,8 +117,11 @@ export function ContactForm({ interests, copy: form }: ContactFormProps) {
 
   if (phase === 'success') {
     return (
-      <div className="border-t border-border-subtle pt-10" role="status">
-        <h2 ref={successRef} tabIndex={-1} className="text-display-md text-text outline-none">
+      <div className="flex min-h-[24rem] flex-col justify-center" role="status">
+        <span aria-hidden="true" className="grid size-12 place-items-center rounded-full border border-violet-border bg-violet-soft text-violet-300">
+          <Check className="size-5" />
+        </span>
+        <h2 ref={successRef} tabIndex={-1} className="mt-7 text-display-sm text-text outline-none">
           {form.success.title}
         </h2>
         <p className="mt-4 max-w-[28rem] text-lead text-text-secondary">{form.success.body}</p>
@@ -132,7 +135,7 @@ export function ContactForm({ interests, copy: form }: ContactFormProps) {
   const submitting = phase === 'submitting';
 
   return (
-    <form noValidate onSubmit={onSubmit} aria-busy={submitting} className="grid gap-x-8 gap-y-9 sm:grid-cols-2">
+    <form noValidate onSubmit={onSubmit} aria-busy={submitting} className="grid gap-x-4 gap-y-6 sm:grid-cols-2">
       <Field id={`${uid}-name`} label="Name" error={errors.name}>
         <input
           id={`${uid}-name`}
@@ -175,36 +178,41 @@ export function ContactForm({ interests, copy: form }: ContactFormProps) {
       </Field>
 
       <Field id={`${uid}-interest`} label="I’m interested in" error={errors.interest}>
-        <div className="relative">
-          <select
+        <Select.Root name="interest" value={current.interest || undefined} onValueChange={(value) => update('interest', value)}>
+          <Select.Trigger
             id={`${uid}-interest`}
-            name="interest"
-            value={current.interest}
-            onChange={(e) => update('interest', e.target.value)}
             aria-invalid={Boolean(errors.interest) || undefined}
             aria-describedby={errors.interest ? `${uid}-interest-error` : undefined}
-            className={cn(fieldClass, 'cursor-pointer pr-8', !current.interest && 'text-text-muted')}
+            className={cn(fieldClass, 'group/select flex cursor-pointer items-center justify-between gap-3 text-left data-placeholder:text-text-muted data-[state=open]:border-violet-500')}
           >
-            <option value="" disabled className="bg-surface text-text-muted">
-              Choose one
-            </option>
-            {interests.map((option) => (
-              <option key={option.value} value={option.value} className="bg-surface text-text">
-                {option.label}
-              </option>
-            ))}
-          </select>
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 20 20"
-            className="pointer-events-none absolute top-1/2 right-0 size-4 -translate-y-1/2 text-text-secondary"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-          >
-            <path d="m5.5 8 4.5 4.5L14.5 8" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </div>
+            <Select.Value placeholder="Choose one" />
+            <Select.Icon>
+              <ChevronDown aria-hidden="true" className="size-4 text-text-secondary transition-transform duration-(--duration-interaction) group-data-[state=open]/select:rotate-180" />
+            </Select.Icon>
+          </Select.Trigger>
+          <Select.Portal>
+            <Select.Content
+              position="popper"
+              sideOffset={6}
+              className="fnx-select-content z-[95] max-h-(--radix-select-content-available-height) w-(--radix-select-trigger-width) overflow-hidden rounded-[0.75rem] border border-white/[0.1] bg-raised shadow-soft"
+            >
+              <Select.Viewport className="p-1.5">
+                {interests.map((option) => (
+                  <Select.Item
+                    key={option.value}
+                    value={option.value}
+                    className="relative flex h-11 cursor-pointer select-none items-center rounded-[0.5rem] pr-10 pl-3.5 text-[0.9375rem] text-text-secondary outline-none transition-colors duration-(--duration-micro) data-highlighted:bg-white/[0.06] data-highlighted:text-text data-[state=checked]:text-text"
+                  >
+                    <Select.ItemText>{option.label}</Select.ItemText>
+                    <Select.ItemIndicator className="absolute right-3.5 inline-flex">
+                      <Check aria-hidden="true" className="size-4 text-violet-400" />
+                    </Select.ItemIndicator>
+                  </Select.Item>
+                ))}
+              </Select.Viewport>
+            </Select.Content>
+          </Select.Portal>
+        </Select.Root>
       </Field>
 
       <Field id={`${uid}-message`} label="Message" error={errors.message} className="sm:col-span-2">
@@ -216,7 +224,7 @@ export function ContactForm({ interests, copy: form }: ContactFormProps) {
           onChange={(e) => update('message', e.target.value)}
           aria-invalid={Boolean(errors.message) || undefined}
           aria-describedby={errors.message ? `${uid}-message-error` : undefined}
-          className={cn(fieldClass, 'min-h-32 resize-y')}
+          className={cn(fieldClass, 'h-auto min-h-36 resize-y py-3 leading-relaxed')}
         />
       </Field>
 
@@ -239,7 +247,7 @@ export function ContactForm({ interests, copy: form }: ContactFormProps) {
             {failure}
           </p>
         ) : null}
-        <Button type="submit" size="lg" arrow={!submitting} disabled={submitting} className="self-start">
+        <Button type="submit" size="lg" arrow={!submitting} disabled={submitting} className="w-full sm:w-auto sm:self-start">
           {submitting ? form.submitting : form.submit}
         </Button>
       </div>
@@ -264,17 +272,18 @@ function Field({
 }) {
   return (
     <div className={className}>
-      <label htmlFor={id} className="flex items-baseline justify-between gap-2 text-small font-medium text-text-secondary">
+      <label htmlFor={id} className="flex items-baseline justify-between gap-2 text-[0.8125rem] font-semibold text-text-secondary">
         <span>{label}</span>
         {optional ? (
-          <span className="text-[0.8125rem] font-normal text-text-muted">
+          <span className="text-[0.8125rem] font-normal normal-case tracking-normal text-text-muted">
             <span className="sr-only">(</span>Optional<span className="sr-only">)</span>
           </span>
         ) : null}
       </label>
-      <div className="mt-1">{children}</div>
+      <div className="mt-2">{children}</div>
       {error ? (
-        <p id={`${id}-error`} className="mt-2 text-[0.8125rem] text-danger">
+        <p id={`${id}-error`} className="mt-2 flex items-center gap-2 text-[0.8125rem] text-danger">
+          <span aria-hidden="true" className="size-1 rounded-full bg-current" />
           {error}
         </p>
       ) : null}

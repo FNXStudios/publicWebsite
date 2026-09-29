@@ -8,7 +8,7 @@ test.describe('homepage', () => {
     await page.goto('/');
 
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Independent iGaming\s+studio for real play\./);
-    const featured = page.getByRole('region', { name: 'Original worlds, built to play.' });
+    const featured = page.getByRole('region', { name: 'Original worlds. Built to play.' });
     await expect(featured.getByRole('heading', { level: 3 })).toHaveText(['Lantern Quarter', 'Tide Runner', 'Ember Crown']);
     await expect(page.getByText('Hidden Vault')).toHaveCount(0);
     await expect(page.locator('iframe')).toHaveCount(0);
@@ -25,7 +25,8 @@ test.describe('homepage', () => {
     expect(headers['permissions-policy']).toContain('camera=()');
   });
 
-  test('has no technology page and serves a styled 404', async ({ page }) => {
+  test('has no technology or about page and serves a styled 404', async ({ page, request }) => {
+    expect((await request.get('/about')).status()).toBe(404);
     const response = await page.goto('/technology');
     expect(response?.status()).toBe(404);
     await expect(page.getByRole('heading', { name: 'This page wandered off.' })).toBeVisible();
@@ -37,6 +38,7 @@ test.describe('homepage', () => {
     expect(xml).toContain('/games/ember-crown');
     expect(xml).not.toContain('hidden-vault');
     expect(xml).not.toContain('/play');
+    expect(xml).not.toContain('/contact');
   });
 });
 
@@ -45,6 +47,7 @@ test.describe('navigation', () => {
     test.skip(isMobile, 'desktop navigation');
     await page.goto('/');
     const nav = page.getByRole('navigation', { name: 'Primary' });
+    await expect(nav.getByRole('link')).toHaveText(['Games', 'Studio', 'Careers']);
     for (const [label, path] of [
       ['Games', '/games'],
       ['Studio', '/studio'],
@@ -54,8 +57,10 @@ test.describe('navigation', () => {
       await expect(page).toHaveURL(path);
       await expect(nav.getByRole('link', { name: label })).toHaveAttribute('aria-current', 'page');
     }
-    await page.getByRole('link', { name: 'Get in touch' }).first().click();
-    await expect(page).toHaveURL('/contact');
+    // Contact is a dialog over the current page, not a destination.
+    await page.getByRole('banner').getByRole('button', { name: 'Get in touch' }).click();
+    await expect(page.getByRole('dialog', { name: 'Have something worth building?' })).toBeVisible();
+    await expect(page).toHaveURL('/careers');
   });
 
   test('mobile menu opens, navigates and closes', async ({ page, isMobile }) => {

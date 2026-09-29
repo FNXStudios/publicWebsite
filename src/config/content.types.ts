@@ -23,3 +23,9 @@ export interface TitledCopy {
   title: string;
   body: string;
 }
+
+/** An action that opens the global contact dialog, optionally preselecting a topic. */
+export interface ContactAction {
+  label: string;
+  interest?: string;
+}

@@ -20,15 +20,15 @@ export function GameInfo({ game }: { game: Game }) {
   if (!paragraphs.length && !hasFacts && !lists.length) return null;
 
   return (
-    <section aria-labelledby="game-info-title" className="container-fnx section-space">
+    <section aria-labelledby="game-info-title" className="container-fnx pt-medium pb-medium">
       <h2 id="game-info-title" className="sr-only">
         About {game.title}
       </h2>
       <div className="grid gap-14 md:grid-cols-12 md:gap-6">
         {paragraphs.length ? (
           <div className="space-y-6 md:col-span-6">
-            {paragraphs.map((paragraph) => (
-              <p key={paragraph} className="text-lead text-text-secondary">
+            {paragraphs.map((paragraph, index) => (
+              <p key={paragraph} className={index === 0 ? 'text-[clamp(1.25rem,1.1rem+0.5vw,1.5rem)] leading-[1.5] tracking-[-0.01em] text-text' : 'text-lead text-text-secondary'}>
                 {paragraph}
               </p>
             ))}
@@ -40,9 +40,9 @@ export function GameInfo({ game }: { game: Game }) {
             {hasFacts ? (
               <>
                 <Eyebrow>Game info</Eyebrow>
-                <dl className="mt-5 border-t border-border-subtle">
+                <dl className="mt-5 border-t border-white/[0.09]">
                   {volatility ? (
-                    <div className="flex items-center justify-between gap-6 border-b border-border-subtle py-4">
+                    <div className="flex items-center justify-between gap-6 border-b border-white/[0.09] py-4">
                       <dt className="text-small text-text-muted">Volatility</dt>
                       <dd className="text-small font-medium text-text">
                         <VolatilityIndicator value={volatility} />
@@ -50,9 +50,9 @@ export function GameInfo({ game }: { game: Game }) {
                     </div>
                   ) : null}
                   {facts.map((fact) => (
-                    <div key={fact.key} className="flex items-center justify-between gap-6 border-b border-border-subtle py-4">
+                    <div key={fact.key} className="flex items-center justify-between gap-6 border-b border-white/[0.09] py-4">
                       <dt className="text-small text-text-muted">{fact.label}</dt>
-                      <dd className="text-small font-medium tabular-nums text-text">{fact.value}</dd>
+                      <dd className="text-small font-semibold tabular-nums text-text">{fact.value}</dd>
                     </div>
                   ))}
                 </dl>
@@ -60,13 +60,13 @@ export function GameInfo({ game }: { game: Game }) {
             ) : null}
 
             {lists.length ? (
-              <div className={hasFacts ? 'mt-12 grid gap-10 sm:grid-cols-2' : 'grid gap-10 sm:grid-cols-2'}>
+              <div className={hasFacts ? 'mt-10 grid gap-8 sm:grid-cols-2' : 'grid gap-8 sm:grid-cols-2'}>
                 {lists.map((list) => (
                   <div key={list.title}>
-                    <h3 className="text-eyebrow uppercase text-text-muted">{list.title}</h3>
-                    <ul className="mt-4 space-y-2.5">
+                    <h3 className="text-eyebrow text-text-muted uppercase">{list.title}</h3>
+                    <ul className="mt-4 flex flex-wrap gap-2">
                       {list.items.map((item) => (
-                        <li key={item} className="text-body text-text">
+                        <li key={item} className="rounded-full border border-(--game-accent)/30 bg-(--game-accent)/[0.06] px-3.5 py-1.5 text-small font-medium text-text">
                           {item}
                         </li>
                       ))}

@@ -13,18 +13,17 @@ typed config (Zod-validated)  →  static pages (Server Components)  →  small 
 | `next` 16 (App Router) | Static generation, metadata/sitemap/robots APIs, image optimisation, `next/font` |
 | `react` 19 | — |
 | `zod` 4 | Validates all product configuration at build/test time. The contact form uses `zod/mini`, so browsers only download the validators the form uses. |
-| `class-variance-authority`, `clsx`, `tailwind-merge` | Button variants and class composition |
 | `tailwindcss` 4 | Token-driven utilities. Design tokens live as CSS custom properties in `src/app/globals.css`. |
+| `class-variance-authority`, `clsx`, `tailwind-merge` | The one canonical `Button` (variants/sizes) and class composition |
+| `motion` | Scroll-linked progress and small client islands (`LazyMotion` + `m`, so only the DOM animation features load). Never used to hide content. |
+| `@radix-ui/react-dialog` | Accessible behaviour for the contact dialog, mobile menu and age gate (focus trap, inert page, focus return). All visuals are FNX's own. |
+| `@radix-ui/react-select` | Keyboard-accessible "I'm interested in" selector, styled by FNX. |
+| `lucide-react` | Two generic utility icons in the select (chevron, check). Brand-facing icons live in `src/components/ui/Icons.tsx`. |
 | `vitest`, Testing Library, `jsdom` | Unit and component tests |
-| `@playwright/test` | End-to-end tests against a production build |
+| `@playwright/test` | End-to-end tests against a production build, and the visual-fixture renderer |
 | `tsx` | Runs `scripts/validate-config.ts` |
-| `@fontsource-variable/manrope` (dev) | Source of the self-hosted Manrope variable font file (copied into `src/app/fonts`) |
 
-**Considered and left out on purpose**
-
-- **Motion / Framer Motion.** It was measured at about 39 KB gzip on every page. It would have been used only for reveal-once fades, and one `IntersectionObserver` plus CSS does that (`src/motion/Reveal.tsx`). If gesture or layout animation is needed later, add Motion (`LazyMotion`) to that one component.
-- **Radix.** The native `<dialog>` handles the mobile menu (focus containment, Esc, inert background), and a native `<select>` is fully accessible and better on mobile.
-- **Lucide.** The site needs seven utility icons, drawn on a single grid in `src/components/ui/Icons.tsx`.
+**Deliberately not used:** Material UI, Chakra, Ant, Bootstrap or any pre-styled kit (shadcn styling included); Three.js, particle engines, Lenis, scroll-jacking or a full-site canvas.
 
 ## Scripts (pnpm)
 
@@ -51,42 +50,50 @@ See `.env.example`. `.env.development` and `.env.production` hold safe defaults.
 
 Per environment, `NEXT_PUBLIC_GAME_BASE_URL` is `https://games.fnxstudio.com` (production), `https://games-staging.fnxstudio.com` (staging) or `http://localhost:4000` (local).
 
+## Information architecture
+
+Top-level pages are fixed: `/`, `/games`, `/studio`, `/careers`. Navigation: **Games · Studio · Careers**, plus the global **Get in touch** action.
+
+- **Studio is the About page.** Technology is supporting credibility inside Studio and the homepage, never a destination.
+- **Contact is a dialog, not a page.** Every "Get in touch" opens the same Radix dialog over the current page (`ContactProvider` + `ContactTrigger`). `/contact` redirects to `/?contact=open`, which opens it; `?interest=careers` (or `ContactTrigger interest="careers"`) preselects a topic.
+- Product routes `/games/[slug]` and `/games/[slug]/play` exist but are not navigation destinations.
+
 ## Project layout
 
 ```
 src/
   app/
-    (site)/            marketing routes with header + footer
-      page.tsx         /
-      games/           /games, /games/[slug]
-      studio/ careers/ contact/
+    (site)/            marketing routes (header, footer, contact dialog via SiteChrome)
+      page.tsx         /  Hero → Featured games → Made to hit → From idea to game → For operators → CTA
+      games/ studio/ careers/
     (player)/games/[slug]/play/   stripped-down player route (no header/footer)
     api/contact/route.ts          contact submission boundary
-    sitemap.ts robots.ts not-found.tsx icon.svg layout.tsx globals.css
-  config/              ← all mutable content lives here
-    schema/            Zod schemas (game, site/navigation, career, contact, game origins)
-    site / navigation / home / games / studio / careers / contact / game-origins .config.ts
-  lib/
-    games/             catalog selectors, launch URL resolution, origins, postMessage protocol, volatility, facts
-    contact/           shared schema (zod/mini), server binding, delivery boundary
-    security/headers.ts  CSP, Permissions-Policy and other headers
-    seo/metadata.ts    page and game metadata, JSON-LD
-    analytics/         vendor-neutral track()
-    routes.ts          the only place route strings are built
+  config/              ← all mutable content lives here (Zod-validated where it has business rules)
+  content/visual-fixtures/        fixture games (development only, see below)
+  lib/                 catalogue, launch URLs, contact schema, SEO, analytics, security headers, routes
   components/
-    layout/ ui/ home/ games/ contact/
-  motion/Reveal.tsx    scroll reveal
+    layout/            Header, Footer, SiteChrome, Container/Section, PageIntro
+    ui/                Button, TextLink, ResponsiveArt, Typography, Icons, EmptyState
+    contact/           ContactProvider (dialog), ContactTrigger, ContactForm
+    games/             GameCard, GameRail, GameFeature, GameHero, GameInfo, GamePlayer
+    home/              Hero, FeaturedGames, MadeToHit, IdeaToGame + StageStory, Operators + NetworkVisual, FinalCta
+    studio/            ProcessStages
+    age-gate/          AgeGate, AgeGateDialog
+  motion/              tokens.ts, variants.ts, Reveal.tsx
+scripts/
+  validate-config.ts
+  visual-fixtures/     SVG scene generator for fixture art (render.mjs)
 tests/  unit/ component/ e2e/ fixtures/
 ```
 
 **Rules the code follows**
 
 - Configuration controls content; components control presentation. Page structure stays explicit in React. There is no JSON section engine.
-- Client components never import configuration modules. A unit test (`tests/unit/client-boundaries.test.ts`) enforces this, so full Zod and config data stay out of the browser bundle.
+- Client components never import configuration modules. A unit test (`tests/unit/client-boundaries.test.ts`) enforces this, so full Zod and config data stay out of the browser bundle. Server components render artwork and pass it into client islands as props.
 
 ## Adding a game
 
-1. Put artwork in `public/games/<slug>/`: `thumb.jpg` (4:5), `hero.jpg` (wide), plus optional `hero-mobile.jpg`, `thumb-mobile.jpg` and `screenshots/*.jpg`.
+1. Put artwork in `public/games/<slug>/`: `thumb.jpg` (4:5), `hero.png` (wide), plus optional `hero-mobile.jpg`, `thumb-mobile.jpg` and `screenshots/*.jpg`.
 2. Add one entry to `src/config/games.config.ts`:
 
 ```ts
@@ -100,7 +107,7 @@ tests/  unit/ component/ e2e/ fixtures/
   category: 'slot',               // 'slot' | 'instant'
   featured: true,
   order: 1,
-  artwork: { thumbnail: '/games/golden-harbour/thumb.jpg', hero: '/games/golden-harbour/hero.jpg' },
+  artwork: { thumbnail: '/games/golden-harbour/thumb.jpg', hero: '/games/golden-harbour/ hero.png' },
   game: {
     launchPath: '/golden-harbour/index.html',  // resolved against NEXT_PUBLIC_GAME_BASE_URL
     orientation: 'landscape',                   // 'landscape' | 'portrait' | 'responsive'
@@ -108,6 +115,7 @@ tests/  unit/ component/ e2e/ fixtures/
     readySignal: true,             // game posts { type: 'fnx:ready' } when interactive
   },
   info: { volatility: 'high', reels: 5, rows: 3, ways: 243 },   // only verified facts; omit the rest
+  theme: { accent: '#ffe39a', glow: '#1fa56a', deep: '#03140c' },   // optional: the game's own colours on its page
   seo: {},
 }
 ```
@@ -147,26 +155,37 @@ The homepage, `/games`, the detail page, the player, metadata, JSON-LD and the s
 
 ## Design system
 
-- **Tokens:** colours, radii, motion and layout are CSS custom properties in `src/app/globals.css`, exposed to Tailwind through `@theme`.
-  - Type scale: `text-display-xl/lg/md`, `title`, `lead`, `body`, `small`, `eyebrow`.
-  - Breakpoints: 640 / 900 / 1200 / 1600.
-  - Container: about 1376 px plus fluid gutters.
-- **Colour:** graphite surfaces, off-white type and FNX violet (`--color-accent`) used only for primary actions, focus and small signals.
-- **Headlines:** configured as arrays of lines. They break as art-directed on screens ≥640 px and flow naturally on phones.
-- **Motion:** above-the-fold entrances are CSS-only, so LCP never waits for JavaScript. Below the fold, `Reveal` fades content up once. `prefers-reduced-motion` disables all of it.
+**Quiet brand frame, loud games.** Graphite, precise and editorial; the games bring colour, character and movement and are never desaturated to fit the UI.
+
+- **Tokens** (`src/app/globals.css`, exposed to Tailwind via `@theme`): the graphite ladder `--fnx-black-950…650`, text (`primary/secondary/muted`), borders, violet `700…300` + `soft/border/glow`, warm light, shadows (`soft`, `card-hover`, `violet`), radii, motion.
+- **Depth:** page (`950/900`) → section (`850/800`) → raised interactive (`750/700`) → featured (imagery + controlled violet). Homepage tones: hero 900 → featured 850 → made 900 → idea 800 → operators 900 → CTA raised → footer 950. Transitions come from tone and imagery, not divider lines.
+- **Type** (Manrope variable, self-hosted): `text-hero` (≈88px, lh .96, −0.035em), `text-display` (≈64px), `text-display-sm`, `text-title`, `text-lead`, `text-body`, `text-small`, `text-eyebrow` (12px, .2em).
+- **Button:** one CVA component — `primary | secondary | ghost | text` × `sm | md | lg`. Primary: barely-there `#8951ff → #7134f4` gradient, 1px violet rim, lit top edge, soft violet contact shadow; hover −1px/+4% brightness, press .985, 2px violet focus ring. `TextLink` / `ContactTrigger appearance="link"` share one text-action style (animated rule, arrow nudge).
+- **Game colour:** games may declare `theme: { accent, glow, deep }`. Game pages let it dominate (hero gradients, title, chips); cards use the glow for hover light. FNX violet stays on primary actions.
+- **Motion** (`src/motion/tokens.ts`): micro 170 · interaction 260 · standard 340 · editorial 550 · hero 850 ms, easing `[0.16, 1, 0.3, 1]`, no bouncy springs. Above-the-fold entrances and ambient light are CSS only. `Reveal` fades below-the-fold content once but content is **server-rendered visible** and only armed after hydration if still off-screen. `prefers-reduced-motion` removes ambient motion, scroll-linked transforms and reveals.
+
+## Age gate
+
+Configured in `src/config/age-gate.config.ts` (copy, `minimumAge`, `version`, `rememberDays`, optional `exitUrl`).
+
+- A tiny inline `<head>` script marks `<html data-age-gate="pending">` before first paint when no valid confirmation exists; CSS then covers the page with the blurred scrim, so nothing is usable before hydration.
+- `AgeGateDialog` is a Radix modal Dialog: focus trap, inert page and dialog semantics. Escape, outside pointer and outside interaction are all prevented — only an answer closes it.
+- Confirming stores `{ version, verifiedAt, expiresAt }` under `fnx_age_verified` in localStorage (sessionStorage if blocked). Bump `version` to ask everyone again.
+- Declining goes to `exitUrl` if configured; otherwise the gate stays with the "adults only" copy.
 
 ## Remaining TODOs (need real inputs)
 
-- **Games:** `games.config.ts` is empty until real titles, launch paths, verified info and artwork arrive. `/games` shows its designed empty state, and the homepage leaves out the featured section.
-- **Artwork:** `public/art/*.jpg` and `public/og.jpg` are interim, procedurally rendered studio art. Replace them with final illustrations and real production material (sketches, symbol sheets, UI frames), then update the paths in `home.config.ts` and `studio.config.ts`.
-- **Logo:** `Wordmark.tsx` is a typeset placeholder. `app/icon.svg` is a placeholder mark. Both need the official FNX logo.
-- **Business facts:**
-  - Public email and social profiles in `site.config.ts`.
-  - Confirm the operator claims (`home.config.ts`) and the studio capabilities (`studio.config.ts`); both are marked `TODO(business)`.
-  - Confirm the footer 18+ notice wording for your target markets.
-- **Contact delivery:** set `CONTACT_SUBMIT_ENDPOINT` (form service, CRM webhook or internal API). Add rate limiting at the edge/WAF; the route has a honeypot and a size limit but no per-IP throttle.
-- **Deployment:**
-  - Set `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_GAME_BASE_URL` per environment.
-  - Enable `ENABLE_HSTS` on HTTPS hosts.
-  - Wire an analytics vendor by listening for `fnx:analytics` events or providing `window.dataLayer`.
-- **Known framework log:** `next start` logs `Error: Internal: NoFallbackError` for unknown game slugs. The response is a correct static 404; the log comes from Next 16's handling of `dynamicParams = false`.
+- **Games:** `games.config.ts` is empty until real titles, launch paths, verified info and artwork arrive. In production builds the homepage then omits Featured games and `/games` shows its designed empty state.
+- **Artwork:** `public/art/hero*.jpg` and everything in `public/visual-fixtures/` is generated interim art. Replace with the final hero illustration and real production material (Golden Chinatown symbol sheets, frames, UI work), then update paths in `home.config.ts`, `studio.config.ts` and `careers.config.ts`.
+- **Business facts:** public email / social profiles (`site.config.ts` — they appear in the footer and contact dialog only once set); operator capabilities (`home.config.ts`, `TODO(business)`); responsible-gaming URL and age-gate `exitUrl`.
+- **Contact delivery:** set `CONTACT_SUBMIT_ENDPOINT`; add rate limiting at the edge/WAF.
+- **Known framework log:** `next start` logs `Error: Internal: NoFallbackError` for unknown game slugs. The response is a correct static 404.
+
+## Visual fixtures (development artwork)
+
+So the design can be judged with colourful, real-looking content while the catalogue is empty:
+
+- **Fixture games** live in `src/content/visual-fixtures/games.ts` (Dragon's Fortune, Mystic Tides, Temple of Valor) — never in `games.config.ts`. They show only when `NEXT_PUBLIC_USE_DEMO_CONTENT=true` (default in `next dev`) **and** no real game exists. They are `noindex`, have no JSON-LD, are never in the sitemap and are never playable.
+- **Fixture art** (`public/visual-fixtures/`, plus `public/art/hero*.jpg`) is rendered from SVG scenes: `node scripts/visual-fixtures/render.mjs [scene…]` (uses Playwright's Chromium; set `PLAYWRIGHT_CHROMIUM_EXECUTABLE` if needed).
+- Visitors never see "fixture/demo/placeholder" labels. A small debug marker appears on fixture cards only with `NEXT_PUBLIC_SHOW_FIXTURE_LABELS=true`.
+- Remove fixtures entirely by deleting `src/content/visual-fixtures/`, `public/visual-fixtures/` and `scripts/visual-fixtures/` (and the import in `src/lib/games/catalog.ts`).

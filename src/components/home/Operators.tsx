@@ -1,50 +1,44 @@
 import { homeConfig } from '@/config/home.config';
-import { ResponsiveArt } from '@/components/ui/ResponsiveArt';
-import { TextLink } from '@/components/ui/TextLink';
-import { Eyebrow, HeadlineLines } from '@/components/ui/Typography';
+import { ContactTrigger } from '@/components/contact/ContactTrigger';
+import { Eyebrow, HeadlineLines, Index } from '@/components/ui/Typography';
 import { Reveal } from '@/motion/Reveal';
+import { NetworkVisual } from './NetworkVisual';
 
-/** Full-bleed atmospheric band; claims kept to what FNX can stand behind. */
+/** Built for real play: operator credibility with depth, claims kept to what FNX can stand behind. */
 export function Operators() {
   const { operators } = homeConfig;
   return (
-    <section aria-labelledby="operators-title" className="relative isolate overflow-hidden">
-      <div aria-hidden="true" className="absolute inset-0 -z-10">
-        <ResponsiveArt
-          src={operators.art.src}
-          alt=""
-          sizes="100vw"
-          imgClassName="object-[68%_70%] opacity-90 md:object-[60%_60%]"
-        />
-        <div className="absolute inset-x-0 top-0 h-48 bg-[linear-gradient(180deg,var(--color-bg),transparent)]" />
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-[linear-gradient(0deg,var(--color-bg),transparent)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgb(6_7_8/0.7),transparent_60%)]" />
-      </div>
+    <section aria-labelledby="operators-title" className="relative isolate overflow-hidden pt-tight pb-large bg-(--tone-operators)">
+      {/* Cool atmosphere on the right; the section reads cooler than the warm studio sections. */}
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[radial-gradient(46rem_38rem_at_78%_42%,rgb(58_74_154/0.2),transparent_70%),radial-gradient(28rem_24rem_at_92%_80%,rgb(113_52_244/0.12),transparent_70%)]" />
+      <NetworkVisual className="pointer-events-none absolute top-8 right-[-18%] -z-10 w-[62rem] max-w-none opacity-45 sm:right-[-10%] md:top-1/2 md:right-[-6%] md:w-[58%] md:-translate-y-[55%] md:opacity-100" />
 
-      <div className="container-fnx pt-(--section-space) pb-[calc(var(--section-space)*0.8)]">
-        <Reveal className="max-w-[40rem]">
-          <Eyebrow>{operators.eyebrow}</Eyebrow>
-          <h2 id="operators-title" className="mt-5 text-display-lg text-text">
+      <div className="container-fnx">
+        <div className="max-w-[40rem] md:max-w-[46%]">
+          <Eyebrow rule>{operators.eyebrow}</Eyebrow>
+          <h2 id="operators-title" className="mt-5 text-display text-white">
             <HeadlineLines lines={operators.headline} />
           </h2>
-          <p className="mt-8 max-w-[32rem] text-lead text-text-secondary">{operators.body}</p>
-          <TextLink
-            href={operators.cta.href}
-            event={{ name: 'partner_cta_clicked', props: { placement: 'home-operators' } }}
-            className="mt-8"
-          >
+          <p className="mt-7 max-w-[30rem] text-lead text-text-secondary">{operators.body}</p>
+          <ContactTrigger appearance="link" placement="home-operators" interest={operators.cta.interest} className="mt-7">
             {operators.cta.label}
-          </TextLink>
-        </Reveal>
+          </ContactTrigger>
+        </div>
 
-        <ul className="mt-24 grid gap-10 sm:grid-cols-3 sm:gap-6 md:mt-40">
-          {operators.points.map((point, index) => (
-            <Reveal as="li" key={point.title} delay={index * 90} className="border-l border-border pl-5 md:pl-6">
-              <h3 className="text-body font-semibold text-text">{point.title}</h3>
-              <p className="mt-2 max-w-[20rem] text-small text-text-secondary">{point.body}</p>
-            </Reveal>
+        <Reveal as="ul" className="mt-14 grid gap-x-8 gap-y-2 sm:grid-cols-2 md:mt-20 md:max-w-[52%] lg:grid-cols-2">
+          {operators.capabilities.map((item, index) => (
+            <li key={item.label} className="group relative border-t border-white/[0.09] py-6">
+              <span aria-hidden="true" className="absolute -top-px left-0 h-px w-8 bg-violet-400 transition-[width] duration-[520ms] ease-premium group-hover:w-full" />
+              <div className="flex items-baseline gap-4">
+                <Index n={index + 1} className="text-violet-300/80 transition-colors group-hover:text-violet-300" />
+                <div>
+                  <h3 className="text-eyebrow text-white uppercase">{item.label}</h3>
+                  <p className="mt-2.5 text-body text-text-secondary">{item.body}</p>
+                </div>
+              </div>
+            </li>
           ))}
-        </ul>
+        </Reveal>
       </div>
     </section>
   );

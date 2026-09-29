@@ -26,6 +26,10 @@ const nextConfig: NextConfig = {
     imageSizes: [96, 256, 384],
     minimumCacheTTL: 60 * 60 * 24 * 30,
   },
+  // Contact is a global dialog, not a page. Old links land on the homepage with it open.
+  async redirects() {
+    return [{ source: '/contact', destination: '/?contact=open', permanent: false }];
+  },
   async headers() {
     return [{ source: '/:path*', headers: buildSecurityHeaders({ isDev }) }];
   },

@@ -16,15 +16,18 @@ const checkAsset = (owner: string, asset: string | undefined) => {
   if (asset && !existsSync(path.join(publicDir, asset))) problems.push(`${owner}: missing /public${asset}`);
 };
 
-const [{ games }, { jobs }, { siteConfig }, { homeConfig }, { studioConfig }, { resolveGameLaunch }] = await Promise.all([
+const [{ games }, { jobs, careersPageContent }, { siteConfig }, { homeConfig }, { studioConfig }, { resolveGameLaunch }, { demoGames }, { gameCollectionSchema }] = await Promise.all([
   import('../src/config/games.config'),
   import('../src/config/careers.config'),
   import('../src/config/site.config'),
   import('../src/config/home.config'),
   import('../src/config/studio.config'),
   import('../src/lib/games/launch'),
+  import('../src/content/visual-fixtures/games'),
+  import('../src/config/schema/game.schema'),
   import('../src/config/navigation.config'),
   import('../src/config/contact.config'),
+  import('../src/config/age-gate.config'),
 ]);
 
 for (const game of games) {
@@ -42,10 +45,18 @@ for (const game of games) {
 checkAsset('site defaultOgImage', siteConfig.defaultOgImage);
 const pageArt: { src: string; mobileSrc?: string }[] = [
   homeConfig.hero.art,
-  homeConfig.process.art,
-  homeConfig.operators.art,
+  ...homeConfig.madeToHit.panels.map((p) => p.art),
+  ...homeConfig.ideaToGame.stages.map((s) => s.art),
   studioConfig.intro.art,
+  ...studioConfig.production.items,
+  ...careersPageContent.gallery,
 ];
+// Fixture games are validated too, so their artwork never renders as a fallback.
+for (const game of gameCollectionSchema.parse(demoGames)) {
+  const { screenshots = [], ...art } = game.artwork;
+  for (const [key, value] of Object.entries(art)) if (key !== 'alt') checkAsset(`fixture "${game.slug}" artwork.${key}`, value);
+  screenshots.forEach((shot, i) => checkAsset(`fixture "${game.slug}" screenshot ${i + 1}`, shot));
+}
 for (const art of pageArt) {
   checkAsset('page art', art.src);
   checkAsset('page art (mobile)', art.mobileSrc);

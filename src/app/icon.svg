@@ -1,1 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#060708"/><path d="M18 46V18h17v5H23.5v7H33v5h-9.5v11H18Z" fill="#f3f2ef"/><path d="m37 18 9 14-9 14h6.2L49 37.3V26.7L43.2 18H37Z" fill="#8f78ff"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect width="64" height="64" rx="14" fill="#060708"/>
+  <defs><linearGradient id="x" x1="16" y1="14" x2="48" y2="50" gradientUnits="userSpaceOnUse"><stop stop-color="#c2b6ff"/><stop offset="1" stop-color="#6f52ee"/></linearGradient>
+  <clipPath id="c"><rect x="14" y="14" width="36" height="36"/></clipPath></defs>
+  <g clip-path="url(#c)" stroke-width="9">
+    <path stroke="url(#x)" d="M12 10 52 54"/>
+    <path stroke="#b3a4ff" d="M52 10 39 24.5M25 39.5 12 54"/>
+  </g>
+</svg>

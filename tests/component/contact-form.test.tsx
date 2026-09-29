@@ -2,20 +2,36 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ContactForm as Form } from '@/components/contact/ContactForm';
-import { contactOptions, contactPageContent } from '@/config/contact.config';
+import { contactDialogContent, contactOptions } from '@/config/contact.config';
 
-const ContactForm = () => <Form interests={contactOptions.interests} copy={contactPageContent.form} />;
+const ContactForm = ({ defaultInterest }: { defaultInterest?: string }) => (
+  <Form interests={contactOptions.interests} copy={contactDialogContent.form} defaultInterest={defaultInterest} />
+);
+
+async function chooseInterest(user: ReturnType<typeof userEvent.setup>, label: string) {
+  await user.click(screen.getByLabelText('I’m interested in'));
+  await user.click(await screen.findByRole('option', { name: label }));
+}
 
 async function fillValid(user: ReturnType<typeof userEvent.setup>) {
   await user.type(screen.getByLabelText('Name'), 'Ada Lovelace');
   await user.type(screen.getByLabelText('Work email'), 'ada@operator.example');
-  await user.selectOptions(screen.getByLabelText('I’m interested in'), 'integration');
+  await chooseInterest(user, 'Integration');
   await user.type(screen.getByLabelText('Message'), 'We would like to discuss an integration.');
 }
 
 afterEach(() => vi.unstubAllGlobals());
 
 describe('ContactForm', () => {
+  it('uses an accessible custom select and honours a preselected topic', async () => {
+    const user = userEvent.setup();
+    render(<ContactForm defaultInterest="careers" />);
+    const trigger = screen.getByRole('combobox', { name: 'I’m interested in' });
+    expect(trigger).toHaveTextContent('Careers');
+    await chooseInterest(user, 'Integration');
+    expect(trigger).toHaveTextContent('Integration');
+  });
+
   it('labels every field without relying on placeholders', () => {
     render(<ContactForm />);
     for (const label of ['Name', 'Work email', /^Company\s*\(Optional\)$/, 'I’m interested in', 'Message']) {

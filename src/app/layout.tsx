@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 import type { ReactNode } from 'react';
+import { AgeGate, AgeGateHeadScript } from '@/components/age-gate/AgeGate';
 import { siteConfig } from '@/config/site.config';
 import { getSiteUrl } from '@/lib/site-url';
 import './globals.css';
@@ -35,15 +36,20 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#060708',
+  themeColor: '#050607',
   colorScheme: 'dark',
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={manrope.variable}>
+    // The age-gate head script sets data-age-gate before hydration.
+    <html lang="en" className={manrope.variable} suppressHydrationWarning>
+      <head>
+        <AgeGateHeadScript />
+      </head>
       <body>
         {children}
+        <AgeGate />
       </body>
     </html>
   );
