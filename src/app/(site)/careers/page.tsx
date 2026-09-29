@@ -27,14 +27,15 @@ function JobRow({ job }: { job: Job }) {
   const external = !job.applyUrl.startsWith('/');
   const opensCareersContact = job.applyUrl === routes.careers;
   const Icon = external ? ArrowUpRight : ArrowRight;
-  const className = 'group grid gap-3 border-b border-white/[0.08] py-8 transition-colors md:grid-cols-12 md:items-baseline md:gap-6';
+  const className =
+    'group grid gap-3 border-b border-white/[0.09] py-8 transition-[colors,transform] duration-[220ms] ease-premium hover:border-white/[0.16] md:grid-cols-12 md:items-baseline md:gap-6 md:hover:translate-x-0.5';
   const content = (
     <>
       <h3 className="text-title text-white md:col-span-4">{job.title}</h3>
       <p className="text-small text-text-muted md:col-span-3">
         {JOB_TYPE_LABELS[job.type]} · {job.location}
       </p>
-      <p className="text-body text-text-secondary md:col-span-4">{job.description}</p>
+      <p className="text-body text-text-secondary transition-colors duration-[220ms] group-hover:text-text md:col-span-4">{job.description}</p>
       <Icon className="arrow-nudge hidden size-5 justify-self-end text-text-secondary group-hover:translate-x-1 group-hover:text-white md:col-span-1 md:block" />
     </>
   );
@@ -44,7 +45,7 @@ function JobRow({ job }: { job: Job }) {
       <span className="text-small text-text-muted md:col-span-3">
         {JOB_TYPE_LABELS[job.type]} · {job.location}
       </span>
-      <span className="text-body text-text-secondary md:col-span-4">{job.description}</span>
+      <span className="text-body text-text-secondary transition-colors duration-[220ms] group-hover:text-text md:col-span-4">{job.description}</span>
       <Icon className="arrow-nudge hidden size-5 justify-self-end text-text-secondary group-hover:translate-x-1 group-hover:text-white md:col-span-1 md:block" />
     </>
   );

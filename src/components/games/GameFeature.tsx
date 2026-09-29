@@ -24,9 +24,9 @@ export function GameFeature({ game, headingLevel = 'h2', priority = false }: { g
       >
         <div
           className={cn(
-            'relative isolate aspect-[4/5] overflow-hidden rounded-xl border border-white/[0.08] bg-raised sm:aspect-[16/10] md:aspect-[21/10]',
-            'transition-[transform,border-color,box-shadow] duration-(--duration-standard) ease-premium',
-            'group-hover:-translate-y-[5px] group-hover:border-violet-border group-hover:shadow-card-hover',
+            'relative isolate aspect-[4/5] overflow-hidden rounded-xl border border-white/[0.09] bg-raised sm:aspect-[16/10] md:aspect-[21/10]',
+            'transition-[border-color,box-shadow] duration-[280ms] ease-premium',
+            'group-hover:border-white/[0.16] group-hover:shadow-soft',
           )}
         >
           <ResponsiveArt
@@ -36,8 +36,9 @@ export function GameFeature({ game, headingLevel = 'h2', priority = false }: { g
             alt={gameArtAlt(game)}
             priority={priority}
             quality={80}
-            sizes="(max-width: 1440px) 100vw, 1376px"
-            imgClassName="object-[70%_50%] transition-transform duration-[900ms] ease-premium group-hover:scale-[1.03]"
+            sizes="(max-width: 1440px) 100vw, 1440px"
+            objectPosition={game.artwork.objectPosition ?? '70% 50%'}
+            imgClassName="transition-transform duration-[320ms] ease-premium group-hover:scale-[1.025]"
           />
           <div aria-hidden="true" className="absolute inset-0 hidden bg-[linear-gradient(90deg,var(--game-deep,#050607)_0%,rgb(5_6_7/0.82)_24%,rgb(5_6_7/0.25)_52%,transparent_70%)] sm:block" />
           <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-[rgb(4_5_7/0.95)] to-transparent sm:h-1/2 sm:from-[rgb(4_5_7/0.6)]" />

@@ -16,8 +16,8 @@ async function chooseInterest(user: ReturnType<typeof userEvent.setup>, label: s
 async function fillValid(user: ReturnType<typeof userEvent.setup>) {
   await user.type(screen.getByLabelText('Name'), 'Ada Lovelace');
   await user.type(screen.getByLabelText('Work email'), 'ada@operator.example');
-  await chooseInterest(user, 'Integration');
-  await user.type(screen.getByLabelText('Message'), 'We would like to discuss an integration.');
+  await chooseInterest(user, 'Game Production');
+  await user.type(screen.getByLabelText('Message'), 'We would like to discuss game production.');
 }
 
 afterEach(() => vi.unstubAllGlobals());
@@ -28,8 +28,8 @@ describe('ContactForm', () => {
     render(<ContactForm defaultInterest="careers" />);
     const trigger = screen.getByRole('combobox', { name: 'I’m interested in' });
     expect(trigger).toHaveTextContent('Careers');
-    await chooseInterest(user, 'Integration');
-    expect(trigger).toHaveTextContent('Integration');
+    await chooseInterest(user, 'Game Production');
+    expect(trigger).toHaveTextContent('Game Production');
   });
 
   it('labels every field without relying on placeholders', () => {
@@ -76,7 +76,7 @@ describe('ContactForm', () => {
     await fillValid(user);
     await user.click(screen.getByRole('button', { name: /send message/i }));
     expect(await screen.findByRole('alert')).toHaveTextContent(/temporarily unavailable/i);
-    expect(screen.getByLabelText('Message')).toHaveValue('We would like to discuss an integration.');
+    expect(screen.getByLabelText('Message')).toHaveValue('We would like to discuss game production.');
     await waitFor(() => expect(screen.getByRole('button', { name: /send message/i })).toBeEnabled());
   });
 });

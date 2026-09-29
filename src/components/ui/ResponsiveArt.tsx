@@ -1,4 +1,5 @@
 import Image, { getImageProps } from 'next/image';
+import type { CSSProperties } from 'react';
 import { resolveArtSrc } from '@/lib/art/resolve';
 import { cn } from '@/lib/cn';
 
@@ -17,6 +18,8 @@ interface ResponsiveArtProps {
   quality?: 70 | 80;
   className?: string;
   imgClassName?: string;
+  /** CSS object-position. Prefer this over a one-off crop class when the focal point is known. */
+  objectPosition?: string;
 }
 
 /**
@@ -38,19 +41,20 @@ export function ResponsiveArt({
   quality = 70,
   className,
   imgClassName,
+  objectPosition,
 }: ResponsiveArtProps) {
   const src = resolveArtSrc(rawSrc);
   const mobileSrc = rawMobileSrc ? resolveArtSrc(rawMobileSrc) : undefined;
   const loading = priority ? 'eager' : 'lazy';
   const fetchPriority = priority ? 'high' : 'auto';
   const common = { fill: true, quality, loading, fetchPriority } as const;
-
+  const imgStyle: CSSProperties | undefined = objectPosition ? { objectPosition } : undefined;
   const imgClass = cn('object-cover', imgClassName);
 
   if (!mobileSrc) {
     return (
-      <div className={cn('absolute inset-0', className)}>
-        <Image {...common} src={src} alt={alt} sizes={sizes} className={imgClass} />
+      <div className={cn('art-slot absolute inset-0', className)}>
+        <Image {...common} src={src} alt={alt} sizes={sizes} className={imgClass} style={imgStyle} />
       </div>
     );
   }
@@ -62,10 +66,10 @@ export function ResponsiveArt({
   } = getImageProps({ ...common, src: mobileSrc, alt, sizes: mobileSizes });
 
   return (
-    <picture className={cn('absolute inset-0', className)}>
+    <picture className={cn('art-slot absolute inset-0', className)}>
       <source media={`(max-width: ${mobileMaxWidth}px)`} srcSet={mobileSrcSet} sizes={mobileSizes} />
       <source media={`(min-width: ${mobileMaxWidth + 1}px)`} srcSet={desktop.srcSet} sizes={sizes} />
-      <img {...desktop} alt={alt} className={imgClass} />
+      <img {...desktop} alt={alt} className={imgClass} style={imgStyle} />
     </picture>
   );
 }

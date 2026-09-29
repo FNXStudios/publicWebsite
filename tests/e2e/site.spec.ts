@@ -7,7 +7,7 @@ test.describe('homepage', () => {
     page.on('request', (r) => r.url().startsWith(E2E_GAME_ORIGIN) && gameRequests.push(r.url()));
     await page.goto('/');
 
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Independent iGaming\s+studio for real play\./);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Independent iGaming\s+Studio for real play\./);
     const featured = page.getByRole('region', { name: 'Original worlds. Built to play.' });
     await expect(featured.getByRole('heading', { level: 3 })).toHaveText(['Lantern Quarter', 'Tide Runner', 'Ember Crown']);
     await expect(page.getByText('Hidden Vault')).toHaveCount(0);

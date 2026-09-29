@@ -19,14 +19,26 @@ export const studioConfig = {
       {
         title: 'Original games',
         body: 'Slots and instant games built around a distinct hook, visual identity and player experience.',
+        art: {
+          src: '/visual-fixtures/production/concepts.png',
+          alt: 'World-building studies: environment, palette and character explorations for an original title.',
+        },
       },
       {
         title: 'Game production',
         body: 'Game design, math, art, animation, frontend and runtime development developed together rather than handed between isolated stages.',
+        art: {
+          src: '/visual-fixtures/production/stage-game.jpg',
+          alt: 'A finished reel frame with production UI, win states and motion still in one screen.',
+        },
       },
       {
         title: 'Operator delivery',
         body: 'Responsive builds prepared around real integration, deployment and production requirements.',
+        art: {
+          src: '/visual-fixtures/production/made-devices.jpg',
+          alt: 'The same game presented on desktop and portrait layouts for operator environments.',
+        },
       },
     ],
   },
@@ -88,6 +100,18 @@ export const studioConfig = {
           src: '/visual-fixtures/production/made-devices.jpg',
           alt: 'A finished game presentation across devices, showing responsive UI layout and interaction states.',
         },
+        compare: [
+          {
+            src: '/visual-fixtures/production/stage-concept.png',
+            alt: 'Early lantern symbol sketches with construction lines.',
+            caption: 'Sketch',
+          },
+          {
+            src: '/visual-fixtures/production/stage-design.jpg',
+            alt: 'The finished lantern symbol with palette and states.',
+            caption: 'Production',
+          },
+        ],
       },
     ],
   },
@@ -118,38 +142,38 @@ export const studioConfig = {
     intro: 'The finished screen is only the last layer. Before that come symbol studies, visual systems, animation tests, interface decisions, environment exploration and countless iterations that never need to be visible to the player.',
     gallery: [
       {
-        label: 'SYMBOL DEVELOPMENT',
-        caption: 'Lantern exploration and final asset.',
-        src: '/visual-fixtures/production/symbol-sheet.png',
-        alt: 'A symbol sheet showing lantern, wild and premium symbols in different forms and states.',
-      },
-      {
-        label: 'CHARACTER / SYMBOL DESIGN',
-        caption: 'Idol turnaround and breakdowns.',
-        src: '/visual-fixtures/production/character-sheet.png',
-        alt: 'A temple idol displayed in multiple turns and angle studies, with design notes around silhouettes and expression.',
-      },
-      {
-        label: 'MOTION STUDY',
-        caption: 'Win-state timing and bounce behaviour.',
-        src: '/visual-fixtures/production/animation-frames.png',
-        alt: 'Animation frames for a lantern win state with frame numbers and an easing curve.',
-      },
-      {
-        label: 'ART DIRECTION',
-        caption: 'Environment and palette exploration.',
+        label: 'World',
+        caption: 'Environment, palette and the first readable silhouette.',
         src: '/visual-fixtures/production/concepts.png',
         alt: 'Colour and environment exploration pinned next to a concept sheet for a game world.',
       },
       {
-        label: 'GAME UI',
+        label: 'Symbol language',
+        caption: 'Lantern exploration through to the final asset.',
+        src: '/visual-fixtures/production/symbol-sheet.png',
+        alt: 'A symbol sheet showing lantern, wild and premium symbols in different forms and states.',
+      },
+      {
+        label: 'Interface',
         caption: 'Controls, states and interaction language.',
         src: '/visual-fixtures/production/ui-kit.jpg',
         alt: 'Game UI kit showing buttons, states, win banners and responsive controls for a slot build.',
       },
       {
-        label: 'FINAL EXPERIENCE',
-        caption: 'Game running on device and in context.',
+        label: 'Motion',
+        caption: 'Win-state timing and bounce behaviour.',
+        src: '/visual-fixtures/production/animation-frames.png',
+        alt: 'Animation frames for a lantern win state with frame numbers and an easing curve.',
+      },
+      {
+        label: 'Character',
+        caption: 'Idol turnaround and breakdowns.',
+        src: '/visual-fixtures/production/character-sheet.png',
+        alt: 'A temple idol displayed in multiple turns and angle studies, with design notes around silhouettes and expression.',
+      },
+      {
+        label: 'Final game',
+        caption: 'Finished scene, on the reels.',
         src: '/visual-fixtures/games/mystic-tides-screen-2.jpg',
         alt: 'A finished slot game screen showing the reel grid, win states and premium symbols in game context.',
       },
@@ -171,7 +195,7 @@ export const studioConfig = {
   },
 } satisfies {
   about: { eyebrow: string; headline: HeadlineLines; body: string; art: ArtContent };
-  capabilities: { eyebrow: string; headline: HeadlineLines; intro: string; items: TitledCopy[] };
+  capabilities: { eyebrow: string; headline: HeadlineLines; intro: string; items: (TitledCopy & { art: ArtContent })[] };
   reason: { eyebrow: string; headline: HeadlineLines; intro: string; blocks: string[]; closing: string; art: ArtContent };
   philosophy: {
     eyebrow: string;
@@ -182,6 +206,7 @@ export const studioConfig = {
       headline: HeadlineLines;
       body: string;
       art: ArtContent;
+      compare?: (ArtContent & { caption: string })[];
     }[];
   };
   tools: { eyebrow: string; headline: string; body: string };

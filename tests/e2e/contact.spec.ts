@@ -16,8 +16,8 @@ async function fill(page: Page) {
   await page.getByLabel('Name').fill('Ada Lovelace');
   await page.getByLabel('Work email').fill('ada@operator.example');
   await page.getByRole('combobox', { name: 'I’m interested in' }).click();
-  await page.getByRole('option', { name: 'Integration' }).click();
-  await page.getByLabel('Message').fill('We would like to discuss an integration.');
+  await page.getByRole('option', { name: 'Game Production' }).click();
+  await page.getByLabel('Message').fill('We would like to discuss game production.');
 }
 
 test('there is no contact page: the old URL opens the global dialog', async ({ page }) => {
@@ -65,7 +65,7 @@ test('without a configured endpoint the real API refuses and the form says so', 
   await page.getByRole('button', { name: 'Send message' }).click();
   await expect(page.getByRole('alert').filter({ hasText: 'temporarily unavailable' })).toBeVisible();
   await expect(page.getByRole('heading', { name: /your message is with us/i })).toHaveCount(0);
-  await expect(page.getByLabel('Message')).toHaveValue('We would like to discuss an integration.');
+  await expect(page.getByLabel('Message')).toHaveValue('We would like to discuss game production.');
 });
 
 test('open careers role preselects the careers topic', async ({ page }) => {

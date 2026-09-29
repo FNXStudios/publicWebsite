@@ -25,7 +25,7 @@ export function Operators() {
           </ContactTrigger>
         </div>
 
-        <Reveal as="ul" className="mt-14 grid gap-x-8 gap-y-2 sm:grid-cols-2 md:mt-20 md:max-w-[52%] lg:grid-cols-2">
+        <Reveal as="ul" className="mt-14 grid gap-x-8 gap-y-2 sm:grid-cols-3 md:mt-20 md:max-w-[58%]">
           {operators.capabilities.map((item, index) => (
             <li key={item.label} className="group relative border-t border-white/[0.09] py-6">
               <span aria-hidden="true" className="absolute -top-px left-0 h-px w-8 bg-violet-400 transition-[width] duration-[520ms] ease-premium group-hover:w-full" />

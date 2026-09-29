@@ -22,9 +22,10 @@
   --fnx-text-secondary: #a8a5ae;
   /* Tuned up from #706d77 so small muted text still clears WCAG AA on every surface. */
   --fnx-text-muted: #817e89;
+  --fnx-text-disabled: #5c5a63;
 
-  /* Lines */
-  --fnx-border: rgb(255 255 255 / 0.075);
+  /* Lines — functional cards must stay identifiable on mediocre displays */
+  --fnx-border: rgb(255 255 255 / 0.09);
   --fnx-border-hover: rgb(255 255 255 / 0.16);
   --fnx-border-strong: rgb(255 255 255 / 0.22);
 
@@ -53,6 +54,17 @@
   --depth-raised: var(--fnx-black-750);
   --depth-raised-hover: var(--fnx-black-700);
 
+  /* Semantic aliases (components may use either name) */
+  --background-primary: var(--depth-page);
+  --background-elevated: var(--depth-section);
+  --background-card: var(--depth-raised);
+  --text-disabled: var(--fnx-text-disabled);
+  --border-subtle: var(--fnx-border);
+  --border-interactive: var(--fnx-border-hover);
+  --accent-primary: var(--fnx-violet-500);
+  --accent-hover: var(--fnx-violet-400);
+  --accent-muted: var(--fnx-violet-soft);
+
   /* Homepage rhythm: tone changes carry transitions, not divider lines */
   --tone-hero: var(--fnx-black-900);
   --tone-featured: var(--fnx-black-850);
@@ -66,13 +78,13 @@
   --shadow-card-hover: 0 24px 70px rgb(0 0 0 / 0.38);
   --shadow-violet: 0 12px 36px rgb(95 45 220 / 0.16);
 
-  /* Layout */
-  --container-max: 86rem; /* 1376px */
-  --gutter: clamp(1rem, 0.4rem + 2.8vw, 3rem);
+  /* Layout: content column 1440px; gutters 16px (phone) → 24px (desktop) */
+  --container-max: 90rem;
+  --gutter: clamp(1rem, 0.7rem + 1.1vw, 1.5rem);
   --header-height: 4rem; /* 64px; 76px from md */
-  --space-tight: clamp(3rem, 2rem + 2.6vw, 5rem);
-  --space-medium: clamp(4.5rem, 3rem + 4vw, 7.5rem);
-  --space-large: clamp(5.5rem, 3.5rem + 5.5vw, 9.5rem);
+  --space-tight: clamp(4rem, 3.2rem + 2.4vw, 6.25rem);
+  --space-medium: clamp(5rem, 3.5rem + 4vw, 8.75rem);
+  --space-large: clamp(5.5rem, 3.8rem + 5.2vw, 10.5rem);
 
   /* Radii */
   --radius-sm: 0.5rem;
@@ -112,6 +124,7 @@
   --color-text: var(--fnx-text-primary);
   --color-text-secondary: var(--fnx-text-secondary);
   --color-text-muted: var(--fnx-text-muted);
+  --color-text-disabled: var(--fnx-text-disabled);
   --color-white: var(--fnx-white);
 
   --color-line: var(--fnx-border);
@@ -155,11 +168,16 @@
   --breakpoint-xl: 100rem;
   --breakpoint-2xl: initial;
 
-  /* Editorial type scale (fluid). */
+  /* Editorial type scale (fluid). display → heading → body → supporting → meta */
   --text-hero: clamp(2.75rem, 1.1rem + 4.55vw, 5.5rem);
   --text-hero--line-height: 0.96;
   --text-hero--letter-spacing: -0.035em;
   --text-hero--font-weight: 600;
+
+  --text-display-xl: clamp(3.25rem, 1.4rem + 5.2vw, 6.25rem);
+  --text-display-xl--line-height: 0.94;
+  --text-display-xl--letter-spacing: -0.04em;
+  --text-display-xl--font-weight: 600;
 
   --text-display: clamp(2.25rem, 1.35rem + 3.1vw, 4rem);
   --text-display--line-height: 1.02;
@@ -171,16 +189,21 @@
   --text-display-sm--letter-spacing: -0.028em;
   --text-display-sm--font-weight: 600;
 
+  --text-heading: clamp(1.5rem, 1.25rem + 0.85vw, 2.125rem);
+  --text-heading--line-height: 1.12;
+  --text-heading--letter-spacing: -0.022em;
+  --text-heading--font-weight: 600;
+
   --text-title: clamp(1.375rem, 1.2rem + 0.55vw, 1.75rem);
   --text-title--line-height: 1.18;
   --text-title--letter-spacing: -0.02em;
   --text-title--font-weight: 600;
 
-  --text-lead: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --text-lead: clamp(1.03125rem, 0.98rem + 0.22vw, 1.125rem);
   --text-lead--line-height: 1.6;
 
   --text-body: 1rem;
-  --text-body--line-height: 1.65;
+  --text-body--line-height: 1.62;
 
   --text-small: 0.875rem;
   --text-small--line-height: 1.55;
@@ -221,6 +244,10 @@
 
   p {
     text-wrap: pretty;
+  }
+
+  .prose-measure {
+    max-width: 55ch;
   }
 
   ::selection {
@@ -289,7 +316,16 @@
 
 /* Arrow nudge shared by buttons, text links and cards. */
 @utility arrow-nudge {
-  transition: transform var(--duration-interaction) var(--ease-premium);
+  transition: transform 180ms var(--ease-premium);
+}
+
+/* Reserved art frame: graphite fill until the image paints, then a quiet fade-in. */
+@utility art-slot {
+  background-color: var(--depth-raised);
+}
+
+img[loading='lazy'] {
+  animation: fnx-fade-in var(--duration-editorial) var(--ease-premium) both;
 }
 
 /* Underline that draws in from the left on hover / keyboard focus of the parent link. */

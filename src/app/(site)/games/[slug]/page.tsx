@@ -102,7 +102,7 @@ export default async function GamePage({ params }: Props) {
                     Play Game
                   </ButtonLink>
                 ) : (
-                  <ContactTrigger variant="secondary" size="lg" placement={`game-${game.slug}-art`} interest="operator-partnership">
+                  <ContactTrigger variant="secondary" size="lg" placement={`game-${game.slug}-art`} interest="original-content">
                     Ask us about this title
                   </ContactTrigger>
                 )}

@@ -17,6 +17,8 @@ export interface ArtContent {
   mobileSrc?: string;
   /** Empty string for decorative artwork. */
   alt: string;
+  /** CSS object-position, e.g. "62% 48%". */
+  objectPosition?: string;
 }
 
 export interface TitledCopy {

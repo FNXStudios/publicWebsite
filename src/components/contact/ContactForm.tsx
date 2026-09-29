@@ -182,7 +182,7 @@ export function ContactForm({ interests, copy: form, defaultInterest = '' }: Con
           <Select.Trigger
             id={`${uid}-interest`}
             aria-invalid={Boolean(errors.interest) || undefined}
-            aria-describedby={errors.interest ? `${uid}-interest-error` : undefined}
+            aria-describedby={errors.interest ? `${uid}-interest-error` : current.interest === 'careers' ? `${uid}-careers-hint` : undefined}
             className={cn(fieldClass, 'group/select flex cursor-pointer items-center justify-between gap-3 text-left data-placeholder:text-text-muted data-[state=open]:border-violet-500')}
           >
             <Select.Value placeholder="Choose one" />
@@ -213,6 +213,14 @@ export function ContactForm({ interests, copy: form, defaultInterest = '' }: Con
             </Select.Content>
           </Select.Portal>
         </Select.Root>
+        {current.interest === 'careers' && !errors.interest ? (
+          <p id={`${uid}-careers-hint`} className="mt-2 text-[0.8125rem] text-text-muted">
+            Prefer open roles?{' '}
+            <a href={routes.careers} className="font-medium text-text underline decoration-white/25 underline-offset-4 transition-colors hover:text-white hover:decoration-current">
+              See Careers
+            </a>
+          </p>
+        ) : null}
       </Field>
 
       <Field id={`${uid}-message`} label="Message" error={errors.message} className="sm:col-span-2">

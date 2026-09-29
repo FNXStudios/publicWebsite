@@ -38,6 +38,11 @@ export const gameSchema = z
         screenshots: z.array(imagePathSchema).min(1).max(12).optional(),
         /** Overrides the default "<title> key art" alt text. */
         alt: z.string().trim().min(1).max(160).optional(),
+        /** CSS object-position so crops keep the focal point, e.g. "62% 48%". */
+        objectPosition: z
+          .string()
+          .regex(/^\d{1,3}(?:\.\d+)?% \d{1,3}(?:\.\d+)?%$/, 'must look like "62% 48%"')
+          .optional(),
       })
       .strict(),
 

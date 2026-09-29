@@ -31,7 +31,7 @@ export const demoGames: GameInput[] = [
     description:
       'Beneath a sun the colour of embers, a dragon wraps itself around its hoard. Lanterns sway above the reels and every spin tightens the coil.\n\nFree spins open the hoard: the dragon unwinds, symbols land heavier and the reels slow just enough to let each win arrive.',
     order: 1,
-    artwork: art('dragons-fortune'),
+    artwork: { ...art('dragons-fortune'), objectPosition: '62% 46%' },
     game: launch,
     info: { reels: 5, rows: 3, ways: 243, mechanics: ['Ways pays', 'Stacked wilds'], features: ['Free spins', 'Lantern respins'] },
     theme: { accent: '#ffcf7a', glow: '#e2402a', deep: '#1a0406' },
@@ -45,7 +45,7 @@ export const demoGames: GameInput[] = [
     description:
       'A calm indigo sea under a full moon, lit from below by drifting light. Wins wash away and new symbols fall into their place.\n\nCascades keep a session moving without rushing it — each chain a little brighter than the last.',
     order: 2,
-    artwork: art('mystic-tides'),
+    artwork: { ...art('mystic-tides'), objectPosition: '48% 42%' },
     game: launch,
     info: { reels: 6, rows: 4, ways: 4096, mechanics: ['Cascades', 'Ways pays'], features: ['Free spins', 'Rising multiplier'] },
     theme: { accent: '#cfd9ff', glow: '#6a3fe0', deep: '#070822' },
@@ -59,7 +59,7 @@ export const demoGames: GameInput[] = [
     description:
       'An old temple deep in the jungle, glowing from its highest step. Sun medallions that land stay where they are while the rest of the reels turn.\n\nHold & win builds slowly and visibly, so the moment the last position fills feels earned.',
     order: 3,
-    artwork: art('temple-of-valor'),
+    artwork: { ...art('temple-of-valor'), objectPosition: '55% 48%' },
     game: launch,
     info: { reels: 5, rows: 3, paylines: 20, mechanics: ['Paylines', 'Sticky prizes'], features: ['Hold & win', 'Free spins'] },
     theme: { accent: '#ffe39a', glow: '#1fa56a', deep: '#03140c' },

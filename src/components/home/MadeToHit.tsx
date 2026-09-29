@@ -29,7 +29,7 @@ export function MadeToHit() {
           {madeToHit.panels.map((panel, index) => (
             <li
               key={panel.label}
-              className="group/panel relative isolate flex min-w-0 flex-col overflow-hidden rounded-lg border border-white/[0.08] bg-raised transition-[flex-grow,border-color] duration-[560ms] ease-premium md:flex-1 md:hover:grow-[1.4] md:hover:border-white/[0.16]"
+              className="group/panel relative isolate flex min-w-0 flex-col overflow-hidden rounded-lg border border-white/[0.09] bg-raised transition-[flex-grow,border-color] duration-[560ms] ease-premium md:flex-1 md:hover:grow-[1.4] md:hover:border-white/[0.16]"
             >
               <div className="relative aspect-[4/3] shrink-0 overflow-hidden md:absolute md:inset-0 md:aspect-auto">
                 <ResponsiveArt
@@ -48,10 +48,10 @@ export function MadeToHit() {
                   <span className="h-px w-5 bg-white/20" aria-hidden="true" />
                   <span className="text-text-secondary">{panel.label}</span>
                 </div>
-                <h3 className="mt-5 max-w-[22ch] text-title text-white">
+                <h3 className="mt-5 max-w-[22ch] text-heading text-white">
                   {panel.title}
                 </h3>
-                <p className="mt-4 max-w-[34ch] text-small text-text-secondary transition-[opacity,color] duration-(--duration-standard) md:text-white/55 md:group-hover/panel:text-text-secondary">
+                <p className="mt-4 max-w-[36ch] text-body text-text-secondary transition-[opacity,color] duration-(--duration-standard) md:text-white/70 md:group-hover/panel:text-text-secondary">
                   {panel.body}
                 </p>
                 {/* Accent rule draws across the active panel. */}

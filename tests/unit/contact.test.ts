@@ -7,7 +7,7 @@ const valid = {
   name: 'Ada',
   email: 'ada@operator.example',
   company: '',
-  interest: 'integration',
+  interest: 'game-production',
   message: 'We would like to talk about integrating your games.',
 };
 
@@ -44,7 +44,7 @@ describe('deliverContactSubmission', () => {
     const [url, init] = fetchImpl.mock.calls[0]!;
     expect(url).toBe('https://forms.example/hook');
     expect(init.headers.authorization).toBe('Bearer t0k');
-    expect(JSON.parse(init.body)).toMatchObject({ email: valid.email, interest: 'integration' });
+    expect(JSON.parse(init.body)).toMatchObject({ email: valid.email, interest: 'game-production' });
   });
 
   it('treats upstream errors as failures', async () => {

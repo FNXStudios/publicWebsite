@@ -25,11 +25,11 @@ export const metadata: Metadata = pageMetadata({
 
 const workLayouts = [
   {
-    span: 'md:col-span-8',
+    span: 'md:col-span-7',
     aspect: 'aspect-[16/10]',
   },
   {
-    span: 'md:col-span-4',
+    span: 'md:col-span-5',
     aspect: 'aspect-[4/5]',
   },
   {
@@ -41,12 +41,12 @@ const workLayouts = [
     aspect: 'aspect-[16/10]',
   },
   {
-    span: 'md:col-span-12',
-    aspect: 'aspect-[16/7]',
+    span: 'md:col-span-4',
+    aspect: 'aspect-[4/5]',
   },
   {
-    span: 'md:col-span-12',
-    aspect: 'aspect-[16/8]',
+    span: 'md:col-span-8',
+    aspect: 'aspect-[16/9]',
   },
 ] as const;
 
@@ -172,7 +172,7 @@ export default function StudioPage() {
          ========================================================= */}
       <section
         aria-labelledby="reason-title"
-        className="relative isolate overflow-hidden bg-[var(--depth-section)] py-[clamp(7rem,11vw,11rem)]"
+        className="relative isolate overflow-hidden bg-[var(--depth-section)] py-[clamp(5.5rem,9vw,9.5rem)]"
       >
         {/* Giant authored geometry instead of another card/image block. */}
         <div
@@ -218,13 +218,13 @@ export default function StudioPage() {
                 {reason.intro}
               </p>
 
-              <div className="mt-10 space-y-7">
+              <div className="mt-8 space-y-6">
                 {reason.blocks.map((paragraph, index) => (
                   <Reveal
                     key={`${index}-${paragraph.slice(0, 16)}`}
                     delay={index * 55}
                   >
-                    <p className="max-w-[40rem] text-[1.0625rem] leading-[1.75] text-text-secondary md:text-[1.125rem]">
+                    <p className="prose-measure text-body leading-[1.65] text-text-secondary md:text-[1.0625rem] md:leading-[1.7]">
                       {paragraph}
                     </p>
                   </Reveal>
@@ -284,29 +284,42 @@ export default function StudioPage() {
             </p>
           </div>
 
-          {/* Editorial lanes — no feature cards. */}
-          <div className="mt-16 grid gap-12 md:mt-24 md:grid-cols-3 md:gap-9">
+          {/* Capability pillars with adjacent production proof. */}
+          <div className="mt-14 grid gap-10 md:mt-20 md:grid-cols-3 md:gap-8">
             {capabilities.items.map((item, index) => (
               <article
                 key={item.title}
-                className="group relative border-t border-white/[0.085] pt-7 md:pt-9"
+                className="group relative flex flex-col border-t border-white/[0.09] pt-7 md:pt-9"
               >
                 <span
                   aria-hidden="true"
                   className="absolute -top-px left-0 h-px w-0 bg-violet-400 transition-[width] duration-[520ms] ease-premium group-hover:w-24"
                 />
 
-                <Reveal delay={index * 70}>
+                <Reveal delay={index * 70} className="flex flex-1 flex-col">
+                  <figure className="relative mb-7 aspect-[5/4] overflow-hidden rounded-lg border border-white/[0.09] bg-raised">
+                    <ResponsiveArt
+                      src={item.art.src}
+                      alt={item.art.alt}
+                      sizes="(max-width: 899px) 100vw, 420px"
+                      imgClassName="object-cover transition-transform duration-[700ms] ease-premium group-hover:scale-[1.02]"
+                    />
+                    <div
+                      aria-hidden="true"
+                      className="absolute inset-0 bg-[linear-gradient(180deg,transparent_55%,rgb(5_6_7/0.35)_100%)]"
+                    />
+                  </figure>
+
                   <Index
                     n={index + 1}
                     className="text-text-muted transition-colors duration-(--duration-standard) group-hover:text-violet-300"
                   />
 
-                  <h3 className="mt-7 max-w-[10ch] text-[clamp(1.9rem,1.4rem+1.25vw,3rem)] leading-[1.03] font-semibold tracking-[-0.037em] text-white/92 transition-[transform,color] duration-(--duration-standard) ease-premium group-hover:translate-x-1 group-hover:text-white">
+                  <h3 className="mt-5 max-w-[12ch] text-[clamp(1.75rem,1.35rem+1.1vw,2.5rem)] leading-[1.05] font-semibold tracking-[-0.034em] text-white/92 transition-[transform,color] duration-(--duration-standard) ease-premium group-hover:translate-x-1 group-hover:text-white">
                     {item.title}
                   </h3>
 
-                  <p className="mt-5 max-w-[28rem] text-lead text-text-secondary">
+                  <p className="mt-4 max-w-[28rem] text-body text-text-secondary">
                     {item.body}
                   </p>
                 </Reveal>
@@ -349,9 +362,10 @@ export default function StudioPage() {
         </div>
 
         {/* Each principle is an editorial chapter, not a card. */}
-        <div className="relative mt-24 space-y-[clamp(8rem,13vw,14rem)] md:mt-32">
+        <div className="relative mt-16 space-y-[clamp(5.5rem,9vw,10rem)] md:mt-24">
           {philosophy.principles.map((principle, index) => {
             const visualFirst = index % 2 !== 0;
+            const compare = principle.compare;
 
             return (
               <article
@@ -359,10 +373,7 @@ export default function StudioPage() {
                 className="relative overflow-hidden"
               >
                 <div className="container-fnx">
-                  <div className="grid gap-12 border-t border-white/[0.055] pt-12 md:grid-cols-12 md:items-center md:gap-10 md:pt-16">
-                    {/* -----------------------------
-                        Principle copy
-                       ----------------------------- */}
+                  <div className="grid gap-10 border-t border-white/[0.08] pt-10 md:grid-cols-12 md:items-center md:gap-10 md:pt-14">
                     <div
                       className={cn(
                         'relative z-10 md:col-span-5',
@@ -379,18 +390,15 @@ export default function StudioPage() {
                         {principle.label}
                       </p>
 
-                      <h3 className="mt-7 max-w-[11ch] text-[clamp(2.45rem,1.6rem+2.2vw,4.6rem)] leading-[1] font-semibold tracking-[-0.043em] text-white">
+                      <h3 className="mt-6 max-w-[11ch] text-[clamp(2.2rem,1.5rem+2vw,4rem)] leading-[1.02] font-semibold tracking-[-0.04em] text-white">
                         <HeadlineLines lines={principle.headline} />
                       </h3>
 
-                      <p className="mt-8 max-w-[35rem] text-[1.0625rem] leading-[1.75] text-text-secondary md:text-[1.125rem]">
+                      <p className="prose-measure mt-7 text-body text-text-secondary md:text-[1.0625rem] md:leading-[1.7]">
                         {principle.body}
                       </p>
                     </div>
 
-                    {/* -----------------------------
-                        Principle artwork
-                       ----------------------------- */}
                     <div
                       className={cn(
                         'md:col-span-7',
@@ -400,30 +408,44 @@ export default function StudioPage() {
                       )}
                     >
                       <Reveal className="group relative">
-                        <figure className="relative aspect-[4/3] overflow-hidden rounded-xl bg-raised">
-                          <ResponsiveArt
-                            src={principle.art.src}
-                            alt={principle.art.alt}
-                            sizes="(max-width: 899px) 100vw, 62vw"
-                            imgClassName="object-cover object-[50%_44%] transition-transform duration-[950ms] ease-premium group-hover:scale-[1.018]"
-                          />
-
-                          {/* Fade the image towards copy to avoid 'card beside text'. */}
-                          <div
-                            aria-hidden="true"
-                            className={cn(
-                              'absolute inset-0',
-                              visualFirst
-                                ? 'bg-[linear-gradient(90deg,transparent_74%,var(--depth-section-alt)_100%)]'
-                                : 'bg-[linear-gradient(90deg,var(--depth-section-alt)_0%,transparent_26%)]',
-                            )}
-                          />
-
-                          <div
-                            aria-hidden="true"
-                            className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[var(--depth-section-alt)]/35 to-transparent"
-                          />
-                        </figure>
+                        {compare && compare.length >= 2 ? (
+                          <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                            {compare.map((frame) => (
+                              <figure
+                                key={frame.src}
+                                className="relative aspect-[4/5] overflow-hidden rounded-lg border border-white/[0.09] bg-raised"
+                              >
+                                <ResponsiveArt
+                                  src={frame.src}
+                                  alt={frame.alt}
+                                  sizes="(max-width: 899px) 50vw, 28vw"
+                                  imgClassName="object-cover"
+                                />
+                                <figcaption className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/70 to-transparent px-3 py-3 text-[0.7rem] font-semibold tracking-[0.16em] text-white/80 uppercase">
+                                  {frame.caption}
+                                </figcaption>
+                              </figure>
+                            ))}
+                          </div>
+                        ) : (
+                          <figure className="relative aspect-[4/3] overflow-hidden rounded-xl bg-raised">
+                            <ResponsiveArt
+                              src={principle.art.src}
+                              alt={principle.art.alt}
+                              sizes="(max-width: 899px) 100vw, 62vw"
+                              imgClassName="object-cover object-[50%_44%] transition-transform duration-[700ms] ease-premium group-hover:scale-[1.015]"
+                            />
+                            <div
+                              aria-hidden="true"
+                              className={cn(
+                                'absolute inset-0',
+                                visualFirst
+                                  ? 'bg-[linear-gradient(90deg,transparent_74%,var(--depth-section-alt)_100%)]'
+                                  : 'bg-[linear-gradient(90deg,var(--depth-section-alt)_0%,transparent_26%)]',
+                              )}
+                            />
+                          </figure>
+                        )}
                       </Reveal>
                     </div>
                   </div>
@@ -521,7 +543,7 @@ export default function StudioPage() {
           </div>
 
           {/* Asymmetric production evidence board. */}
-          <div className="mt-16 grid gap-5 md:mt-24 md:grid-cols-12 md:gap-6">
+          <div className="mt-14 grid gap-5 md:mt-20 md:grid-cols-12 md:gap-6">
             {work.gallery.map((item, index) => {
               const layout =
                 workLayouts[index % workLayouts.length] ?? workLayouts[0];
@@ -532,7 +554,7 @@ export default function StudioPage() {
                   delay={(index % 3) * 60}
                   className={layout.span}
                 >
-                  <figure className="group relative overflow-hidden rounded-xl bg-raised">
+                  <figure className="group relative overflow-hidden rounded-xl border border-white/[0.09] bg-raised">
                     <div
                       className={cn(
                         'relative overflow-hidden',
@@ -543,30 +565,25 @@ export default function StudioPage() {
                         src={item.src}
                         alt={item.alt}
                         sizes={
-                          layout.span === 'md:col-span-12'
-                            ? '(max-width: 899px) 100vw, 1376px'
-                            : '(max-width: 899px) 100vw, 900px'
+                          layout.span.includes('col-span-12') || layout.span.includes('col-span-8') || layout.span.includes('col-span-7')
+                            ? '(max-width: 899px) 100vw, 900px'
+                            : '(max-width: 899px) 100vw, 480px'
                         }
-                        imgClassName="object-cover transition-transform duration-[950ms] ease-premium group-hover:scale-[1.025]"
+                        imgClassName="object-cover transition-transform duration-[700ms] ease-premium group-hover:scale-[1.02]"
                       />
 
                       <div
                         aria-hidden="true"
-                        className="absolute inset-0 bg-[linear-gradient(180deg,transparent_56%,rgb(3_4_5/0.76)_100%)]"
-                      />
-
-                      <div
-                        aria-hidden="true"
-                        className="absolute inset-0 ring-1 ring-inset ring-white/[0.055]"
+                        className="absolute inset-0 bg-[linear-gradient(180deg,transparent_50%,rgb(3_4_5/0.82)_100%)]"
                       />
                     </div>
 
-                    <figcaption className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-2 px-5 py-5 md:px-7 md:py-7">
-                      <span className="text-[0.7rem] font-semibold tracking-[0.19em] text-violet-300 uppercase">
-                        {item.label}
+                    <figcaption className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-1.5 px-5 py-5 md:px-6 md:py-6">
+                      <span className="text-[0.7rem] font-semibold tracking-[0.18em] text-violet-300 uppercase">
+                        {String(index + 1).padStart(2, '0')} · {item.label}
                       </span>
 
-                      <span className="max-w-[34rem] text-small text-white/72">
+                      <span className="max-w-[34rem] text-small text-white/78">
                         {item.caption}
                       </span>
                     </figcaption>

@@ -11,11 +11,11 @@ import type { ArtContent, ContactAction, HeadlineLines, LinkContent } from './co
 export const homeConfig = {
   hero: {
     eyebrow: 'Original games · Real experiences.',
-    headline: ['Independent iGaming', 'studio for real play.'],
-    body: 'We make original slot and instant games — worlds with character, tuned to feel right and built to run anywhere.',
+    headline: ['Independent iGaming', 'Studio for real play.'],
+    body: 'We design and build original slot and instant games from concept through production.',
     primaryCta: { label: 'Explore Games', href: routes.games },
     secondaryCta: { label: 'Meet the Studio', href: routes.studio },
-    proofPoints: ['Original IP', 'Production Ready', 'Operator Focused'],
+    proofPoints: ['Original titles', 'Full-cycle production', 'Built for real-money environments'],
     art: { src: '/art/hero.png', mobileSrc: '/art/hero-mobile.png', alt: '' },
   },
 
@@ -46,7 +46,7 @@ export const homeConfig = {
         title: 'Distinct worlds made to be recognised at a glance.',
         body: 'Every title gets its own symbols, characters and light — readable at thumbnail size and rewarding at full screen.',
         art: {
-          src: '/visual-fixtures/production/made-impact.png',
+          src: '/visual-fixtures/production/made-impact.jpg',
           alt: 'A lineup of hero symbols from three worlds: a red lantern and dragon pearl, a violet jellyfish and crystal, a golden idol and emerald.',
         },
       },
@@ -55,7 +55,7 @@ export const homeConfig = {
         title: 'Fast, responsive games built for real devices and real operators.',
         body: 'One build that holds its frame rate and its layout on desktop, tablet and the phones players actually own.',
         art: {
-          src: '/visual-fixtures/production/made-devices.png',
+          src: '/visual-fixtures/production/made-devices.jpg',
           alt: 'The same games running on a desktop monitor, a tablet and a phone.',
         },
       },
@@ -76,7 +76,7 @@ export const homeConfig = {
       {
         title: 'Design',
         body: 'Final form, palette and states — idle, win and dim — settled together so the symbol works on every reel.',
-        art: { src: '/visual-fixtures/production/stage-design.png', alt: 'The finished lantern symbol with its palette swatches and idle, win and dim states.' },
+        art: { src: '/visual-fixtures/production/stage-design.jpg', alt: 'The finished lantern symbol with its palette swatches and idle, win and dim states.' },
       },
       {
         title: 'Motion',
@@ -86,7 +86,7 @@ export const homeConfig = {
       {
         title: 'Game',
         body: 'On the reels, on the line, in the player’s hands — the same idea, now part of a game.',
-        art: { src: '/visual-fixtures/production/stage-game.png', alt: 'Three lanterns and a wild landing on a lit win line in the finished game.' },
+        art: { src: '/visual-fixtures/production/stage-game.jpg', alt: 'Three lanterns and a wild landing on a lit win line in the finished game.' },
       },
     ],
   },
@@ -98,11 +98,10 @@ export const homeConfig = {
     // TODO(business): confirm each capability reflects the current pipeline before launch.
     capabilities: [
       { label: 'Responsive', body: 'Built for desktop and mobile.' },
-      { label: 'Performance', body: 'Fast loading and stable runtime.' },
-      { label: 'Integration', body: 'Made for operator and aggregator workflows.' },
-      { label: 'Delivery', body: 'A clear path from build to production.' },
+      { label: 'Performance', body: 'Fast loading and stable runtime behaviour.' },
+      { label: 'Production-minded', body: 'Designed around real deployment environments.' },
     ],
-    cta: { label: 'Talk to us about distribution', interest: 'operator-partnership' },
+    cta: { label: 'Talk to us about distribution', interest: 'studio-partnership' },
   },
 
   finalCta: {

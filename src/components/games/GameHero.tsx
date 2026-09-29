@@ -61,7 +61,7 @@ export function GameHero({ game }: { game: Game }) {
               <span className="inline-flex h-[3.25rem] items-center rounded-md border border-white/15 bg-black/25 px-5 text-body font-semibold text-white/80 backdrop-blur-[2px]">
                 {game.isDemo ? 'In development' : 'Coming soon'}
               </span>
-              <ContactTrigger appearance="link" placement={`game-${game.slug}`} interest="operator-partnership">
+              <ContactTrigger appearance="link" placement={`game-${game.slug}`} interest="original-content">
                 Ask us about this title
               </ContactTrigger>
             </>

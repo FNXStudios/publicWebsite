@@ -4,12 +4,11 @@ import { parseConfig } from './schema/parse';
 
 export const contactOptions = parseConfig('contact', contactConfigSchema, {
   interests: [
-    { value: 'original-content', label: 'Original content' },
-    { value: 'operator-partnership', label: 'Operator partnership' },
-    { value: 'studio-partnership', label: 'A new concept or studio partnership' },
-    { value: 'integration', label: 'Integration' },
+    { value: 'original-content', label: 'Original Game' },
+    { value: 'game-production', label: 'Game Production' },
+    { value: 'studio-partnership', label: 'Studio Partnership' },
     { value: 'careers', label: 'Careers' },
-    { value: 'other', label: 'Something else' },
+    { value: 'other', label: 'Something Else' },
   ],
 });
 
@@ -17,7 +16,7 @@ export const contactOptions = parseConfig('contact', contactConfigSchema, {
 export const contactDialogContent = {
   eyebrow: 'Let’s talk',
   title: 'Have something worth building?',
-  body: 'Original content, a new concept, a studio partner or a place on the team — tell us a little about it and we’ll take it from there.',
+  body: 'Original Game, production help, a studio partnership — tell us a little about it and we’ll take it from there.',
   note: 'Every message is read by the people who make the games. We reply to the address you give us.',
   directHeading: 'Direct',
   form: {

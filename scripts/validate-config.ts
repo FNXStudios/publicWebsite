@@ -32,7 +32,10 @@ const [{ games }, { jobs, careersPageContent }, { siteConfig }, { homeConfig }, 
 
 for (const game of games) {
   const { screenshots = [], ...art } = game.artwork;
-  for (const [key, value] of Object.entries(art)) if (key !== 'alt') checkAsset(`game "${game.slug}" artwork.${key}`, value);
+  for (const [key, value] of Object.entries(art)) {
+    if (key === 'alt' || key === 'objectPosition' || typeof value !== 'string') continue;
+    checkAsset(`game "${game.slug}" artwork.${key}`, value);
+  }
   screenshots.forEach((shot, i) => checkAsset(`game "${game.slug}" screenshot ${i + 1}`, shot));
   checkAsset(`game "${game.slug}" seo.image`, game.seo.image);
   try {
@@ -47,14 +50,23 @@ const pageArt: { src: string; mobileSrc?: string }[] = [
   homeConfig.hero.art,
   ...homeConfig.madeToHit.panels.map((p) => p.art),
   ...homeConfig.ideaToGame.stages.map((s) => s.art),
-  studioConfig.intro.art,
-  ...studioConfig.production.items,
+  studioConfig.about.art,
+  studioConfig.reason.art,
+  ...studioConfig.capabilities.items.map((item) => item.art),
+  ...studioConfig.philosophy.principles.flatMap((principle) => [
+    principle.art,
+    ...(principle.compare ?? []),
+  ]),
+  ...studioConfig.work.gallery,
   ...careersPageContent.gallery,
 ];
 // Fixture games are validated too, so their artwork never renders as a fallback.
 for (const game of gameCollectionSchema.parse(demoGames)) {
   const { screenshots = [], ...art } = game.artwork;
-  for (const [key, value] of Object.entries(art)) if (key !== 'alt') checkAsset(`fixture "${game.slug}" artwork.${key}`, value);
+  for (const [key, value] of Object.entries(art)) {
+    if (key === 'alt' || key === 'objectPosition' || typeof value !== 'string') continue;
+    checkAsset(`fixture "${game.slug}" artwork.${key}`, value);
+  }
   screenshots.forEach((shot, i) => checkAsset(`fixture "${game.slug}" screenshot ${i + 1}`, shot));
 }
 for (const art of pageArt) {

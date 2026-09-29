@@ -31,14 +31,14 @@ export const careersPageContent = {
     { label: 'Character sheet', src: '/visual-fixtures/production/character-sheet.png', alt: 'A golden idol mask drawn in turnaround with three expressions.' },
     { label: 'Animation frames', src: '/visual-fixtures/production/animation-frames.png', alt: 'Eight frames of a lantern symbol swinging into place.' },
     { label: 'Symbol evolution', src: '/visual-fixtures/production/stage-concept.png', alt: 'A pencil sketch of a lantern symbol with notes and thumbnail variants.' },
-    { label: 'UI iteration', src: '/visual-fixtures/production/ui-kit.png', alt: 'Spin button states and controls for three game themes.' },
+    { label: 'UI iteration', src: '/visual-fixtures/production/ui-kit.jpg', alt: 'Spin button states and controls for three game themes.' },
   ],
   values: {
     eyebrow: 'What we care about',
     headline: 'Small details, taken seriously.',
     items: [
       { title: 'Craft', body: 'Details are the work, not the finishing touch.' },
-      { title: 'Ownership', body: 'Own the outcome, not just the task.' },
+      { title: 'Ownership', body: 'See the game through, not just your part of it.' },
       { title: 'Clarity', body: 'Say what you mean and make it easy to follow.' },
       { title: 'Iteration', body: 'Make it, play it, make it better.' },
     ],

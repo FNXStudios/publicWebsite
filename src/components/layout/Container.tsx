@@ -7,7 +7,7 @@ type ContainerProps<T extends ElementType> = {
   className?: string;
 } & Omit<ComponentPropsWithoutRef<T>, 'as' | 'children' | 'className'>;
 
-/** The site's content column: max ~1376px plus fluid gutters. */
+/** The site's content column: max 1440px plus fluid gutters. */
 export function Container<T extends ElementType = 'div'>({ as, className, children, ...props }: ContainerProps<T>) {
   const Component: ElementType = as ?? 'div';
   return (

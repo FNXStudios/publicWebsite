@@ -47,7 +47,7 @@ export function Hero() {
           <h1 id="hero-title" style={step(1)} className="enter-rise mt-6 text-hero text-white md:mt-7">
             <HeadlineLines lines={hero.headline} />
           </h1>
-          <p style={step(2)} className="enter-rise mt-6 max-w-[31rem] text-lead text-text-secondary md:mt-7">
+          <p style={step(2)} className="enter-rise prose-measure mt-6 text-lead text-text-secondary md:mt-7">
             {hero.body}
           </p>
           <div style={step(3)} className="enter-rise mt-9 flex flex-wrap gap-3 md:mt-10">
@@ -70,14 +70,14 @@ export function Hero() {
 
         <ul
           style={step(4)}
-          className="enter-rise -mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 sm:gap-x-6 text-small text-text-secondary md:mt-20"
+          className="enter-rise -mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 text-[0.8125rem] font-medium tracking-[0.04em] text-text-secondary uppercase sm:gap-x-6 md:mt-20"
           aria-label="What FNX brings"
         >
           {hero.proofPoints.map((point, index) => (
             <li key={point} className="flex items-center gap-6" style={{ animationDelay: `${index * 45}ms` }}>
               {index > 0 ? <span aria-hidden="true" className="hidden h-3.5 w-px bg-white/20 sm:block" /> : null}
-              <span className="flex items-center gap-2.5 font-medium">
-                <span aria-hidden="true" className="size-1.5 rotate-45 bg-violet-400" />
+              <span className="flex items-center gap-2.5">
+                <span aria-hidden="true" className="size-1 rotate-45 bg-violet-400/80" />
                 {point}
               </span>
             </li>

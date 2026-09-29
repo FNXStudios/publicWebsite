@@ -32,7 +32,7 @@ const RATIO = {
  * The canonical FNX game card. Full-bleed artwork is the reward: bright, saturated,
  * never toned down. A deep gradient carries it into the title, a quiet metadata row
  * and a circular action. The whole card is one link, fully keyboard operable.
- * Hover: lift 5px, art 1 → 1.035, overlay lifts, border warms to violet, arrow leans.
+ * Hover stays restrained: border warms, art scales ~1.025, title lifts 1px, arrow +4px.
  */
 export function GameCard({ game, placement, headingLevel = 'h3', ratio = 'portrait', sizes, priority = false, className }: GameCardProps) {
   const Heading = headingLevel;
@@ -51,11 +51,10 @@ export function GameCard({ game, placement, headingLevel = 'h3', ratio = 'portra
       >
         <div
           className={cn(
-            'relative isolate overflow-hidden rounded-lg border border-white/[0.08] bg-raised',
-            'transition-[transform,border-color,box-shadow] duration-(--duration-standard) ease-premium',
-            'group-hover:-translate-y-[5px] group-hover:border-violet-border group-hover:shadow-card-hover',
-            'group-focus-within:-translate-y-[5px] group-focus-within:border-violet-border',
-            'group-active:-translate-y-0.5 group-active:duration-(--duration-micro)',
+            'relative isolate overflow-hidden rounded-lg border border-white/[0.09] bg-raised',
+            'transition-[border-color,box-shadow] duration-[280ms] ease-premium',
+            'group-hover:border-white/[0.16] group-hover:shadow-soft',
+            'group-focus-within:border-white/[0.16]',
             RATIO[ratio],
           )}
         >
@@ -65,16 +64,17 @@ export function GameCard({ game, placement, headingLevel = 'h3', ratio = 'portra
             alt={gameArtAlt(game)}
             sizes={sizes}
             priority={priority}
-            imgClassName="transition-transform duration-[520ms] ease-premium group-hover:scale-[1.035] group-focus-within:scale-[1.035]"
+            objectPosition={game.artwork.objectPosition}
+            imgClassName="transition-transform duration-[280ms] ease-premium group-hover:scale-[1.025] group-focus-within:scale-[1.025]"
           />
           {/* Coloured light from the game itself, rising on hover. */}
           <div
             aria-hidden="true"
-            className="absolute inset-x-0 bottom-0 h-1/2 bg-[radial-gradient(70%_80%_at_50%_100%,var(--game-glow,transparent),transparent)] opacity-0 mix-blend-screen transition-opacity duration-(--duration-standard) group-hover:opacity-25"
+            className="absolute inset-x-0 bottom-0 h-1/2 bg-[radial-gradient(70%_80%_at_50%_100%,var(--game-glow,transparent),transparent)] opacity-0 mix-blend-screen transition-opacity duration-[280ms] group-hover:opacity-20"
           />
           <div
             aria-hidden="true"
-            className="absolute inset-x-0 bottom-0 h-[64%] bg-[linear-gradient(180deg,transparent,rgb(4_5_7/0.25)_38%,rgb(4_5_7/0.94))] transition-opacity duration-(--duration-standard) ease-premium group-hover:opacity-85"
+            className="absolute inset-x-0 bottom-0 h-[64%] bg-[linear-gradient(180deg,transparent,rgb(4_5_7/0.25)_38%,rgb(4_5_7/0.94))] transition-opacity duration-[280ms] ease-premium group-hover:opacity-88"
           />
           <div aria-hidden="true" className="absolute inset-x-6 top-0 h-px bg-linear-to-r from-transparent via-white/20 to-transparent" />
 
@@ -91,14 +91,16 @@ export function GameCard({ game, placement, headingLevel = 'h3', ratio = 'portra
 
           <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 sm:p-6">
             <div className="min-w-0">
-              <Heading className="text-[clamp(1.25rem,1.1rem+0.45vw,1.5rem)] leading-[1.15] font-semibold tracking-[-0.02em] text-white">{game.title}</Heading>
-              <p className="mt-2 flex flex-wrap items-center text-[0.8125rem] leading-5 text-white/70 sm:text-[0.875rem]">
+              <Heading className="text-[clamp(1.25rem,1.1rem+0.45vw,1.5rem)] leading-[1.15] font-semibold tracking-[-0.02em] text-white transition-transform duration-[280ms] ease-premium group-hover:-translate-y-px">
+                {game.title}
+              </Heading>
+              <p className="mt-2 flex flex-wrap items-center text-[0.875rem] leading-5 text-white/78">
                 {facts.map((fact, index) => (
                   <span key={fact} className={cn('inline-flex items-center whitespace-nowrap', index > 1 && 'hidden sm:inline-flex')}>
                     {index > 0 ? (
                       <>
                         <span className="sr-only">, </span>
-                        <span aria-hidden="true" className="mx-2 size-[3px] rounded-full bg-white/40" />
+                        <span aria-hidden="true" className="mx-2 size-[3px] rounded-full bg-white/45" />
                       </>
                     ) : null}
                     {fact}
@@ -109,9 +111,9 @@ export function GameCard({ game, placement, headingLevel = 'h3', ratio = 'portra
             <span
               aria-hidden="true"
               className={cn(
-                'grid size-10 shrink-0 place-items-center rounded-full border border-white/20 bg-black/30 text-white backdrop-blur-[3px]',
-                'transition-[border-color,background-color] duration-(--duration-interaction) ease-premium',
-                'group-hover:border-violet-300/70 group-hover:bg-violet-600/30',
+                'grid size-11 shrink-0 place-items-center rounded-full border border-white/20 bg-black/30 text-white backdrop-blur-[3px]',
+                'transition-[border-color,background-color] duration-[220ms] ease-premium',
+                'group-hover:border-violet-300/60 group-hover:bg-violet-600/25',
               )}
             >
               <ArrowRight className="arrow-nudge size-[1.0625rem] group-hover:translate-x-1" />
