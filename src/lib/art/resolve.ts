@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 
 /** Neutral branded placeholder. Ships with the site so a missing image can never render broken. */
-export const FALLBACK_ART = '/art/fallback.png';
+export const FALLBACK_ART = '/art/fallback.webp';
 
 const cache = new Map<string, boolean>();
 const warned = new Set<string>();

@@ -1,13 +1,10 @@
 import type { Metadata } from 'next';
 
 import { FinalCta } from '@/components/home/FinalCta';
+import { Container, FullBleed } from '@/components/layout/Container';
 import { ProcessStages } from '@/components/studio/ProcessStages';
 import { ResponsiveArt } from '@/components/ui/ResponsiveArt';
-import {
-  Eyebrow,
-  HeadlineLines,
-  Index,
-} from '@/components/ui/Typography';
+import { Eyebrow, HeadlineLines, Index } from '@/components/ui/Typography';
 
 import { studioConfig } from '@/config/studio.config';
 
@@ -19,647 +16,228 @@ import { Reveal } from '@/motion/Reveal';
 
 export const metadata: Metadata = pageMetadata({
   title: 'Studio',
-  description: studioConfig.about.body,
+  description: studioConfig.about.summary,
   path: routes.studio,
 });
 
-const workLayouts = [
-  {
-    span: 'md:col-span-7',
-    aspect: 'aspect-[16/10]',
-  },
-  {
-    span: 'md:col-span-5',
-    aspect: 'aspect-[4/5]',
-  },
-  {
-    span: 'md:col-span-5',
-    aspect: 'aspect-[4/3]',
-  },
-  {
-    span: 'md:col-span-7',
-    aspect: 'aspect-[16/10]',
-  },
-  {
-    span: 'md:col-span-4',
-    aspect: 'aspect-[4/5]',
-  },
-  {
-    span: 'md:col-span-8',
-    aspect: 'aspect-[16/9]',
-  },
+/**
+ * Inside the work: four larger stories instead of many small tiles, on the wide grid.
+ *   01 Symbol development (7) │ 02 Art direction (5)
+ *   03 Motion + UI        (5) │ 04 Final build   (7)
+ * In each row the 7-column item sets the height by aspect ratio and its partner
+ * stretches to match. Phones stack in order.
+ */
+const galleryLayout = [
+  { span: 'md:col-span-7', media: 'aspect-[16/10]', position: '50% 50%', sizes: '(max-width: 899px) 100vw, (max-width: 1600px) 57vw, 860px' },
+  { span: 'md:col-span-5', media: 'aspect-[16/10] md:aspect-auto md:flex-1', position: '50% 50%', sizes: '(max-width: 899px) 100vw, (max-width: 1600px) 41vw, 610px' },
+  { span: 'md:col-span-5', media: 'aspect-[16/10] md:aspect-auto md:flex-1', position: '30% 50%', sizes: '(max-width: 899px) 100vw, (max-width: 1600px) 41vw, 610px' },
+  { span: 'md:col-span-7', media: 'aspect-[16/10]', position: '50% 50%', sizes: '(max-width: 899px) 100vw, (max-width: 1600px) 57vw, 860px' },
 ] as const;
 
 export default function StudioPage() {
-  const {
-    about,
-    reason,
-    capabilities,
-    philosophy,
-    tools,
-    process,
-    work,
-    standard,
-    cta,
-  } = studioConfig;
+  const { about, reason, capabilities, thinking, process, work, standard, cta } = studioConfig;
 
   return (
     <>
-      {/* =========================================================
-          01 — ABOUT FNX
-          Who we are.
-         ========================================================= */}
-      <section
-        aria-labelledby="studio-title"
-        className="relative isolate overflow-hidden bg-[var(--depth-page)]"
-      >
-        {/* Warm studio light — deliberately restrained. */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 -z-30 bg-[radial-gradient(42rem_30rem_at_12%_14%,rgb(240_189_114/0.075),transparent_72%),radial-gradient(50rem_34rem_at_94%_18%,rgb(113_52_244/0.12),transparent_72%)]"
-        />
-
-        <div
-          aria-hidden="true"
-          className="fnx-diagonals pointer-events-none absolute inset-0 -z-20 opacity-[0.035]"
-        />
-
-        <div className="container-fnx pt-[calc(var(--header-height)+4.5rem)] pb-16 md:pt-[calc(var(--header-height)+6rem)] md:pb-24 lg:min-h-[50rem] lg:flex lg:items-center">
-          <div className="grid w-full gap-12 md:grid-cols-12 md:items-center md:gap-10">
-            {/* ---------------------------------
-                Hero copy
-               --------------------------------- */}
-            <div className="relative z-10 md:col-span-5">
-              <Eyebrow
-                rule
-                className="enter-rise text-text-secondary"
-              >
-                {about.eyebrow}
-              </Eyebrow>
-
-              <h1
-                id="studio-title"
-                className="enter-rise mt-6 max-w-[10.5ch] text-hero text-white [--enter-step:1]"
-              >
-                <HeadlineLines lines={about.headline} />
-              </h1>
-
-              <p className="enter-rise mt-7 max-w-[34rem] text-lead text-text-secondary [--enter-step:2]">
-                {about.body}
-              </p>
-
-              {/* Small proof line. Not a badge cluster. */}
-              <div className="enter-rise mt-10 flex flex-wrap items-center gap-x-4 gap-y-2 text-[0.69rem] font-semibold tracking-[0.18em] text-white/38 uppercase [--enter-step:3]">
-                <span>5+ years building games</span>
-
-                <span
-                  aria-hidden="true"
-                  className="h-[3px] w-[3px] rounded-full bg-violet-400/70"
-                />
-
-                <span>Independent studio</span>
-
-                <span
-                  aria-hidden="true"
-                  className="h-[3px] w-[3px] rounded-full bg-violet-400/70"
-                />
-
-                <span>Original IP</span>
-              </div>
-            </div>
-
-            {/* ---------------------------------
-                Production board visual
-               --------------------------------- */}
-            <div className="relative md:col-span-7 md:-mr-[4vw] lg:-mr-[8vw]">
-              <Reveal className="relative">
-                <figure className="relative min-h-[25rem] overflow-hidden rounded-[1rem] sm:min-h-[31rem] md:min-h-[39rem] lg:min-h-[43rem]">
-                  <ResponsiveArt
-                    src={about.art.src}
-                    alt={about.art.alt}
-                    priority
-                    quality={80}
-                    sizes="(max-width: 899px) 100vw, 62vw"
-                    imgClassName="object-cover object-[51%_47%] saturate-[0.97]"
-                  />
-
-                  {/* Integrate artwork into the page instead of presenting
-                      it as a detached card. */}
-                  <div
-                    aria-hidden="true"
-                    className="absolute inset-0 bg-[linear-gradient(90deg,var(--depth-page)_0%,rgb(5_6_7/0.72)_6%,transparent_31%),linear-gradient(180deg,transparent_66%,var(--depth-page)_100%)]"
-                  />
-
-                  <div
-                    aria-hidden="true"
-                    className="absolute inset-0 bg-[radial-gradient(55%_48%_at_77%_41%,transparent_0%,rgb(5_6_7/0.08)_62%,rgb(5_6_7/0.46)_100%)]"
-                  />
-
-                  <div
-                    aria-hidden="true"
-                    className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[var(--depth-page)] to-transparent"
-                  />
-                </figure>
-              </Reveal>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================
-          02 — WHY FNX EXISTS
-          Why this studio needed to exist.
-         ========================================================= */}
-      <section
-        aria-labelledby="reason-title"
-        className="relative isolate overflow-hidden bg-[var(--depth-section)] py-[clamp(5.5rem,9vw,9.5rem)]"
-      >
-        {/* Giant authored geometry instead of another card/image block. */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute top-1/2 right-[-8rem] -z-20 hidden -translate-y-1/2 select-none text-[36rem] leading-none font-black tracking-[-0.12em] text-violet-400/[0.018] lg:block"
+      {/* 01 — WHO FNX IS · Type B editorial hero: typographic, centred, no image ---- */}
+      <section aria-labelledby="studio-title" className="relative isolate w-full overflow-hidden bg-(--depth-page)">
+        <FullBleed>
+          <div className="absolute inset-0 bg-[radial-gradient(46rem_30rem_at_50%_-6%,rgb(113_52_244/0.13),transparent_72%),radial-gradient(40rem_26rem_at_8%_100%,rgb(240_189_114/0.04),transparent_72%)]" />
+        </FullBleed>
+        <Container
+          size="content"
+          className="flex min-h-[clamp(42.5rem,88vh,50rem)] flex-col items-center justify-center pt-[calc(var(--header-height)+3.5rem)] pb-sec-md text-center md:pt-[calc(var(--header-height)+5rem)]"
         >
-          X
-        </div>
-
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute top-0 right-0 -z-10 h-full w-[46vw] opacity-[0.055]"
-        >
-          <ResponsiveArt
-            src={reason.art.src}
-            alt=""
-            sizes="46vw"
-            imgClassName="object-cover object-[52%_40%]"
-          />
-
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--depth-section)_0%,rgb(7_9_12/0.92)_24%,rgb(7_9_12/0.46)_72%,var(--depth-section)_100%),linear-gradient(180deg,var(--depth-section)_0%,transparent_24%,var(--depth-section)_100%)]" />
-        </div>
-
-        <div className="container-fnx">
-          <div className="grid gap-14 md:grid-cols-12 md:gap-10">
-            {/* Manifesto heading */}
-            <div className="md:col-span-5">
-              <Eyebrow rule>
-                {reason.eyebrow}
-              </Eyebrow>
-
-              <h2
-                id="reason-title"
-                className="mt-6 max-w-[11ch] text-display text-white"
-              >
-                <HeadlineLines lines={reason.headline} />
-              </h2>
-            </div>
-
-            {/* Story */}
-            <div className="md:col-span-6 md:col-start-7">
-              <p className="max-w-[39rem] text-lead text-text-secondary">
-                {reason.intro}
-              </p>
-
-              <div className="mt-8 space-y-6">
-                {reason.blocks.map((paragraph, index) => (
-                  <Reveal
-                    key={`${index}-${paragraph.slice(0, 16)}`}
-                    delay={index * 55}
-                  >
-                    <p className="prose-measure text-body leading-[1.65] text-text-secondary md:text-[1.0625rem] md:leading-[1.7]">
-                      {paragraph}
-                    </p>
-                  </Reveal>
-                ))}
-              </div>
-
-              {/* Strong editorial statement */}
-              <Reveal delay={100}>
-                <p className="mt-12 max-w-[38rem] text-[clamp(1.8rem,1.25rem+1.6vw,3.15rem)] leading-[1.08] font-semibold tracking-[-0.038em] text-white">
-                  {reason.closing}
-                </p>
-              </Reveal>
-
-              {/* Tools philosophy folded into the origin story. */}
-              <Reveal delay={140}>
-                <div className="mt-14 border-l border-violet-400/55 pl-6 md:pl-8">
-                  <p className="text-eyebrow font-semibold tracking-[0.2em] text-violet-300 uppercase">
-                    {tools.eyebrow}
-                  </p>
-
-                  <h3 className="mt-4 max-w-[27rem] text-[clamp(1.8rem,1.35rem+1.1vw,2.8rem)] leading-[1.06] font-semibold tracking-[-0.034em] text-white">
-                    {tools.headline}
-                  </h3>
-
-                  <p className="mt-5 max-w-[39rem] text-lead text-text-secondary">
-                    {tools.body}
-                  </p>
-                </div>
-              </Reveal>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================
-          03 — WHAT WE DO
-         ========================================================= */}
-      <section
-        aria-labelledby="capabilities-title"
-        className="bg-[var(--depth-page)] py-[clamp(6rem,9vw,9rem)]"
-      >
-        <div className="container-fnx">
-          <Eyebrow
-            id="capabilities-title"
-            rule
-          >
-            {capabilities.eyebrow}
+          <Eyebrow rule className="enter-rise justify-center text-text-secondary">
+            {about.eyebrow}
           </Eyebrow>
-
-          <div className="mt-7 grid gap-8 md:grid-cols-12 md:items-end md:gap-10">
-            <h2 className="max-w-[11ch] text-display text-white md:col-span-7">
-              <HeadlineLines lines={capabilities.headline} />
-            </h2>
-
-            <p className="max-w-[32rem] text-lead text-text-secondary md:col-span-5 md:justify-self-end">
-              {capabilities.intro}
-            </p>
-          </div>
-
-          {/* Capability pillars with adjacent production proof. */}
-          <div className="mt-14 grid gap-10 md:mt-20 md:grid-cols-3 md:gap-8">
-            {capabilities.items.map((item, index) => (
-              <article
-                key={item.title}
-                className="group relative flex flex-col border-t border-white/[0.09] pt-7 md:pt-9"
-              >
-                <span
-                  aria-hidden="true"
-                  className="absolute -top-px left-0 h-px w-0 bg-violet-400 transition-[width] duration-[520ms] ease-premium group-hover:w-24"
-                />
-
-                <Reveal delay={index * 70} className="flex flex-1 flex-col">
-                  <figure className="relative mb-7 aspect-[5/4] overflow-hidden rounded-lg border border-white/[0.09] bg-raised">
-                    <ResponsiveArt
-                      src={item.art.src}
-                      alt={item.art.alt}
-                      sizes="(max-width: 899px) 100vw, 420px"
-                      imgClassName="object-cover transition-transform duration-[700ms] ease-premium group-hover:scale-[1.02]"
-                    />
-                    <div
-                      aria-hidden="true"
-                      className="absolute inset-0 bg-[linear-gradient(180deg,transparent_55%,rgb(5_6_7/0.35)_100%)]"
-                    />
-                  </figure>
-
-                  <Index
-                    n={index + 1}
-                    className="text-text-muted transition-colors duration-(--duration-standard) group-hover:text-violet-300"
-                  />
-
-                  <h3 className="mt-5 max-w-[12ch] text-[clamp(1.75rem,1.35rem+1.1vw,2.5rem)] leading-[1.05] font-semibold tracking-[-0.034em] text-white/92 transition-[transform,color] duration-(--duration-standard) ease-premium group-hover:translate-x-1 group-hover:text-white">
-                    {item.title}
-                  </h3>
-
-                  <p className="mt-4 max-w-[28rem] text-body text-text-secondary">
-                    {item.body}
-                  </p>
-                </Reveal>
-              </article>
+          <h1 id="studio-title" className="enter-rise mt-7 text-hero text-white [--enter-step:1]">
+            <HeadlineLines lines={about.headline} />
+          </h1>
+          <div className="enter-rise measure-reading mt-10 space-y-6 text-[clamp(1.0625rem,0.95rem+0.4vw,1.25rem)] leading-[1.68] text-text-secondary [--enter-step:2] md:mt-12">
+            {about.paragraphs.map((paragraph, index) => (
+              <p key={paragraph} className={index === 0 ? 'text-text' : undefined}>
+                {paragraph}
+              </p>
             ))}
           </div>
-        </div>
+          <p className="enter-rise mt-10 flex flex-col items-center gap-2 text-[0.75rem] font-semibold tracking-[0.2em] text-text-muted uppercase [--enter-step:3] sm:flex-row sm:gap-3 md:mt-12">
+            {about.proof.map((item, index) => (
+              <span key={item} className="inline-flex items-center gap-3">
+                {index > 0 ? (
+                  <span aria-hidden="true" className="hidden sm:inline">
+                    ·
+                  </span>
+                ) : null}
+                {item}
+              </span>
+            ))}
+          </p>
+        </Container>
       </section>
 
-      {/* =========================================================
-          04 — OUR PHILOSOPHY
-          Main signature section.
-         ========================================================= */}
-      <section
-        aria-labelledby="philosophy-title"
-        className="relative overflow-hidden bg-[var(--depth-section-alt)] py-[clamp(7rem,11vw,12rem)]"
-      >
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 h-[28rem] bg-[radial-gradient(40rem_20rem_at_20%_0%,rgb(113_52_244/0.07),transparent_75%)]"
-        />
+      {/* 02 — WHY FNX EXISTS · headline centred against the whole argument ----------- */}
+      <section aria-labelledby="reason-title" className="w-full bg-(--depth-section) pt-sec-lg pb-sec-lg">
+        <Container size="content" className="grid gap-y-10 md:grid-cols-2 md:items-center md:gap-x-(--gap-editorial)">
+          <h2 id="reason-title" className="text-principle text-white">
+            <HeadlineLines lines={reason.headline} />
+          </h2>
 
-        <div className="container-fnx relative">
-          <div className="max-w-[48rem]">
-            <Eyebrow rule>
-              {philosophy.eyebrow}
-            </Eyebrow>
-
-            <h2
-              id="philosophy-title"
-              className="mt-6 max-w-[11ch] text-display text-white"
-            >
-              <HeadlineLines lines={philosophy.headline} />
-            </h2>
-
-            <p className="mt-7 max-w-[42rem] text-lead text-text-secondary">
-              {philosophy.intro}
-            </p>
-          </div>
-        </div>
-
-        {/* Each principle is an editorial chapter, not a card. */}
-        <div className="relative mt-16 space-y-[clamp(5.5rem,9vw,10rem)] md:mt-24">
-          {philosophy.principles.map((principle, index) => {
-            const visualFirst = index % 2 !== 0;
-            const compare = principle.compare;
-
-            return (
-              <article
-                key={principle.label}
-                className="relative overflow-hidden"
-              >
-                <div className="container-fnx">
-                  <div className="grid gap-10 border-t border-white/[0.08] pt-10 md:grid-cols-12 md:items-center md:gap-10 md:pt-14">
-                    <div
-                      className={cn(
-                        'relative z-10 md:col-span-5',
-                        visualFirst
-                          ? 'md:order-2 md:col-start-8'
-                          : 'md:order-1 md:col-start-1',
-                      )}
-                    >
-                      <p className="flex items-center gap-3 text-eyebrow font-semibold tracking-[0.18em] text-violet-300 uppercase">
-                        <span
-                          aria-hidden="true"
-                          className="h-px w-7 bg-violet-400/80"
-                        />
-                        {principle.label}
-                      </p>
-
-                      <h3 className="mt-6 max-w-[11ch] text-[clamp(2.2rem,1.5rem+2vw,4rem)] leading-[1.02] font-semibold tracking-[-0.04em] text-white">
-                        <HeadlineLines lines={principle.headline} />
-                      </h3>
-
-                      <p className="prose-measure mt-7 text-body text-text-secondary md:text-[1.0625rem] md:leading-[1.7]">
-                        {principle.body}
-                      </p>
-                    </div>
-
-                    <div
-                      className={cn(
-                        'md:col-span-7',
-                        visualFirst
-                          ? 'md:order-1 md:col-start-1 md:-ml-[4vw]'
-                          : 'md:order-2 md:col-start-6 md:-mr-[4vw]',
-                      )}
-                    >
-                      <Reveal className="group relative">
-                        {compare && compare.length >= 2 ? (
-                          <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                            {compare.map((frame) => (
-                              <figure
-                                key={frame.src}
-                                className="relative aspect-[4/5] overflow-hidden rounded-lg border border-white/[0.09] bg-raised"
-                              >
-                                <ResponsiveArt
-                                  src={frame.src}
-                                  alt={frame.alt}
-                                  sizes="(max-width: 899px) 50vw, 28vw"
-                                  imgClassName="object-cover"
-                                />
-                                <figcaption className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/70 to-transparent px-3 py-3 text-[0.7rem] font-semibold tracking-[0.16em] text-white/80 uppercase">
-                                  {frame.caption}
-                                </figcaption>
-                              </figure>
-                            ))}
-                          </div>
-                        ) : (
-                          <figure className="relative aspect-[4/3] overflow-hidden rounded-xl bg-raised">
-                            <ResponsiveArt
-                              src={principle.art.src}
-                              alt={principle.art.alt}
-                              sizes="(max-width: 899px) 100vw, 62vw"
-                              imgClassName="object-cover object-[50%_44%] transition-transform duration-[700ms] ease-premium group-hover:scale-[1.015]"
-                            />
-                            <div
-                              aria-hidden="true"
-                              className={cn(
-                                'absolute inset-0',
-                                visualFirst
-                                  ? 'bg-[linear-gradient(90deg,transparent_74%,var(--depth-section-alt)_100%)]'
-                                  : 'bg-[linear-gradient(90deg,var(--depth-section-alt)_0%,transparent_26%)]',
-                              )}
-                            />
-                          </figure>
-                        )}
-                      </Reveal>
-                    </div>
-                  </div>
-                </div>
-              </article>
-            );
-          })}
-        </div>
+          <Reveal>
+            <p className="text-lead text-text-secondary">{reason.intro}</p>
+            <p className="mt-9 border-l border-violet-400/70 pl-6 text-heading text-white md:mt-10 md:pl-8">{reason.statement}</p>
+            <p className="mt-9 text-lead text-text-secondary md:mt-10">{reason.closing}</p>
+          </Reveal>
+        </Container>
       </section>
 
-      {/* =========================================================
-          05 — HOW WE WORK
-          Sticky editorial production narrative.
-         ========================================================= */}
-      <section
-        aria-labelledby="how-title"
-        className="relative bg-[linear-gradient(180deg,var(--depth-page)_0%,var(--depth-section-alt)_10rem,var(--depth-section-alt)_calc(100%-10rem),var(--depth-page)_100%)] py-[clamp(7rem,11vw,11rem)]"
-      >
-        <div className="container-fnx grid gap-16 md:grid-cols-12 md:gap-10">
-          {/* Sticky left narrative */}
-          <div className="md:col-span-5">
-            <div className="md:sticky md:top-[calc(var(--header-height)+3.5rem)]">
-              <Eyebrow rule>
-                {process.eyebrow}
-              </Eyebrow>
+      {/* 03 — WHAT WE BUILD · full-width headline, three editorial lanes ------------- */}
+      <section aria-labelledby="capabilities-title" className="w-full bg-(--depth-page) pt-sec-lg pb-sec-md">
+        <Container size="wide">
+          <Eyebrow rule>{capabilities.eyebrow}</Eyebrow>
+          <h2 id="capabilities-title" className="mt-6 text-display text-white">
+            {capabilities.headline}
+          </h2>
+          <p className="mt-7 max-w-[50rem] text-lead text-text-secondary md:mt-8">{capabilities.intro}</p>
 
-              <h2
-                id="how-title"
-                className="mt-6 max-w-[9ch] text-display text-white"
-              >
-                <HeadlineLines lines={process.headline} />
-              </h2>
-
-              <p className="mt-7 max-w-[30rem] text-lead text-text-secondary">
-                {process.body}
-              </p>
-
-              {/* This visual gives the sticky side weight.
-                  ProcessStages can later expose active-stage state and
-                  switch this asset without altering the page structure. */}
-              <Reveal className="mt-12 hidden max-w-[31rem] md:block">
-                <figure className="group relative aspect-[5/4] overflow-hidden rounded-xl bg-raised">
-                  <ResponsiveArt
-                    src="/visual-fixtures/production/stage-motion.jpg"
-                    alt="Animation timing and game symbol production study."
-                    sizes="496px"
-                    imgClassName="object-cover transition-transform duration-[900ms] ease-premium group-hover:scale-[1.018]"
-                  />
-
-                  <div
-                    aria-hidden="true"
-                    className="absolute inset-0 bg-[linear-gradient(180deg,transparent_62%,rgb(5_6_7/0.42)_100%)]"
-                  />
-                </figure>
+          <ol className="mt-18 grid gap-x-(--grid-gap) gap-y-10 md:mt-24 md:grid-cols-3">
+            {capabilities.items.map((item, index) => (
+              <Reveal as="li" key={item.title} delay={index * 60} className="group relative border-t border-white/[0.12] pt-7">
+                <span aria-hidden="true" className="absolute -top-px left-0 h-px w-8 bg-violet-400 transition-[width] duration-[560ms] ease-premium group-hover:w-full" />
+                <Index n={index + 1} className="text-violet-300" />
+                <h3 className="mt-5 text-heading text-white">{item.title}</h3>
+                <p className="mt-4 max-w-[28rem] text-body text-text-secondary">{item.body}</p>
               </Reveal>
-            </div>
-          </div>
-
-          {/* Scrollable process */}
-          <div className="md:col-span-7 md:col-start-6 lg:col-span-6 lg:col-start-7">
-            <ProcessStages
-              label="FNX production stages"
-              stages={process.stages}
-            />
-          </div>
-        </div>
+            ))}
+          </ol>
+        </Container>
       </section>
 
-      {/* =========================================================
-          06 — INSIDE THE WORK
-          Evidence, not decoration.
-         ========================================================= */}
-      <section
-        aria-labelledby="work-title"
-        className="bg-[var(--depth-page)] py-[clamp(7rem,11vw,11rem)]"
-      >
-        <div className="container-fnx">
-          <div className="grid gap-9 md:grid-cols-12 md:items-end md:gap-10">
+      {/* 04 — HOW WE THINK · the largest editorial chapter; art breaks out of the grid */}
+      <section aria-labelledby="thinking-title" className="w-full overflow-x-clip bg-(--depth-section-alt) pt-sec-xl pb-sec-lg">
+        <Container size="wide">
+          <div className="grid-fnx gap-y-6 md:items-end">
             <div className="md:col-span-7">
-              <Eyebrow rule>
-                {work.eyebrow}
-              </Eyebrow>
+              <Eyebrow rule>{thinking.eyebrow}</Eyebrow>
+              <h2 id="thinking-title" className="mt-5 text-display text-white">
+                <HeadlineLines lines={thinking.headline} />
+              </h2>
+            </div>
+            <p className="prose-side text-lead text-text-secondary md:col-span-4 md:col-start-9 md:pb-1">{thinking.intro}</p>
+          </div>
 
-              <h2
-                id="work-title"
-                className="mt-6 max-w-[10ch] text-display text-white"
-              >
+          <ol className="mt-sec-md flex flex-col gap-y-[clamp(4.5rem,9vw,9rem)]">
+            {thinking.principles.map((principle, index) => {
+              const reverse = index % 2 === 1;
+              return (
+                <li
+                  key={principle.label}
+                  className={cn(
+                    'grid gap-y-8 md:items-center md:gap-x-(--gap-editorial)',
+                    reverse ? 'md:grid-cols-[minmax(0,58fr)_minmax(0,42fr)]' : 'md:grid-cols-[minmax(0,42fr)_minmax(0,58fr)]',
+                  )}
+                >
+                  <Reveal className={cn(reverse && 'md:order-2')}>
+                    <p className="flex items-center gap-3 text-eyebrow uppercase">
+                      <Index n={index + 1} className="text-violet-300" />
+                      <span className="h-px w-5 bg-white/20" aria-hidden="true" />
+                      <span className="text-text-secondary">{principle.label}</span>
+                    </p>
+                    <h3 className="mt-6 text-principle text-white">{principle.title}</h3>
+                    <p className="mt-6 max-w-[34rem] text-lead text-text-secondary">{principle.body}</p>
+                  </Reveal>
+                  <Reveal
+                    as="figure"
+                    className={cn(
+                      'relative aspect-[4/3] overflow-hidden rounded-xl bg-raised md:aspect-[16/10]',
+                      reverse ? 'md:order-1 md:breakout-left md:rounded-l-none' : 'md:breakout-right md:rounded-r-none',
+                    )}
+                  >
+                    <ResponsiveArt src={principle.art.src} alt={principle.art.alt} sizes="(max-width: 899px) 100vw, 64vw" quality={80} />
+                  </Reveal>
+                </li>
+              );
+            })}
+          </ol>
+        </Container>
+      </section>
+
+      {/* 05 — HOW WE WORK · sticky narrative (lg+) beside the production stages ------ */}
+      <section aria-labelledby="how-title" className="w-full bg-(--depth-page) pt-sec-lg pb-sec-md">
+        <Container size="wide" className="grid-fnx gap-y-14">
+          <div className="md:col-span-5 lg:sticky lg:top-[calc(var(--header-height)+2.5rem)] lg:self-start">
+            <h2 id="how-title" className="text-display text-white lg:text-display-xl">
+              <HeadlineLines lines={process.headline} />
+            </h2>
+            <p className="mt-7 max-w-[32rem] text-lead text-text-secondary md:mt-8">{process.body}</p>
+            <Reveal as="figure" className="relative mt-10 aspect-[16/10] overflow-hidden rounded-xl bg-raised md:mt-12">
+              <ResponsiveArt src={process.art.src} alt={process.art.alt} sizes="(max-width: 899px) 100vw, (max-width: 1600px) 40vw, 600px" imgClassName="object-[50%_50%]" />
+            </Reveal>
+          </div>
+
+          <div className="md:col-span-6 md:col-start-7">
+            <ProcessStages label="FNX production stages" stages={process.stages} />
+          </div>
+        </Container>
+      </section>
+
+      {/* 06 — INSIDE THE WORK · four larger stories -------------------------------- */}
+      <section aria-labelledby="work-title" className="w-full bg-(--depth-section) pt-sec-md pb-sec-md">
+        <Container size="wide">
+          <div className="grid-fnx gap-y-6 md:items-end">
+            <div className="md:col-span-7">
+              <Eyebrow rule>{work.eyebrow}</Eyebrow>
+              <h2 id="work-title" className="mt-5 text-display text-white">
                 <HeadlineLines lines={work.headline} />
               </h2>
             </div>
-
-            <p className="max-w-[33rem] text-lead text-text-secondary md:col-span-5 md:justify-self-end">
-              {work.intro}
-            </p>
+            <p className="prose-side text-lead text-text-secondary md:col-span-4 md:col-start-9 md:pb-1">{work.intro}</p>
           </div>
 
-          {/* Asymmetric production evidence board. */}
-          <div className="mt-14 grid gap-5 md:mt-20 md:grid-cols-12 md:gap-6">
+          <ol className="grid-fnx mt-14 gap-y-12 md:mt-20 md:gap-y-(--grid-gap)">
             {work.gallery.map((item, index) => {
-              const layout =
-                workLayouts[index % workLayouts.length] ?? workLayouts[0];
-
+              const layout = galleryLayout[index] ?? galleryLayout[0];
               return (
-                <Reveal
-                  key={item.src}
-                  delay={(index % 3) * 60}
-                  className={layout.span}
-                >
-                  <figure className="group relative overflow-hidden rounded-xl border border-white/[0.09] bg-raised">
-                    <div
-                      className={cn(
-                        'relative overflow-hidden',
-                        layout.aspect,
-                      )}
-                    >
+                <Reveal as="li" key={item.src} delay={(index % 2) * 60} className={cn('flex flex-col', layout.span)}>
+                  <figure className="group flex flex-1 flex-col">
+                    <div className={cn('relative overflow-hidden rounded-lg bg-raised', layout.media)}>
                       <ResponsiveArt
                         src={item.src}
                         alt={item.alt}
-                        sizes={
-                          layout.span.includes('col-span-12') || layout.span.includes('col-span-8') || layout.span.includes('col-span-7')
-                            ? '(max-width: 899px) 100vw, 900px'
-                            : '(max-width: 899px) 100vw, 480px'
-                        }
-                        imgClassName="object-cover transition-transform duration-[700ms] ease-premium group-hover:scale-[1.02]"
-                      />
-
-                      <div
-                        aria-hidden="true"
-                        className="absolute inset-0 bg-[linear-gradient(180deg,transparent_50%,rgb(3_4_5/0.82)_100%)]"
+                        sizes={layout.sizes}
+                        objectPosition={layout.position}
+                        imgClassName="transition-transform duration-[700ms] ease-premium group-hover:scale-[1.015]"
                       />
                     </div>
-
-                    <figcaption className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-1.5 px-5 py-5 md:px-6 md:py-6">
-                      <span className="text-[0.7rem] font-semibold tracking-[0.18em] text-violet-300 uppercase">
-                        {String(index + 1).padStart(2, '0')} · {item.label}
+                    <figcaption className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-small">
+                      <span className="font-semibold tracking-[0.14em] text-violet-300 uppercase tabular-nums">
+                        {String(index + 1).padStart(2, '0')} {item.label}
                       </span>
-
-                      <span className="max-w-[34rem] text-small text-white/78">
-                        {item.caption}
-                      </span>
+                      <span className="text-text-muted">{item.caption}</span>
                     </figcaption>
                   </figure>
                 </Reveal>
               );
             })}
-          </div>
-        </div>
+          </ol>
+        </Container>
       </section>
 
-      {/* =========================================================
-          07 — THE STANDARD
-          Quiet conclusion before the CTA.
-         ========================================================= */}
-      <section
-        aria-labelledby="standard-title"
-        className="relative isolate overflow-hidden bg-[var(--depth-section)] py-[clamp(8rem,13vw,13rem)]"
-      >
-        <div
-          aria-hidden="true"
-          className="fnx-diagonals pointer-events-none absolute inset-0 -z-20 opacity-[0.055]"
-        />
-
-        {/* Giant ghosted X — almost imperceptible. */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute top-1/2 right-[3vw] -z-10 hidden -translate-y-1/2 select-none text-[31rem] leading-none font-black tracking-[-0.12em] text-violet-400/[0.024] lg:block"
-        >
-          X
-        </div>
-
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute top-1/2 left-[30%] -z-10 h-[36rem] w-[36rem] -translate-y-1/2 rounded-full bg-violet-600/[0.045] blur-[130px]"
-        />
-
-        <div className="container-fnx">
-          <div className="max-w-[65rem]">
-            <Eyebrow
-              rule
-              className="text-violet-300"
-            >
-              {standard.eyebrow}
-            </Eyebrow>
-
-            <h2
-              id="standard-title"
-              className="mt-7 max-w-[13ch] text-display text-white"
-            >
-              {standard.headline}
+      {/* 07 — THE STANDARD · a quiet reset before contact -------------------------- */}
+      <section aria-labelledby="standard-title" className="w-full bg-(--depth-page) pt-sec-lg pb-sec-md">
+        <Container size="content" className="text-center">
+          <Reveal>
+            <Eyebrow className="justify-center">{standard.eyebrow}</Eyebrow>
+            <h2 id="standard-title" className="mt-7 text-display text-white">
+              <HeadlineLines lines={standard.headline} />
             </h2>
-
-            <p className="mt-9 max-w-[46rem] text-lead text-text-secondary">
-              {standard.body}
-            </p>
-
-            {standard.closing ? (
-              <p className="mt-11 max-w-[38rem] text-[clamp(1.35rem,1.05rem+0.9vw,2.1rem)] leading-[1.24] font-medium tracking-[-0.028em] text-white/88">
-                {standard.closing}
-              </p>
-            ) : null}
-          </div>
-        </div>
+            <p className="mx-auto mt-7 max-w-[34rem] text-lead text-text-secondary">{standard.body}</p>
+          </Reveal>
+        </Container>
       </section>
 
-      {/* =========================================================
-          08 — WORK WITH US
-         ========================================================= */}
-      <FinalCta
-        eyebrow={cta.eyebrow}
-        headline={cta.headline}
-        body={cta.body}
-        cta={cta.cta}
-        placement="studio-closing"
-      />
+      {/* 08 — CONTACT ------------------------------------------------------------ */}
+      <FinalCta headline={cta.headline} body={cta.body} cta={cta.cta} placement="studio-closing" />
     </>
   );
 }

@@ -12,7 +12,7 @@ export default function NotFound() {
     <SiteChrome>
       <section className="relative isolate">
         <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[radial-gradient(34rem_30rem_at_80%_40%,rgb(113_52_244/0.14),transparent_70%)]" />
-        <div className="container-fnx flex min-h-[78svh] flex-col justify-center pt-(--header-height) pb-16">
+        <div className="container-wide flex min-h-[78svh] flex-col justify-center pt-(--header-height) pb-16">
           <Eyebrow rule>404</Eyebrow>
           <h1 className="mt-6 max-w-[16ch] text-display text-white">This page wandered off.</h1>
           <p className="mt-6 max-w-[30rem] text-lead text-text-secondary">

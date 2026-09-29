@@ -50,15 +50,11 @@ const pageArt: { src: string; mobileSrc?: string }[] = [
   homeConfig.hero.art,
   ...homeConfig.madeToHit.panels.map((p) => p.art),
   ...homeConfig.ideaToGame.stages.map((s) => s.art),
-  studioConfig.about.art,
-  studioConfig.reason.art,
-  ...studioConfig.capabilities.items.map((item) => item.art),
-  ...studioConfig.philosophy.principles.flatMap((principle) => [
-    principle.art,
-    ...(principle.compare ?? []),
-  ]),
+  homeConfig.operators.art,
+  ...studioConfig.thinking.principles.map((p) => p.art),
+  studioConfig.process.art,
   ...studioConfig.work.gallery,
-  ...careersPageContent.gallery,
+  careersPageContent.art,
 ];
 // Fixture games are validated too, so their artwork never renders as a fallback.
 for (const game of gameCollectionSchema.parse(demoGames)) {

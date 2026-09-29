@@ -20,7 +20,7 @@ export function GameInfo({ game }: { game: Game }) {
   if (!paragraphs.length && !hasFacts && !lists.length) return null;
 
   return (
-    <section aria-labelledby="game-info-title" className="container-fnx pt-medium pb-medium">
+    <section aria-labelledby="game-info-title" className="container-wide pt-sec-md pb-sec-md">
       <h2 id="game-info-title" className="sr-only">
         About {game.title}
       </h2>

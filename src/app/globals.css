@@ -46,13 +46,15 @@
   --fnx-danger: #ff8f8f;
   --fnx-success: #8fdcb4;
 
-  /* Depth: page → section → raised → featured */
-  --depth-page: var(--fnx-black-900);
+  /* Depth: page → section → raised → hover. Steps are deliberately small: the site
+     should read as layered graphite, never as hard stripes. Game art brings the colour. */
+  --depth-page: #040506;
   --depth-page-deep: var(--fnx-black-950);
-  --depth-section: var(--fnx-black-850);
-  --depth-section-alt: var(--fnx-black-800);
-  --depth-raised: var(--fnx-black-750);
-  --depth-raised-hover: var(--fnx-black-700);
+  --depth-section: #07090c;
+  --depth-section-alt: #090b0f;
+  --depth-raised: #0d1015;
+  --depth-hover: #12161d;
+  --depth-raised-hover: var(--depth-hover);
 
   /* Semantic aliases (components may use either name) */
   --background-primary: var(--depth-page);
@@ -66,25 +68,51 @@
   --accent-muted: var(--fnx-violet-soft);
 
   /* Homepage rhythm: tone changes carry transitions, not divider lines */
-  --tone-hero: var(--fnx-black-900);
-  --tone-featured: var(--fnx-black-850);
-  --tone-made: var(--fnx-black-900);
-  --tone-idea: var(--fnx-black-800);
-  --tone-operators: var(--fnx-black-900);
-  --tone-footer: var(--fnx-black-950);
+  --tone-hero: var(--depth-page);
+  --tone-featured: var(--depth-section);
+  --tone-made: var(--depth-page);
+  --tone-idea: var(--depth-section-alt);
+  --tone-operators: var(--depth-page);
+  --tone-footer: var(--depth-page-deep);
 
   /* Shadows — used deliberately, not on every component */
   --shadow-soft: 0 16px 50px rgb(0 0 0 / 0.28);
   --shadow-card-hover: 0 24px 70px rgb(0 0 0 / 0.38);
   --shadow-violet: 0 12px 36px rgb(95 45 220 / 0.16);
 
-  /* Layout: content column 1440px; gutters 16px (phone) → 24px (desktop) */
-  --container-max: 90rem;
-  --gutter: clamp(1rem, 0.7rem + 1.1vw, 1.5rem);
-  --header-height: 4rem; /* 64px; 76px from md */
-  --space-tight: clamp(4rem, 3.2rem + 2.4vw, 6.25rem);
-  --space-medium: clamp(5rem, 3.5rem + 4vw, 8.75rem);
-  --space-large: clamp(5.5rem, 3.8rem + 5.2vw, 10.5rem);
+  /* ------------------------------------------------------------------------
+     Composition widths. Text is disciplined; artwork has freedom.
+       reading  760   long paragraphs, manifestos, forms, supporting prose
+       content  1180  two-column editorial, process, structured information
+       focus    1320  focused closers (CTA) — deliberately narrower than wide
+       wide     1480  games, portfolio grids, large artwork, header, footer
+       ultra    1600  reserved ceiling for exceptional art direction
+       full bleed     100vw — hero art, world imagery, atmospheric backgrounds
+     Every container is `min(100% − 2 × gutter, width)`, centred. Use <Container size>
+     (or the container-* utilities) instead of one-off max-widths.
+     ------------------------------------------------------------------------ */
+  --fnx-reading: 47.5rem;
+  --fnx-content: 73.75rem;
+  --fnx-focus: 82.5rem;
+  --fnx-wide: 92.5rem;
+  --fnx-ultra: 100rem;
+  /* 20px on phones → ~58px at 1440 → 72px at 1800+. */
+  --fnx-gutter: clamp(1.25rem, 4vw, 4.5rem);
+  --gutter: var(--fnx-gutter);
+  --grid-gap: clamp(1rem, 0.4rem + 1.6vw, 2rem);
+  /* Gap between the two halves of an editorial split (headline ↔ argument). */
+  --gap-editorial: clamp(2.5rem, 7vw, 8rem);
+  --header-height: 4rem; /* 64px; 72px from md */
+
+  /* ------------------------------------------------------------------------
+     Section spacing. Semantic, not uniform: small gaps where one section continues
+     another, large ones where the subject changes. Never invent a one-off gap.
+       sm  56 → 96    md  72 → 128    lg  88 → 176    xl  104 → 208
+     ------------------------------------------------------------------------ */
+  --space-section-sm: clamp(3.5rem, 6vw, 6rem);
+  --space-section-md: clamp(4.5rem, 8vw, 8rem);
+  --space-section-lg: clamp(5.5rem, 11vw, 11rem);
+  --space-section-xl: clamp(6.5rem, 13vw, 13rem);
 
   /* Radii */
   --radius-sm: 0.5rem;
@@ -109,7 +137,7 @@
 
 @media (min-width: 56.25rem) {
   :root {
-    --header-height: 4.75rem;
+    --header-height: 4.5rem;
   }
 }
 
@@ -168,44 +196,57 @@
   --breakpoint-xl: 100rem;
   --breakpoint-2xl: initial;
 
-  /* Editorial type scale (fluid). display → heading → body → supporting → meta */
-  --text-hero: clamp(2.75rem, 1.1rem + 4.55vw, 5.5rem);
-  --text-hero--line-height: 0.96;
+  /* Editorial type scale (fluid). One hierarchy for every page:
+       hero      44 → 80   page openers (capped so a two-line hero headline stays ≈760px)
+       display   36 → 77   major section headlines
+       principle 32 → 64   editorial statements (Studio philosophy, manifestos)
+       heading   24 → 32   subsection
+       title     20 → 26   item / stage titles
+       lead      17 → 20   intros and supporting copy
+       body      16 → 18   running text — never tiny on large desktops
+       small     13 → 14.4 */
+  --text-hero: clamp(2.75rem, 5.4vw, 5rem);
+  --text-hero--line-height: 0.98;
   --text-hero--letter-spacing: -0.035em;
   --text-hero--font-weight: 600;
 
-  --text-display-xl: clamp(3.25rem, 1.4rem + 5.2vw, 6.25rem);
-  --text-display-xl--line-height: 0.94;
-  --text-display-xl--letter-spacing: -0.04em;
+  --text-display-xl: clamp(3rem, 1.6rem + 5.4vw, 6.5rem);
+  --text-display-xl--line-height: 0.92;
+  --text-display-xl--letter-spacing: -0.045em;
   --text-display-xl--font-weight: 600;
 
-  --text-display: clamp(2.25rem, 1.35rem + 3.1vw, 4rem);
+  --text-display: clamp(2.25rem, 4.2vw, 4.8rem);
   --text-display--line-height: 1.02;
   --text-display--letter-spacing: -0.032em;
   --text-display--font-weight: 600;
+
+  --text-principle: clamp(2rem, 3.4vw, 4rem);
+  --text-principle--line-height: 1.04;
+  --text-principle--letter-spacing: -0.03em;
+  --text-principle--font-weight: 600;
 
   --text-display-sm: clamp(1.875rem, 1.35rem + 1.8vw, 2.875rem);
   --text-display-sm--line-height: 1.05;
   --text-display-sm--letter-spacing: -0.028em;
   --text-display-sm--font-weight: 600;
 
-  --text-heading: clamp(1.5rem, 1.25rem + 0.85vw, 2.125rem);
+  --text-heading: clamp(1.5rem, 1.25rem + 0.6vw, 2rem);
   --text-heading--line-height: 1.12;
   --text-heading--letter-spacing: -0.022em;
   --text-heading--font-weight: 600;
 
-  --text-title: clamp(1.375rem, 1.2rem + 0.55vw, 1.75rem);
+  --text-title: clamp(1.25rem, 1.05rem + 0.5vw, 1.625rem);
   --text-title--line-height: 1.18;
   --text-title--letter-spacing: -0.02em;
   --text-title--font-weight: 600;
 
-  --text-lead: clamp(1.03125rem, 0.98rem + 0.22vw, 1.125rem);
+  --text-lead: clamp(1.0625rem, 0.95rem + 0.3vw, 1.25rem);
   --text-lead--line-height: 1.6;
 
-  --text-body: 1rem;
+  --text-body: clamp(1rem, 0.925rem + 0.2vw, 1.125rem);
   --text-body--line-height: 1.62;
 
-  --text-small: 0.875rem;
+  --text-small: clamp(0.8125rem, 0.78rem + 0.08vw, 0.9rem);
   --text-small--line-height: 1.55;
 
   --text-eyebrow: 0.75rem;
@@ -246,8 +287,12 @@
     text-wrap: pretty;
   }
 
+  /* Body copy measure: 50ch; short editorial side copy: 30–42ch (.prose-side). */
   .prose-measure {
-    max-width: 55ch;
+    max-width: 50ch;
+  }
+  .prose-side {
+    max-width: 40ch;
   }
 
   ::selection {
@@ -280,11 +325,56 @@
 /* ==========================================================================
    Utilities
    ========================================================================== */
-@utility container-fnx {
-  width: 100%;
-  max-width: calc(var(--container-max) + var(--gutter) * 2);
+/* ---- Composition widths (see the token block at the top) ------------------
+   `--bleed` is the distance from the container's edge to the viewport edge, so
+   artwork inside can break out deliberately (breakout-left / breakout-right). */
+@utility container-reading {
+  width: min(calc(100% - var(--fnx-gutter) * 2), var(--fnx-reading));
   margin-inline: auto;
-  padding-inline: var(--gutter);
+  --bleed: max(var(--fnx-gutter), calc((100vw - var(--fnx-reading)) / 2));
+}
+@utility container-content {
+  width: min(calc(100% - var(--fnx-gutter) * 2), var(--fnx-content));
+  margin-inline: auto;
+  --bleed: max(var(--fnx-gutter), calc((100vw - var(--fnx-content)) / 2));
+}
+@utility container-focus {
+  width: min(calc(100% - var(--fnx-gutter) * 2), var(--fnx-focus));
+  margin-inline: auto;
+  --bleed: max(var(--fnx-gutter), calc((100vw - var(--fnx-focus)) / 2));
+}
+@utility container-wide {
+  width: min(calc(100% - var(--fnx-gutter) * 2), var(--fnx-wide));
+  margin-inline: auto;
+  --bleed: max(var(--fnx-gutter), calc((100vw - var(--fnx-wide)) / 2));
+}
+
+/* Nested measure: caps a text block at reading width without adding gutters. */
+@utility measure-reading {
+  max-width: var(--fnx-reading);
+}
+
+/* Escape the container to the viewport edge. The owning section must clip
+   horizontally (`overflow-x-clip`) because 100vw includes the scrollbar. */
+@utility breakout-right {
+  margin-right: calc(var(--bleed, var(--fnx-gutter)) * -1);
+}
+@utility breakout-left {
+  margin-left: calc(var(--bleed, var(--fnx-gutter)) * -1);
+}
+@utility full-bleed {
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+}
+
+/* The canonical 12-column editorial grid inside a container. One column on phones. */
+@utility grid-fnx {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: var(--grid-gap);
+  @media (min-width: 56.25rem) {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
 }
 
 /* Art-directed headline lines: break on wider screens, flow on phones. */
@@ -295,23 +385,39 @@
   }
 }
 
-@utility pt-tight {
-  padding-top: var(--space-tight);
+/* ---- Section spacing (semantic tiers) -------------------------------------- */
+@utility pt-sec-sm {
+  padding-top: var(--space-section-sm);
 }
-@utility pt-medium {
-  padding-top: var(--space-medium);
+@utility pt-sec-md {
+  padding-top: var(--space-section-md);
 }
-@utility pt-large {
-  padding-top: var(--space-large);
+@utility pt-sec-lg {
+  padding-top: var(--space-section-lg);
 }
-@utility pb-tight {
-  padding-bottom: var(--space-tight);
+@utility pt-sec-xl {
+  padding-top: var(--space-section-xl);
 }
-@utility pb-medium {
-  padding-bottom: var(--space-medium);
+@utility pb-sec-sm {
+  padding-bottom: var(--space-section-sm);
 }
-@utility pb-large {
-  padding-bottom: var(--space-large);
+@utility pb-sec-md {
+  padding-bottom: var(--space-section-md);
+}
+@utility pb-sec-lg {
+  padding-bottom: var(--space-section-lg);
+}
+@utility pb-sec-xl {
+  padding-bottom: var(--space-section-xl);
+}
+@utility mt-sec-sm {
+  margin-top: var(--space-section-sm);
+}
+@utility mt-sec-md {
+  margin-top: var(--space-section-md);
+}
+@utility mt-sec-lg {
+  margin-top: var(--space-section-lg);
 }
 
 /* Arrow nudge shared by buttons, text links and cards. */
@@ -584,33 +690,4 @@ html[data-age-gate='pending'] body {
   width: 40%;
   background: var(--fnx-violet-300);
   animation: fnx-progress 1.3s var(--ease-standard) infinite;
-}
-
-/* ---- Operators: network arcs ------------------------------------------- */
-@keyframes fnx-dash {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-@keyframes fnx-pulse {
-  0%,
-  100% {
-    opacity: 0.35;
-    transform: scale(0.8);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-.net-arc {
-  stroke-dasharray: 6 10;
-  stroke-dashoffset: 160;
-  animation: fnx-dash 9s linear infinite;
-}
-.net-node {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: fnx-pulse 4.8s ease-in-out infinite;
-  animation-delay: var(--d, 0s);
 }

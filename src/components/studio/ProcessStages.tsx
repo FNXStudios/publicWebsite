@@ -8,10 +8,10 @@ interface ProcessStagesProps {
 }
 
 /**
- * Numbered process list with a thin connective spine.
- * On desktop the stage nearest the middle of the screen becomes prominent
- * (number to violet, title brightens, rule draws); others stay readable.
- * Server-rendered fully visible; the emphasis is progressive enhancement.
+ * The production spine: numbered rows joined by one continuous vertical line, spaced
+ * so the column carries real weight beside the sticky narrative.
+ * The stage nearest the middle of the screen takes the violet accent (node + title);
+ * every row stays fully readable. Server-rendered visible; emphasis is enhancement only.
  */
 export function ProcessStages({ label, stages }: ProcessStagesProps) {
   const [active, setActive] = useState(-1);
@@ -30,11 +30,9 @@ export function ProcessStages({ label, stages }: ProcessStagesProps) {
   }, []);
 
   return (
-    <ol aria-label={label} className="relative border-b border-white/[0.09]">
-      <span
-        aria-hidden="true"
-        className="absolute top-0 bottom-0 left-[1.35rem] hidden w-px bg-white/[0.08] md:left-[2rem] md:block"
-      />
+    <ol aria-label={label} className="relative">
+      {/* The spine runs from the first node to the last. */}
+      <span aria-hidden="true" className="absolute top-8 bottom-8 left-4 w-px md:top-10 md:bottom-10 bg-linear-to-b from-violet-400/60 via-white/[0.12] to-white/[0.12]" />
       {stages.map((stage, index) => (
         <li
           key={stage.title}
@@ -43,23 +41,17 @@ export function ProcessStages({ label, stages }: ProcessStagesProps) {
           }}
           data-index={index}
           data-active={index === active || undefined}
-          className="group relative grid grid-cols-[3rem_1fr] gap-x-4 border-t border-white/[0.09] py-7 md:grid-cols-[4.5rem_1fr] md:py-8"
+          className="group relative grid grid-cols-[2rem_1fr] gap-x-5 py-5 md:gap-x-7 md:py-7"
         >
           <span
             aria-hidden="true"
-            className="absolute -top-px left-0 h-px w-0 bg-violet-400 transition-[width] duration-[640ms] ease-premium group-hover:w-24 group-data-active:w-24"
-          />
-          <span
-            aria-hidden="true"
-            className="relative z-10 grid size-7 place-items-center rounded-full border border-white/[0.12] bg-section text-[0.75rem] font-semibold tabular-nums text-text-muted transition-[color,border-color,background-color] duration-(--duration-standard) group-hover:border-violet-border group-hover:text-violet-300 group-data-active:border-violet-border group-data-active:bg-violet-soft group-data-active:text-violet-300 md:size-8 md:text-[0.8125rem]"
+            className="relative z-10 grid size-8 place-items-center rounded-full border border-white/[0.14] bg-(--depth-page) text-[0.75rem] font-semibold tabular-nums text-text-muted transition-[color,border-color,background-color] duration-(--duration-standard) group-hover:border-violet-border group-hover:text-violet-300 group-data-active:border-violet-border group-data-active:bg-violet-soft group-data-active:text-violet-300"
           >
             {String(index + 1).padStart(2, '0')}
           </span>
-          <div>
-            <h3 className="text-[clamp(1.4rem,1.15rem+0.9vw,2rem)] leading-[1.1] font-semibold tracking-[-0.026em] text-white/75 transition-[color,transform] duration-(--duration-standard) ease-premium group-hover:text-white group-data-active:text-white md:group-data-active:translate-x-1">
-              {stage.title}
-            </h3>
-            <p className="mt-2.5 max-w-[34rem] text-body text-text-secondary">{stage.body}</p>
+          <div className="pt-0.5">
+            <h3 className="text-title text-white/80 transition-colors duration-(--duration-standard) group-hover:text-white group-data-active:text-white">{stage.title}</h3>
+            <p className="prose-measure mt-2 text-[clamp(0.9375rem,0.89rem+0.15vw,1.0625rem)] leading-[1.62] text-text-secondary">{stage.body}</p>
           </div>
         </li>
       ))}

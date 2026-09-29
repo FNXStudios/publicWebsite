@@ -11,7 +11,7 @@ interface GameRailProps {
 }
 
 /**
- * Three-up grid on desktop; on phones a native horizontal scroll-snap rail with
+ * Three-up grid on desktop, sized by the wide container it sits in; on phones a native horizontal scroll-snap rail with
  * ~84vw cards and a peek of the next one. No autoplay, no JS.
  */
 export function GameRail({ games, placement, headingLevel, ratio = 'feature', className }: GameRailProps) {
@@ -21,7 +21,7 @@ export function GameRail({ games, placement, headingLevel, ratio = 'feature', cl
     <ul
       className={cn(
         '-mx-(--gutter) flex snap-x snap-mandatory scroll-px-(--gutter) gap-4 overflow-x-auto px-(--gutter) pt-2 pb-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
-        'md:mx-0 md:grid md:gap-6 md:overflow-visible md:px-0 md:pt-0 md:pb-0',
+        'md:mx-0 md:grid md:gap-(--grid-gap) md:overflow-visible md:px-0 md:pt-0 md:pb-0',
         cols,
         className,
       )}
@@ -34,7 +34,7 @@ export function GameRail({ games, placement, headingLevel, ratio = 'feature', cl
             headingLevel={headingLevel}
             ratio={ratio}
             priority={placement === 'games' && index < 3}
-            sizes={games.length === 2 ? '(max-width: 899px) 84vw, 680px' : '(max-width: 639px) 84vw, (max-width: 899px) 46vw, 460px'}
+            sizes={games.length === 2 ? '(max-width: 899px) 84vw, (max-width: 1600px) 48vw, 740px' : '(max-width: 639px) 84vw, (max-width: 899px) 46vw, (max-width: 1600px) 31vw, 490px'}
           />
         </li>
       ))}

@@ -36,7 +36,7 @@ export function GameFeature({ game, headingLevel = 'h2', priority = false }: { g
             alt={gameArtAlt(game)}
             priority={priority}
             quality={80}
-            sizes="(max-width: 1440px) 100vw, 1440px"
+            sizes="(max-width: 1600px) 100vw, 1480px"
             objectPosition={game.artwork.objectPosition ?? '70% 50%'}
             imgClassName="transition-transform duration-[320ms] ease-premium group-hover:scale-[1.025]"
           />

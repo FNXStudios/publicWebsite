@@ -22,7 +22,7 @@ export function Footer() {
   return (
     <footer className="relative bg-(--tone-footer)">
       <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/[0.08] to-transparent" />
-      <div className="container-fnx flex flex-col gap-7 py-12 md:flex-row md:items-center md:justify-between md:gap-10 md:py-[4.5rem]">
+      <div className="container-wide flex flex-col gap-7 py-10 md:flex-row md:items-center md:justify-between md:gap-10 md:py-12">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:gap-7">
           <Link href={routes.home} className="-m-2 inline-block self-start rounded-md p-2" aria-label="FNX Studio — home">
             <Wordmark className="h-7" />
@@ -52,7 +52,7 @@ export function Footer() {
       </div>
 
       <div className="border-t border-white/[0.06]">
-        <div className="container-fnx flex flex-col gap-1.5 py-4 text-[0.8125rem] text-text-muted sm:h-14 sm:flex-row sm:items-center sm:justify-between sm:py-0">
+        <div className="container-wide flex flex-col gap-1.5 py-4 text-[0.8125rem] text-text-muted sm:h-14 sm:flex-row sm:items-center sm:justify-between sm:py-0">
           <p>
             © {year} {siteConfig.name}
           </p>

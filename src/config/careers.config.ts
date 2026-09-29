@@ -26,13 +26,11 @@ export const careersPageContent = {
   headline: ['Make games', 'with us.'],
   body: 'FNX brings art, game design, math, motion and engineering together. We look for people who care about the small details that make a game feel right.',
   listHeading: 'Open roles',
-  // Interim production visuals (scripts/visual-fixtures). Replace with real studio work.
-  gallery: [
-    { label: 'Character sheet', src: '/visual-fixtures/production/character-sheet.png', alt: 'A golden idol mask drawn in turnaround with three expressions.' },
-    { label: 'Animation frames', src: '/visual-fixtures/production/animation-frames.png', alt: 'Eight frames of a lantern symbol swinging into place.' },
-    { label: 'Symbol evolution', src: '/visual-fixtures/production/stage-concept.png', alt: 'A pencil sketch of a lantern symbol with notes and thumbnail variants.' },
-    { label: 'UI iteration', src: '/visual-fixtures/production/ui-kit.jpg', alt: 'Spin button states and controls for three game themes.' },
-  ],
+  // Interim production visual (scripts/visual-fixtures). Replace with real studio work.
+  art: {
+    src: '/art/careers-frames.webp',
+    alt: 'A row of pencil drawings refining a gem symbol, frame by frame, ending in the finished violet gem.',
+  },
   values: {
     eyebrow: 'What we care about',
     headline: 'Small details, taken seriously.',
@@ -53,7 +51,7 @@ export const careersPageContent = {
   headline: HeadlineLines;
   body: string;
   listHeading: string;
-  gallery: (ArtContent & { label: string })[];
+  art: ArtContent;
   values: { eyebrow: string; headline: string; items: TitledCopy[] };
   empty: { headline: string; body: string; cta: ContactAction };
 };

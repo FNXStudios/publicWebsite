@@ -36,7 +36,7 @@ describe('resolveDisplayGames', () => {
 
 describe('resolveArtSrc', () => {
   it('keeps artwork that exists and falls back for artwork that does not', () => {
-    expect(resolveArtSrc('/art/hero.png')).toBe('/art/hero.png');
+    expect(resolveArtSrc('/art/hero.webp')).toBe('/art/hero.webp');
     expect(resolveArtSrc('/art/does-not-exist.jpg')).toBe(FALLBACK_ART);
   });
 });

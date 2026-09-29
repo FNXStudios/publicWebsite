@@ -24,7 +24,7 @@ const SHOW_FIXTURE_MARKER = process.env.NEXT_PUBLIC_SHOW_FIXTURE_LABELS === 'tru
 
 const RATIO = {
   portrait: 'aspect-[4/5]',
-  feature: 'aspect-[4/5] md:aspect-[16/15]',
+  feature: 'aspect-[4/5] md:aspect-[8/9]',
   landscape: 'aspect-[16/10]',
 } as const;
 
@@ -89,12 +89,12 @@ export function GameCard({ game, placement, headingLevel = 'h3', ratio = 'portra
             </span>
           ) : null}
 
-          <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 sm:p-6">
-            <div className="min-w-0">
-              <Heading className="text-[clamp(1.25rem,1.1rem+0.45vw,1.5rem)] leading-[1.15] font-semibold tracking-[-0.02em] text-white transition-transform duration-[280ms] ease-premium group-hover:-translate-y-px">
+          <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-4 p-5 sm:p-6">
+            <div className="min-w-0 flex-1">
+              <Heading className="truncate text-[clamp(1.25rem,1.1rem+0.45vw,1.5rem)] leading-[1.15] font-semibold tracking-[-0.02em] text-white transition-transform duration-[280ms] ease-premium group-hover:-translate-y-px">
                 {game.title}
               </Heading>
-              <p className="mt-2 flex flex-wrap items-center text-[0.875rem] leading-5 text-white/78">
+              <p className="mt-2 flex h-5 flex-nowrap items-center overflow-hidden text-[0.875rem] leading-5 text-white/78">
                 {facts.map((fact, index) => (
                   <span key={fact} className={cn('inline-flex items-center whitespace-nowrap', index > 1 && 'hidden sm:inline-flex')}>
                     {index > 0 ? (

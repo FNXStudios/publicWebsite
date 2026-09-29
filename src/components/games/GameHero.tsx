@@ -8,7 +8,8 @@ import { ArrowLeft } from '@/components/ui/Icons';
 import { ResponsiveArt } from '@/components/ui/ResponsiveArt';
 
 /**
- * Full-artwork hero inside the FNX frame. The game's own colours (theme.deep / glow)
+ * Full-bleed game artwork (100vw); only the FNX chrome and copy sit on the wide grid,
+ * so the game identity gets more visual freedom than the studio shell. The game's own colours (theme.deep / glow)
  * carry the gradients here — FNX violet steps back to the primary action only.
  */
 export function GameHero({ game }: { game: Game }) {
@@ -24,7 +25,7 @@ export function GameHero({ game }: { game: Game }) {
         <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-3/4 bg-[linear-gradient(0deg,var(--game-deep)_6%,color-mix(in_srgb,var(--game-deep)_60%,transparent)_45%,transparent)]" />
       </div>
 
-      <div className="container-fnx relative -mt-40 pb-14 sm:-mt-56 md:absolute md:inset-x-0 md:bottom-0 md:mt-0 md:pb-20">
+      <div className="container-wide relative -mt-40 pb-14 sm:-mt-56 md:absolute md:inset-x-0 md:bottom-0 md:mt-0 md:pb-20">
         <Link
           href={routes.games}
           className="group/back enter-rise inline-flex items-center gap-2 rounded-sm py-2 text-small font-medium text-white/70 transition-colors hover:text-white"
@@ -39,7 +40,7 @@ export function GameHero({ game }: { game: Game }) {
         </p>
         <h1
           id="game-title"
-          className="enter-rise mt-4 max-w-[14ch] bg-linear-to-b from-white from-40% to-(--game-accent) bg-clip-text pb-[0.12em] text-[clamp(3rem,1.6rem+5vw,6.25rem)] leading-[0.98] font-semibold tracking-[-0.04em] text-transparent [--enter-step:2]"
+          className="enter-rise mt-4 max-w-[56rem] bg-linear-to-b from-white from-40% to-(--game-accent) bg-clip-text pb-[0.12em] text-[clamp(3rem,1.6rem+5vw,6.25rem)] leading-[0.98] font-semibold tracking-[-0.04em] text-transparent [--enter-step:2]"
         >
           {game.title}
         </h1>

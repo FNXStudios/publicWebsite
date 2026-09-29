@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import { homeConfig } from '@/config/home.config';
+import { Container, FullBleed } from '@/components/layout/Container';
 import { ButtonLink } from '@/components/ui/Button';
 import { ResponsiveArt } from '@/components/ui/ResponsiveArt';
 import { Eyebrow, HeadlineLines } from '@/components/ui/Typography';
@@ -8,49 +9,61 @@ import { Eyebrow, HeadlineLines } from '@/components/ui/Typography';
 const step = (n: number) => ({ '--enter-step': n }) as CSSProperties;
 
 /**
- * Cinematic opener. Desktop: ~44% copy, ~56% architecture — the FNX corridor with its
- * warm doorway, wet floor and a violet edge light — dissolving into the page through a
- * left veil, bottom fade and vignette. Phones: copy, actions, then the art.
+ * Type A — immersive visual hero. The section is the full viewport width and the art
+ * fills it edge to edge (absolute, object-cover); only the copy sits on the wide grid.
  *
- * Entrance and ambience are CSS only, so LCP never waits for JavaScript and nothing
- * is ever hidden behind script. Reduced motion freezes everything at rest.
+ * Desktop: the architecture — doorway, FNX mark, tree — lives in the right half and
+ * runs to the right viewport edge. A left-weighted veil protects the copy (~40% of the
+ * width) without dimming the art evenly; a separate bottom fade leads into Featured Games.
+ * Phones: the portrait composition fills the hero and the copy sits in its lower third.
+ *
+ * Entrance and ambience are CSS only, so LCP never waits for JavaScript.
  */
 export function Hero() {
   const { hero } = homeConfig;
   return (
-    <section aria-labelledby="hero-title" className="relative isolate overflow-hidden bg-(--tone-hero)">
-      {/* Desktop art: full bleed, weighted to the right. */}
-      <div aria-hidden="true" className="absolute inset-0 -z-10 hidden md:block">
+    <section aria-labelledby="hero-title" className="relative isolate flex w-full overflow-hidden bg-(--tone-hero)">
+      <FullBleed>
         <div className="enter-settle absolute inset-0">
           <div className="ambient-drift absolute inset-0">
-            {/* Same sources as the phone art below, so each viewport downloads one file. */}
-            <ResponsiveArt src={hero.art.src} mobileSrc={hero.art.mobileSrc} mobileMaxWidth={899} alt="" priority quality={80} sizes="100vw" imgClassName="object-[68%_50%]" />
+            <ResponsiveArt
+              src={hero.art.src}
+              mobileSrc={hero.art.mobileSrc}
+              mobileMaxWidth={899}
+              alt=""
+              priority
+              quality={80}
+              sizes="100vw"
+              imgClassName="h-full w-full object-[50%_30%] md:object-[72%_50%]"
+            />
           </div>
           {/* Doorway light breathes ±4%. */}
-          <div className="ambient-breathe absolute inset-0 bg-[radial-gradient(20rem_24rem_at_68%_46%,rgb(240_189_114/0.16),transparent_70%)]" />
-          <div className="ambient-breathe absolute inset-0 bg-[radial-gradient(30rem_44rem_at_102%_36%,rgb(113_52_244/0.22),transparent_70%)] [animation-delay:-3.5s]" />
+          <div className="ambient-breathe absolute inset-0 bg-[radial-gradient(14rem_18rem_at_58%_30%,rgb(240_189_114/0.14),transparent_70%)] md:bg-[radial-gradient(20rem_24rem_at_66%_46%,rgb(240_189_114/0.14),transparent_70%)]" />
         </div>
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--tone-hero)_0%,rgb(5_6_7/0.94)_24%,rgb(5_6_7/0.55)_44%,rgb(5_6_7/0.08)_64%,transparent_80%)]" />
-        <div className="absolute inset-x-0 bottom-0 h-2/5 bg-linear-to-t from-(--tone-hero) to-transparent" />
-        <div className="absolute inset-x-0 top-0 h-40 bg-linear-to-b from-[rgb(5_6_7/0.8)] to-transparent" />
-        <div className="absolute inset-0 bg-[radial-gradient(120%_90%_at_60%_45%,transparent_55%,rgb(3_4_5/0.6))]" />
-      </div>
+        {/* Desktop: protect the text side only. */}
+        <div className="absolute inset-0 hidden bg-[linear-gradient(90deg,rgb(3_4_5/0.98)_0%,rgb(3_4_5/0.92)_24%,rgb(3_4_5/0.6)_42%,rgb(3_4_5/0.15)_70%,transparent_100%)] md:block" />
+        {/* Phones: the copy sits low, so the veil rises from the bottom. */}
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgb(3_4_5/0.55)_0%,transparent_22%,transparent_36%,rgb(3_4_5/0.78)_58%,var(--tone-hero)_86%)] md:hidden" />
+        {/* Header legibility + the fade into the next section. */}
+        <div className="absolute inset-x-0 top-0 hidden h-36 bg-linear-to-b from-[rgb(3_4_5/0.7)] to-transparent md:block" />
+        <div className="absolute inset-x-0 bottom-0 hidden h-[28%] bg-linear-to-t from-(--tone-hero) to-transparent md:block" />
+      </FullBleed>
 
-      {/* Phones: faint atmosphere behind the copy. */}
-      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[radial-gradient(28rem_26rem_at_90%_0%,rgb(113_52_244/0.16),transparent_70%)] md:hidden" />
-
-      <div className="container-fnx flex flex-col pt-[calc(var(--header-height)+2.75rem)] md:min-h-[min(100svh,58rem)] md:justify-center md:pt-(--header-height) md:pb-16">
-        <div className="max-w-[40rem] md:max-w-[54rem] md:pt-6">
+      <Container
+        size="wide"
+        className="flex min-h-[max(40rem,calc(100svh-4rem))] flex-col justify-end pt-[calc(var(--header-height)+2rem)] pb-10 sm:min-h-[44rem] md:min-h-[clamp(44rem,78vh,58rem)] md:justify-center md:pt-(--header-height) md:pb-16"
+      >
+        <div className="max-w-[40rem] md:max-w-[53rem]">
           <Eyebrow rule style={step(0)} className="enter-rise text-text-secondary">
             {hero.eyebrow}
           </Eyebrow>
           <h1 id="hero-title" style={step(1)} className="enter-rise mt-6 text-hero text-white md:mt-7">
             <HeadlineLines lines={hero.headline} />
           </h1>
-          <p style={step(2)} className="enter-rise prose-measure mt-6 text-lead text-text-secondary md:mt-7">
+          <p style={step(2)} className="enter-rise mt-6 max-w-[34rem] text-lead text-text-secondary md:mt-7">
             {hero.body}
           </p>
-          <div style={step(3)} className="enter-rise mt-9 flex flex-wrap gap-3 md:mt-10">
+          <div style={step(3)} className="enter-rise mt-8 flex flex-wrap gap-3 md:mt-10">
             <ButtonLink href={hero.primaryCta.href} size="lg" arrow>
               {hero.primaryCta.label}
             </ButtonLink>
@@ -59,31 +72,7 @@ export function Hero() {
             </ButtonLink>
           </div>
         </div>
-
-        {/* Phones: the art follows the actions, bleeding to the edges. */}
-        <div aria-hidden="true" className="enter-settle relative -mx-(--gutter) mt-10 aspect-[4/5] max-h-[34rem] md:hidden">
-          <ResponsiveArt src={hero.art.src} mobileSrc={hero.art.mobileSrc} mobileMaxWidth={899} alt="" priority quality={80} sizes="100vw" imgClassName="object-[56%_45%]" />
-          <div className="ambient-breathe absolute inset-0 bg-[radial-gradient(12rem_14rem_at_56%_42%,rgb(240_189_114/0.16),transparent_70%)]" />
-          <div className="absolute inset-x-0 top-0 h-1/3 bg-linear-to-b from-(--tone-hero) to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-(--tone-hero) to-transparent" />
-        </div>
-
-        <ul
-          style={step(4)}
-          className="enter-rise -mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 text-[0.8125rem] font-medium tracking-[0.04em] text-text-secondary uppercase sm:gap-x-6 md:mt-20"
-          aria-label="What FNX brings"
-        >
-          {hero.proofPoints.map((point, index) => (
-            <li key={point} className="flex items-center gap-6" style={{ animationDelay: `${index * 45}ms` }}>
-              {index > 0 ? <span aria-hidden="true" className="hidden h-3.5 w-px bg-white/20 sm:block" /> : null}
-              <span className="flex items-center gap-2.5">
-                <span aria-hidden="true" className="size-1 rotate-45 bg-violet-400/80" />
-                {point}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      </Container>
     </section>
   );
 }

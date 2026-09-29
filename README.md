@@ -76,7 +76,7 @@ src/
     ui/                Button, TextLink, ResponsiveArt, Typography, Icons, EmptyState
     contact/           ContactProvider (dialog), ContactTrigger, ContactForm
     games/             GameCard, GameRail, GameFeature, GameHero, GameInfo, GamePlayer
-    home/              Hero, FeaturedGames, MadeToHit, IdeaToGame + StageStory, Operators + NetworkVisual, FinalCta
+    home/              Hero, FeaturedGames, MadeToHit, IdeaToGame + StageStory, Operators, FinalCta
     studio/            ProcessStages
     age-gate/          AgeGate, AgeGateDialog
   motion/              tokens.ts, variants.ts, Reveal.tsx
@@ -90,6 +90,25 @@ tests/  unit/ component/ e2e/ fixtures/
 
 - Configuration controls content; components control presentation. Page structure stays explicit in React. There is no JSON section engine.
 - Client components never import configuration modules. A unit test (`tests/unit/client-boundaries.test.ts`) enforces this, so full Zod and config data stay out of the browser bundle. Server components render artwork and pass it into client islands as props.
+
+## Layout system
+
+Text is disciplined; artwork has freedom. They never share one container by default.
+
+| Width | Token | Use |
+| --- | --- | --- |
+| reading | `--fnx-reading` 760px | long paragraphs, manifestos, forms |
+| content | `--fnx-content` 1180px | two-column editorial, process, structured information |
+| focus | `--fnx-focus` 1320px | focused closers (CTA) |
+| wide | `--fnx-wide` 1480px | games, portfolio grids, large artwork, header, footer |
+| full bleed | 100vw | hero art, world imagery, atmospheric backgrounds |
+
+- Use `<Container size="reading | content | focus | wide">` (or the `container-*` utilities). Don't write one-off `max-w-[1376px]`-style frames.
+- Full-bleed art: put it on the section itself with `<FullBleed>` (absolute, edge to edge) and keep the copy in a Container.
+- Breaking out of the grid: `breakout-right` / `breakout-left` extend an item to the viewport edge from whatever container it sits in (each container exposes `--bleed`). The section must use `overflow-x-clip`. `full-bleed` makes an in-container element 100vw.
+- Section spacing is semantic: `pt/pb-sec-sm | md | lg | xl`. Small when one section continues another; large or extra-large when the subject changes.
+- Type scale: `text-hero`, `text-display`, `text-principle`, `text-heading`, `text-title`, `text-lead`, `text-body`, `text-small`. Avoid character-count clamps (`max-w-[9ch]`) on headlines; use art-directed lines or a rem max-width.
+- Depth: `--depth-page` → `--depth-section` → `--depth-section-alt` → `--depth-raised` → `--depth-hover`. Violet is an accent; game art is the colour.
 
 ## Adding a game
 

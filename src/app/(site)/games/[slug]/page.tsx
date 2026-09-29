@@ -53,11 +53,11 @@ export default async function GamePage({ params }: Props) {
       <GameInfo game={game} />
 
       {screenshots.length ? (
-        <section aria-labelledby="screens-title" className="container-fnx pb-medium">
+        <section aria-labelledby="screens-title" className="container-wide pb-sec-md">
           <Eyebrow rule id="screens-title" className="[&>span]:bg-(--game-accent)">
             In game
           </Eyebrow>
-          <ul className="mt-7 grid gap-4 md:grid-cols-12 md:gap-6">
+          <ul className="mt-7 grid gap-4 md:grid-cols-12 md:gap-(--grid-gap)">
             {screenshots.map((src, index) => (
               <Reveal
                 as="li"
@@ -71,7 +71,7 @@ export default async function GamePage({ params }: Props) {
                     alt={`${game.title} — in-game screen ${index + 1}`}
                     fill
                     quality={80}
-                    sizes="(max-width: 899px) 100vw, 680px"
+                    sizes={index === 0 && screenshots.length % 2 === 1 ? '(max-width: 1600px) 100vw, 1480px' : '(max-width: 899px) 100vw, (max-width: 1600px) 50vw, 740px'}
                     className="object-cover transition-transform duration-[900ms] ease-premium group-hover:scale-[1.02]"
                   />
                 </figure>
@@ -83,10 +83,10 @@ export default async function GamePage({ params }: Props) {
 
       {/* Additional art: the portrait key art with the game's light around it. */}
       {game.artwork.thumbnail !== game.artwork.hero ? (
-        <section aria-labelledby="art-title" className="container-fnx pb-medium">
+        <section aria-labelledby="art-title" className="container-wide pb-sec-md">
           <div className="grid items-center gap-10 overflow-hidden rounded-xl border border-white/[0.08] bg-[radial-gradient(60%_80%_at_20%_50%,color-mix(in_srgb,var(--game-glow)_22%,transparent),transparent_70%)] p-4 md:grid-cols-12 md:gap-6 md:p-6">
             <Reveal as="figure" className="relative aspect-[4/5] overflow-hidden rounded-lg md:col-span-5">
-              <ResponsiveArt src={game.artwork.thumbnail} alt={`${game.title} — key art`} sizes="(max-width: 899px) 100vw, 560px" quality={80} />
+              <ResponsiveArt src={game.artwork.thumbnail} alt={`${game.title} — key art`} sizes="(max-width: 899px) 100vw, (max-width: 1600px) 42vw, 620px" quality={80} />
             </Reveal>
             <div className="px-2 pb-6 md:col-span-6 md:col-start-7 md:px-0 md:pb-0">
               <Eyebrow rule id="art-title" className="[&>span]:bg-(--game-accent)">
@@ -113,7 +113,7 @@ export default async function GamePage({ params }: Props) {
       ) : null}
 
       {related.length ? (
-        <section aria-labelledby="related-title" className="container-fnx pt-medium pb-large">
+        <section aria-labelledby="related-title" className="container-wide pt-sec-sm pb-sec-lg">
           <div className="mb-8 flex items-end justify-between gap-6 md:mb-10">
             <h2 id="related-title" className="text-display-sm text-white">
               More original worlds

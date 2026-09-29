@@ -1,179 +1,157 @@
 import type { ArtContent, HeadlineLines, TitledCopy } from './content.types';
 
+/**
+ * Studio page copy, in reading order. Studio is the About page, told in eight chapters:
+ * who FNX is → why it exists → what it builds → how it thinks → how the team works →
+ * inside the work → the standard → contact.
+ * The opener is typographic (no image); production evidence arrives later.
+ */
 export const studioConfig = {
   about: {
-    eyebrow: 'STUDIO',
+    eyebrow: 'Studio',
     headline: ['Independent by design.', 'Built around the game.'],
-    body: 'FNX Studio is an independent iGaming studio founded by developers and game makers with more than five years of hands-on experience building games and production technology. We focus on original titles with a clear point of view, satisfying game feel and the discipline to ship properly.',
-    art: {
-      src: '/visual-fixtures/production/studio-board.png',
-      alt: 'A studio wall covered in art direction studies, game symbols, concept boards and animation frames under warm production lighting.',
-    },
+    /** One-sentence summary for metadata and sharing. */
+    summary: 'FNX Studio is an independent iGaming studio founded by developers and game makers with more than five years of hands-on experience building games.',
+    paragraphs: [
+      'FNX Studio is an independent iGaming studio founded by developers and game makers with more than five years of hands-on experience building games, game systems and production technology.',
+      'We have worked across the parts players see and the systems they never do — gameplay, math, art, animation, frontend, runtime and delivery. That experience taught us how easily a strong idea can lose its identity when those parts are treated separately.',
+      'FNX exists to build games differently: with a clear creative point of view, mechanics and math developed together, and enough attention to detail that the finished experience feels authored rather than assembled.',
+    ],
+    proof: ['5+ years building games', 'Original IP', 'Independent studio'],
+  },
+
+  reason: {
+    headline: ['More games are being made.', 'Too few feel different.'],
+    intro: 'Faster tools and pipelines can produce concepts and variations in seconds. Efficiency without taste creates sameness — games that feel assembled from the same kit.',
+    statement: 'Tools can accelerate production. They should not replace authorship.',
+    closing: 'People still decide why a mechanic exists and how it should feel. Speed matters. Taste still decides whether something is finished.',
   },
 
   capabilities: {
-    eyebrow: 'WHAT WE DO',
-    headline: ['From an idea', 'to a playable product.'],
-    intro: 'FNX works across the full game-production process — from the first mechanic and mathematical model to art, animation, runtime development and delivery.',
+    eyebrow: 'What we build',
+    headline: 'From an idea to a playable product.',
+    intro: 'One team across the whole production — from the first mechanic and math model to art, motion, runtime and delivery.',
     items: [
       {
         title: 'Original games',
         body: 'Slots and instant games built around a distinct hook, visual identity and player experience.',
-        art: {
-          src: '/visual-fixtures/production/concepts.png',
-          alt: 'World-building studies: environment, palette and character explorations for an original title.',
-        },
       },
       {
         title: 'Game production',
-        body: 'Game design, math, art, animation, frontend and runtime development developed together rather than handed between isolated stages.',
-        art: {
-          src: '/visual-fixtures/production/stage-game.jpg',
-          alt: 'A finished reel frame with production UI, win states and motion still in one screen.',
-        },
+        body: 'Design, math, art, animation and runtime developed together — not handed between isolated stages.',
       },
       {
         title: 'Operator delivery',
         body: 'Responsive builds prepared around real integration, deployment and production requirements.',
-        art: {
-          src: '/visual-fixtures/production/made-devices.jpg',
-          alt: 'The same game presented on desktop and portrait layouts for operator environments.',
-        },
       },
     ],
   },
 
-  reason: {
-    eyebrow: 'WHY FNX EXISTS',
-    headline: ['More games are being made.', 'Too few feel different.'],
-    intro:
-      'The tools used to build games have become faster. Pipelines have become more efficient. Generative systems can produce concepts and variations in seconds.',
-    blocks: [
-      'That can be useful. But efficiency without taste creates sameness. When the same visual treatments, mechanics, effects and presentation patterns are repeated across dozens of titles, games stop feeling like individual worlds and start feeling like products assembled from the same kit.',
-      'FNX takes the opposite approach. We use technology to remove unnecessary work, not to remove creative decisions. Every title still has people deciding why a mechanic exists, how a feature should feel, how an animation should move, how a symbol should read at game size and what makes that particular game different from the one beside it.',
-    ],
-    closing: 'Tools can accelerate production. They should not replace authorship.',
-    art: {
-      src: '/visual-fixtures/production/stage-concept.jpg',
-      alt: 'A close crop of multiple visual explorations and production studies pinned to a wall in a studio environment.',
-    },
-  },
-
-  philosophy: {
-    eyebrow: 'OUR PHILOSOPHY',
+  thinking: {
+    eyebrow: 'How we think',
     headline: ['A game should feel', 'considered everywhere.'],
-    intro:
-      'Players may never see the systems behind a game, but they feel the result of every decision: the pacing of a spin, the readability of a feature, the timing of an animation, the balance of the math and the responsiveness of the interface.',
+    intro: 'Players never see the systems behind a game. They feel the result of every decision.',
     principles: [
       {
-        label: '01 / FEEL BEFORE FEATURES',
-        headline: ['The game has to feel good', 'before it has to look complicated.'],
-        body: 'A long feature list can make a game sound impressive without making it enjoyable. We care more about rhythm: anticipation before a result, the weight of a reel stop, how quickly information is understood, how a win escalates and whether a feature actually changes the experience. Math, animation, audio and interface timing all contribute to that feeling.',
+        label: 'Feel',
+        title: 'Feel comes before complexity.',
+        body: 'A game has to feel good before it has to look complicated. We design for rhythm over feature lists — the anticipation before a stop, the weight of a reel landing, the way a win escalates — and tune it until a session has a pulse.',
         art: {
-          src: '/visual-fixtures/production/stage-motion.jpg',
-          alt: 'Animation frame timing and energy curves for a lantern win state set into a production board.',
+          src: '/visual-fixtures/production/made-feel.jpg',
+          alt: 'Reels mid-spin: three lanterns have landed on a glowing win line while the last two reels still blur.',
         },
       },
       {
-        label: '02 / IDENTITY BEFORE DECORATION',
-        headline: ['Every title needs', 'a point of view.'],
-        body: 'Changing symbols while keeping the same structure, lighting, animation language and presentation does not create a new world. Art direction begins before asset production. Shape language, palette, typography, motion, sound and interface treatment should all come from the personality of the game. A player should be able to recognise the game before they read its name.',
+        label: 'Point of view',
+        title: 'Every world needs a reason.',
+        body: 'Every title should have a reason to look and behave the way it does. Shape, palette, motion and sound come from the game’s personality, so a world is recognisable before you read its name — never assembled from a shared kit.',
         art: {
-          src: '/visual-fixtures/production/symbol-sheet.png',
-          alt: 'Symbol sheet and concept explorations for a fantasy game world, across multiple frames and forms.',
+          src: '/art/studio.webp',
+          alt: 'Key art for three original game worlds pinned above a symbol set, palette swatches and timing notes.',
         },
       },
       {
-        label: '03 / MECHANICS + MATH',
-        headline: ['What happens and how often', 'it happens are one system.'],
-        body: 'A mechanic can look exciting on paper and still feel wrong once frequency, volatility and reward structure enter the picture. We do not treat game design as one phase and mathematics as another. Feature behaviour, pacing, hit patterns and reward should reinforce the same experience the mechanic was designed around.',
+        label: 'System',
+        title: 'Mechanics and math are one design.',
+        body: 'What happens and how often it happens are part of the same decision. Mechanics and the math model are built together, so pacing and reward support the feeling the mechanic was made for instead of fighting it.',
         art: {
-          src: '/visual-fixtures/production/stage-game.jpg',
-          alt: 'A production board showing game-state logic, reel flow and mathematical behaviour with notes around the feature model.',
+          src: '/art/process.webp',
+          alt: 'A concept board with symbol sketches, an in-game reel layout, a palette and animation timing curves.',
         },
       },
       {
-        label: '04 / POLISH IS THE PRODUCT',
-        headline: ['The small decisions', 'are the product.'],
-        body: 'Performance, animation timing, responsive behaviour, input feedback, loading, transitions, visual hierarchy and recovery states are often described as polish. We see them as part of the experience from the beginning. A game can technically work long before it feels finished.',
+        label: 'Detail',
+        title: 'The small decisions are the product.',
+        body: 'Timing, readability, states and feedback aren’t polish added at the end. They are the game — and they are where players decide, usually without knowing it, whether something feels finished.',
         art: {
-          src: '/visual-fixtures/production/made-devices.jpg',
-          alt: 'A finished game presentation across devices, showing responsive UI layout and interaction states.',
+          src: '/visual-fixtures/production/stage-design.jpg',
+          alt: 'The finished lantern symbol with its palette and idle, win and dim states.',
         },
-        compare: [
-          {
-            src: '/visual-fixtures/production/stage-concept.png',
-            alt: 'Early lantern symbol sketches with construction lines.',
-            caption: 'Sketch',
-          },
-          {
-            src: '/visual-fixtures/production/stage-design.jpg',
-            alt: 'The finished lantern symbol with palette and states.',
-            caption: 'Production',
-          },
-        ],
       },
     ],
-  },
-
-  tools: {
-    eyebrow: 'HOW WE USE TOOLS',
-    headline: 'Speed is useful. Taste is still the job.',
-    body: 'We use modern tools where they genuinely improve production — development tooling, automation, procedural systems and AI-assisted workflows included. But the tool does not decide what the game should be. Creative direction, gameplay, composition, animation, pacing and final quality still require judgement. If something looks generic, feels synthetic or exists only because it was quick to produce, it is not finished.',
   },
 
   process: {
-    eyebrow: 'HOW WE WORK',
     headline: ['One team.', 'One game.'],
-    body: 'Concept, math, art and engineering are not independent production lines. Each stage informs the others, and the game is repeatedly played, reviewed and refined as it develops.',
+    body: 'Concept, math, art and engineering aren’t separate production lines. The same people carry a game from its first question to its final build — played, reviewed and refined the whole way through.',
+    art: {
+      src: '/art/studio-layers.webp',
+      alt: 'The layers of a slot game — background, reel frame, symbols and interface — stacked into one build.',
+    },
     stages: [
-      { title: 'Direction', body: 'Hook, audience, core mechanic, intended game feel and visual direction set the foundation before production scales.' },
-      { title: 'Game Design & Math', body: 'Mechanics, feature behaviour, pacing and the mathematical model are developed together so the reward rhythm supports the design intent.' },
-      { title: 'Art Direction', body: 'World, shape language, palette, symbols, interface and motion language are established before assets are made at volume.' },
-      { title: 'Build & Motion', body: 'Runtime, interaction, animation, audio behaviour and responsive presentation come together in a single development loop.' },
-      { title: 'Play, Test, Refine', body: 'The actual game is reviewed for timing, clarity, feature flow, performance and device behaviour until it feels deliberate.' },
-      { title: 'Production', body: 'Final build, QA, integration, delivery, handover and support all happen with a clear game-level understanding behind them.' },
+      {
+        title: 'Direction',
+        body: 'Hook, audience, core mechanic and intended feel, set before production scales.',
+      },
+      {
+        title: 'Game Design & Math',
+        body: 'Mechanics, features and the math model shaped together around one reward rhythm.',
+      },
+      {
+        title: 'Art Direction',
+        body: 'World, shape language, palette and motion language defined before assets are made at volume.',
+      },
+      {
+        title: 'Build & Motion',
+        body: 'Runtime, interaction, animation and audio come together in one development loop.',
+      },
+      {
+        title: 'Play, Test, Refine',
+        body: 'The real game is reviewed for timing, clarity, performance and device behaviour.',
+      },
+      {
+        title: 'Production',
+        body: 'Final build, QA, integration, delivery and support — with the whole game understood.',
+      },
     ],
   },
 
   work: {
-    eyebrow: 'INSIDE THE WORK',
+    eyebrow: 'Inside the work',
     headline: ['How a game', 'takes shape.'],
-    intro: 'The finished screen is only the last layer. Before that come symbol studies, visual systems, animation tests, interface decisions, environment exploration and countless iterations that never need to be visible to the player.',
+    intro: 'The finished screen is only the last layer. Before it come studies, systems and tests the player never needs to see.',
     gallery: [
       {
-        label: 'World',
+        label: 'Symbol development',
+        caption: 'One symbol language per world, readable at lobby size.',
+        src: '/visual-fixtures/production/symbol-sheet.jpg',
+        alt: 'Symbol sheets for three games: wilds, premium symbols and card royals in each world’s style.',
+      },
+      {
+        label: 'Art direction',
         caption: 'Environment, palette and the first readable silhouette.',
-        src: '/visual-fixtures/production/concepts.png',
-        alt: 'Colour and environment exploration pinned next to a concept sheet for a game world.',
+        src: '/visual-fixtures/production/concepts.jpg',
+        alt: 'Six pencil and sepia environment studies for a game world, pinned in two rows.',
       },
       {
-        label: 'Symbol language',
-        caption: 'Lantern exploration through to the final asset.',
-        src: '/visual-fixtures/production/symbol-sheet.png',
-        alt: 'A symbol sheet showing lantern, wild and premium symbols in different forms and states.',
-      },
-      {
-        label: 'Interface',
-        caption: 'Controls, states and interaction language.',
+        label: 'Motion + UI',
+        caption: 'Controls, states and win timing.',
         src: '/visual-fixtures/production/ui-kit.jpg',
-        alt: 'Game UI kit showing buttons, states, win banners and responsive controls for a slot build.',
+        alt: 'A game UI kit showing spin buttons, bet controls and win banners in three colourways and four states.',
       },
       {
-        label: 'Motion',
-        caption: 'Win-state timing and bounce behaviour.',
-        src: '/visual-fixtures/production/animation-frames.png',
-        alt: 'Animation frames for a lantern win state with frame numbers and an easing curve.',
-      },
-      {
-        label: 'Character',
-        caption: 'Idol turnaround and breakdowns.',
-        src: '/visual-fixtures/production/character-sheet.png',
-        alt: 'A temple idol displayed in multiple turns and angle studies, with design notes around silhouettes and expression.',
-      },
-      {
-        label: 'Final game',
-        caption: 'Finished scene, on the reels.',
+        label: 'Final build',
+        caption: 'Every layer, resolved on the reels.',
         src: '/visual-fixtures/games/mystic-tides-screen-2.jpg',
         alt: 'A finished slot game screen showing the reel grid, win states and premium symbols in game context.',
       },
@@ -181,42 +159,53 @@ export const studioConfig = {
   },
 
   standard: {
-    eyebrow: 'THE STANDARD',
-    headline: "If it doesn't feel finished, it isn't finished.",
-    body: 'A game can technically work long before it feels ready. We care about the distance between those two points — the small decisions that turn a functioning build into a coherent experience.',
-    closing: 'That is the standard we want FNX to be known for.',
+    eyebrow: 'The standard',
+    headline: ['If it doesn’t feel finished,', 'it isn’t finished.'],
+    body: 'From the first sketch to the final build, the work continues until the whole game feels resolved.',
   },
 
   cta: {
-    eyebrow: 'WORK WITH US',
     headline: 'Have a game in mind?',
     body: 'Talk to us about an original title, a studio partnership or bringing a new concept to production.',
-    cta: { label: 'Get in touch →', interest: 'studio-partnership' },
+    cta: { label: 'Get in touch', interest: 'studio-partnership' },
   },
 } satisfies {
-  about: { eyebrow: string; headline: HeadlineLines; body: string; art: ArtContent };
-  capabilities: { eyebrow: string; headline: HeadlineLines; intro: string; items: (TitledCopy & { art: ArtContent })[] };
-  reason: { eyebrow: string; headline: HeadlineLines; intro: string; blocks: string[]; closing: string; art: ArtContent };
-  philosophy: {
+  about: {
+    eyebrow: string;
+    headline: HeadlineLines;
+    summary: string;
+    paragraphs: string[];
+    proof: string[];
+  };
+  reason: { headline: HeadlineLines; intro: string; statement: string; closing: string };
+  capabilities: {
+    eyebrow: string;
+    headline: string;
+    intro: string;
+    items: TitledCopy[];
+  };
+  thinking: {
     eyebrow: string;
     headline: HeadlineLines;
     intro: string;
-    principles: {
-      label: string;
-      headline: HeadlineLines;
-      body: string;
-      art: ArtContent;
-      compare?: (ArtContent & { caption: string })[];
-    }[];
+    principles: (TitledCopy & { label: string; art: ArtContent })[];
   };
-  tools: { eyebrow: string; headline: string; body: string };
-  process: { eyebrow: string; headline: HeadlineLines; body: string; stages: TitledCopy[] };
+  process: {
+    headline: HeadlineLines;
+    body: string;
+    art: ArtContent;
+    stages: TitledCopy[];
+  };
   work: {
     eyebrow: string;
     headline: HeadlineLines;
     intro: string;
     gallery: { label: string; caption: string; src: string; alt: string }[];
   };
-  standard: { eyebrow: string; headline: string; body: string; closing?: string };
-  cta: { eyebrow: string; headline: string; body: string; cta: { label: string; interest?: string } };
+  standard: { eyebrow: string; headline: HeadlineLines; body: string };
+  cta: {
+    headline: string;
+    body: string;
+    cta: { label: string; interest?: string };
+  };
 };

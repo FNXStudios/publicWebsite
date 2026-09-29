@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useId, useRef, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from 'react';
 import { cn } from '@/lib/cn';
 
 interface Stage {
@@ -9,140 +9,138 @@ interface Stage {
 }
 
 interface StageStoryProps {
-  /** Accessible name for the stage list. */
+  /** Accessible name for the stage set. */
   label: string;
   stages: Stage[];
   /** Server-rendered visual per stage (same order). */
   visuals: ReactNode[];
-  /** Caption shown under the sticky visual on desktop. */
-  caption?: string;
 }
 
 /**
- * A scroll story without scroll-jacking. Desktop: the stage list scrolls normally while
- * a sticky frame crossfades to the stage nearest the middle of the screen; a hairline
- * tracks progress and the active number and title brighten. Phones: a plain vertical
- * sequence, every stage with its own visual. All content is server-rendered visible.
+ * One process, one media panel. Desktop: the four stages run across the full width;
+ * choosing one (click or ←/→/Home/End) crossfades the artwork (~65%) and swaps the
+ * active title and description (~35%). The stage row is the only navigation — no
+ * counter, caption or "next" link competing with it. No sticky wrapper. Phones: a plain ordered
+ * sequence, each stage with its own visual. Everything is server-rendered visible.
  */
-export function StageStory({ label, stages, visuals, caption }: StageStoryProps) {
+export function StageStory({ label, stages, visuals }: StageStoryProps) {
   const [active, setActive] = useState(0);
-  const listRef = useRef<HTMLOListElement>(null);
-  const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
-  const reducedRef = useRef(false);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const baseId = useId();
+  const count = stages.length;
+  const current = stages[active];
 
-  useEffect(() => {
-    reducedRef.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  }, []);
-
-  useEffect(() => {
-    if (typeof IntersectionObserver === 'undefined') return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) setActive(Number((entry.target as HTMLElement).dataset.index));
-        }
-      },
-      { rootMargin: '-48% 0px -48% 0px' },
-    );
-    for (const el of itemRefs.current) if (el) observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  const goTo = (index: number) => {
-    itemRefs.current[index]?.scrollIntoView({
-      behavior: reducedRef.current ? 'auto' : 'smooth',
-      block: 'center',
-    });
+  const select = (index: number, focus = false) => {
+    const next = (index + count) % count;
+    setActive(next);
+    if (focus) tabRefs.current[next]?.focus();
   };
 
-  const progress = (active + 1) / stages.length;
+  const onKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+    const keys: Record<string, number> = {
+      ArrowRight: active + 1,
+      ArrowLeft: active - 1,
+      Home: 0,
+      End: count - 1,
+    };
+    const target = keys[event.key];
+    if (target === undefined) return;
+    event.preventDefault();
+    select(target, true);
+  };
 
   return (
-    <div className="grid gap-12 md:grid-cols-12 md:gap-6">
-      <div className="relative md:col-span-5 lg:col-span-4">
-        {/* Progress hairline (desktop) — CSS scale, no scroll-linked JS */}
-        <div aria-hidden="true" className="absolute top-0 bottom-0 left-0 hidden w-px bg-white/[0.08] md:block">
+    <>
+      {/* Desktop: stage row + one media panel */}
+      <div className="hidden md:block">
+        <div role="tablist" aria-label={label} className="relative grid grid-cols-4 gap-(--grid-gap)">
+          {/* Active line: one bar that travels between stages. */}
           <span
-            className="absolute inset-x-0 top-0 block h-full origin-top bg-linear-to-b from-violet-400 to-violet-600 transition-transform duration-[640ms] ease-premium motion-reduce:transition-none"
-            style={{ transform: `scaleY(${progress})` }}
+            aria-hidden="true"
+            className="pointer-events-none absolute top-0 left-0 z-10 h-px w-[calc((100%-3*var(--grid-gap))/4)] bg-violet-400 transition-transform duration-[520ms] ease-premium motion-reduce:transition-none"
+            style={
+              {
+                transform: `translateX(calc(${active} * (100% + var(--grid-gap))))`,
+              } as CSSProperties
+            }
           />
-        </div>
-        <ol ref={listRef} aria-label={label} className="flex flex-col gap-10 md:gap-0 md:pl-10">
           {stages.map((stage, index) => {
             const on = index === active;
             return (
-              <li
+              <button
                 key={stage.title}
                 ref={(el) => {
-                  itemRefs.current[index] = el;
+                  tabRefs.current[index] = el;
                 }}
-                data-index={index}
-                data-active={on || undefined}
-                className="group/stage md:flex md:min-h-[42vh] md:flex-col md:justify-center"
+                id={`${baseId}-tab-${index}`}
+                type="button"
+                role="tab"
+                aria-selected={on}
+                aria-controls={`${baseId}-panel`}
+                tabIndex={on ? 0 : -1}
+                onClick={() => select(index)}
+                onKeyDown={onKeyDown}
+                className="group/tab flex items-baseline gap-4 border-t border-white/[0.12] pt-5 pb-1 text-left focus-visible:outline-offset-4"
               >
-                <div className="relative mb-5 aspect-[5/4] overflow-hidden rounded-lg border border-white/[0.09] bg-raised md:hidden">
-                  {visuals[index]}
-                </div>
                 <span
                   aria-hidden="true"
-                  className="block text-[0.8125rem] font-semibold tabular-nums tracking-[0.06em] text-violet-300 transition-colors duration-(--duration-standard) md:text-white/30 md:group-data-active/stage:text-violet-300"
+                  className={cn(
+                    'text-[0.8125rem] font-semibold tabular-nums tracking-[0.06em] transition-colors duration-(--duration-standard)',
+                    on ? 'text-violet-300' : 'text-text-muted group-hover/tab:text-text-secondary',
+                  )}
                 >
                   {String(index + 1).padStart(2, '0')}
                 </span>
-                <h3 className="mt-3 text-[clamp(1.75rem,1.3rem+1.6vw,2.75rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-white transition-colors duration-(--duration-standard) md:text-white/35 md:group-data-active/stage:text-white">
-                  {stage.title}
-                </h3>
-                <p className="mt-4 max-w-[26rem] text-body text-text-secondary transition-opacity duration-(--duration-standard) md:opacity-45 md:group-data-active/stage:opacity-100">
-                  {stage.body}
-                </p>
-              </li>
+                <span className={cn('text-title transition-colors duration-(--duration-standard)', on ? 'text-white' : 'text-white/40 group-hover/tab:text-white/70')}>{stage.title}</span>
+              </button>
             );
           })}
-        </ol>
-      </div>
+        </div>
 
-      {/* Sticky frame (desktop) */}
-      <div className="hidden md:col-span-7 md:col-start-6 md:block lg:col-span-8 lg:col-start-5">
-        <div className="sticky top-[calc(var(--header-height)+2rem)]">
-          <div className="mb-4 flex flex-wrap gap-1.5" role="group" aria-label="Jump to stage">
-            {stages.map((stage, index) => (
-              <button
-                key={stage.title}
-                type="button"
-                aria-current={index === active ? 'step' : undefined}
-                onClick={() => goTo(index)}
-                className="inline-flex h-9 items-center gap-2 rounded-full border border-white/[0.09] px-3.5 text-[0.8125rem] font-semibold text-text-muted transition-[color,border-color,background-color] duration-(--duration-interaction) hover:border-white/20 hover:text-text aria-[current=step]:border-violet-border aria-[current=step]:bg-violet-soft aria-[current=step]:text-white"
-              >
-                <span className="tabular-nums opacity-70">{String(index + 1).padStart(2, '0')}</span>
-                {stage.title}
-              </button>
-            ))}
-          </div>
-          <div className="relative aspect-[5/4] max-h-[calc(100svh-var(--header-height)-9.5rem)] w-full overflow-hidden rounded-xl border border-white/[0.09] bg-raised shadow-soft">
+        <div
+          id={`${baseId}-panel`}
+          role="tabpanel"
+          aria-labelledby={`${baseId}-tab-${active}`}
+          className="mt-12 grid grid-cols-[minmax(0,65fr)_minmax(0,35fr)] items-center gap-x-[clamp(2rem,4vw,5rem)] lg:mt-16"
+        >
+          <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-white/[0.09] bg-raised">
             {visuals.map((visual, index) => (
               <div
                 key={index}
                 aria-hidden={index !== active}
                 className={cn(
-                  'absolute inset-0 transition-[opacity,transform] duration-[640ms] ease-premium motion-reduce:transition-none',
-                  index === active ? 'scale-100 opacity-100' : 'scale-[1.015] opacity-0',
+                  'absolute inset-0 transition-[opacity,transform] duration-[560ms] ease-premium motion-reduce:transition-none',
+                  index === active ? 'scale-100 opacity-100' : 'scale-[1.012] opacity-0',
                 )}
               >
                 {visual}
               </div>
             ))}
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 rounded-xl shadow-[inset_0_0_0_1px_rgb(255_255_255/0.04),inset_0_-80px_120px_-60px_rgb(0_0_0/0.6)]"
-            />
-            <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full bg-black/55 px-3 py-1.5 text-[0.75rem] font-semibold tracking-[0.14em] text-white uppercase backdrop-blur-sm">
-              <span className="tabular-nums text-violet-300">{String(active + 1).padStart(2, '0')}</span>
-              {stages[active]?.title}
-            </div>
+            <div aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-xl shadow-[inset_0_-80px_120px_-60px_rgb(0_0_0/0.5)]" />
           </div>
-          {caption ? <p className="mt-4 text-small text-text-muted">{caption}</p> : null}
+
+          <div aria-live="polite">
+            <h3 className="text-display-sm text-white">{current?.title}</h3>
+            <p className="prose-side mt-5 text-lead text-text-secondary">{current?.body}</p>
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* Phones and small tablets: an ordered sequence */}
+      <ol aria-label={label} className="grid gap-12 sm:grid-cols-2 sm:gap-x-(--grid-gap) sm:gap-y-14 md:hidden">
+        {stages.map((stage, index) => (
+          <li key={stage.title}>
+            <div className="relative aspect-[5/4] overflow-hidden rounded-lg border border-white/[0.09] bg-raised">{visuals[index]}</div>
+            <div className="mt-5 flex items-baseline gap-3">
+              <span aria-hidden="true" className="text-[0.8125rem] font-semibold tabular-nums tracking-[0.06em] text-violet-300">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <h3 className="text-title text-white">{stage.title}</h3>
+            </div>
+            <p className="prose-measure mt-2.5 text-body text-text-secondary">{stage.body}</p>
+          </li>
+        ))}
+      </ol>
+    </>
   );
 }

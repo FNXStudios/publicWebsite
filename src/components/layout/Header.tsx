@@ -54,7 +54,7 @@ export function Header({ primary, ctaLabel, notice }: HeaderProps) {
       >
         Skip to content
       </a>
-      <div className="container-fnx grid h-full grid-cols-[1fr_auto] items-center gap-8 md:grid-cols-[1fr_auto_1fr]">
+      <div className="container-wide grid h-full grid-cols-[1fr_auto] items-center gap-8 md:grid-cols-[1fr_auto_1fr]">
         <Link href={routes.home} className="-m-2 justify-self-start rounded-md p-2 transition-opacity duration-(--duration-micro) hover:opacity-85" aria-label="FNX Studio — home">
           <Wordmark className="h-6 md:h-[1.625rem]" />
         </Link>
@@ -108,7 +108,7 @@ export function Header({ primary, ctaLabel, notice }: HeaderProps) {
                 <div aria-hidden="true" className="pointer-events-none fixed inset-0 bg-[radial-gradient(30rem_24rem_at_100%_100%,rgb(113_52_244/0.2),transparent_70%),radial-gradient(24rem_16rem_at_0%_0%,rgb(240_189_114/0.05),transparent_70%)]" />
                 <div aria-hidden="true" className="fnx-diagonals pointer-events-none fixed inset-0 opacity-50" />
                 <Dialog.Title className="sr-only">Menu</Dialog.Title>
-                <div className="container-fnx relative flex h-(--header-height) shrink-0 items-center justify-between">
+                <div className="container-wide relative flex h-(--header-height) shrink-0 items-center justify-between">
                   <Link href={routes.home} className="-m-2 p-2" aria-label="FNX Studio — home" onClick={() => setMenuOpen(false)}>
                     <Wordmark className="h-6" />
                   </Link>
@@ -118,7 +118,7 @@ export function Header({ primary, ctaLabel, notice }: HeaderProps) {
                   </Dialog.Close>
                 </div>
 
-                <nav aria-label="Mobile" className="container-fnx relative flex flex-1 flex-col pt-8 pb-8">
+                <nav aria-label="Mobile" className="container-wide relative flex flex-1 flex-col pt-8 pb-8">
                   <ul className="border-t border-white/[0.08]">
                     {primary.map((item, index) => {
                       const active = isActive(pathname, item.href);

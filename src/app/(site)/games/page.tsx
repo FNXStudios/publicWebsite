@@ -7,6 +7,7 @@ import { ContactTrigger } from '@/components/contact/ContactTrigger';
 import { GameFeature } from '@/components/games/GameFeature';
 import { GameRail } from '@/components/games/GameShowcase';
 import { FinalCta } from '@/components/home/FinalCta';
+import { Container } from '@/components/layout/Container';
 import { PageIntro } from '@/components/layout/PageIntro';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Reveal } from '@/motion/Reveal';
@@ -17,7 +18,10 @@ export const metadata: Metadata = pageMetadata({
   path: routes.games,
 });
 
-/** A portfolio, not a grid of rectangles: the lead title large, the rest as wide cards. */
+/**
+ * A portfolio, not a grid of rectangles. Editorial opener, then the catalogue on the
+ * wide visual grid: the lead title large, the rest as substantial landscape cards.
+ */
 export default function GamesPage() {
   const games = getDisplayGames();
   const [lead, ...rest] = games;
@@ -34,9 +38,9 @@ export default function GamesPage() {
         }
       />
 
-      <section aria-label={gamesPageContent.portfolioLabel} className="container-fnx pt-12 pb-large md:pt-16">
+      <Container as="section" size="wide" aria-label={gamesPageContent.portfolioLabel} className="pt-14 pb-sec-md md:pt-20">
         {lead ? (
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-(--grid-gap)">
             <GameFeature game={lead} priority />
             {rest.length ? (
               <Reveal>
@@ -55,7 +59,7 @@ export default function GamesPage() {
             }
           />
         )}
-      </section>
+      </Container>
 
       {lead ? <FinalCta eyebrow={closing.eyebrow} headline={closing.headline} body={closing.body} cta={closing.cta} placement="games-closing" /> : null}
     </>
