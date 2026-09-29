@@ -5,8 +5,8 @@ import { GAME_LOAD_TIMEOUT_MS, GamePlayer, type GamePlayerProps } from '@/compon
 const props: GamePlayerProps = {
   slug: 'lantern-quarter',
   title: 'Lantern Quarter',
-  src: 'https://games.fnxstudio.com/lantern-quarter/index.html',
-  origin: 'https://games.fnxstudio.com',
+  src: 'https://games.fnx-studios.com/lantern-quarter/index.html',
+  origin: 'https://games.fnx-studios.com',
   orientation: 'landscape',
   aspectRatio: '16/9',
   readySignal: false,

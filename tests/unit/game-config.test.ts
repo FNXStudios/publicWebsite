@@ -39,13 +39,13 @@ describe('game configuration schema', () => {
 
   it('rejects both launchPath and launchUrl together', () => {
     const game = base();
-    game.game = { ...game.game, launchUrl: 'https://games.fnxstudio.com/x/' };
+    game.game = { ...game.game, launchUrl: 'https://games.fnx-studios.com/x/' };
     expect(gameSchema.safeParse(game).success).toBe(false);
   });
 
   it('rejects plain http and remote-hosted artwork', () => {
     const httpLaunch = base();
-    httpLaunch.game = { orientation: 'landscape', launchUrl: 'http://games.fnxstudio.com/x/' };
+    httpLaunch.game = { orientation: 'landscape', launchUrl: 'http://games.fnx-studios.com/x/' };
     delete httpLaunch.game.launchPath;
     expect(gameSchema.safeParse(httpLaunch).success).toBe(false);
 

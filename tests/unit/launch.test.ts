@@ -14,25 +14,25 @@ describe('game origins', () => {
   });
 
   it('rejects plain http except for localhost', () => {
-    expect(() => getGameOrigins(env('http://games.fnxstudio.com'))).toThrow(/https/);
+    expect(() => getGameOrigins(env('http://games.fnx-studios.com'))).toThrow(/https/);
     expect(getGameOrigins(env('http://localhost:4000')).baseUrl.origin).toBe('http://localhost:4000');
   });
 });
 
 describe('resolveGameLaunch', () => {
-  const origins = getGameOrigins(env('https://games-staging.fnxstudio.com'));
+  const origins = getGameOrigins(env('https://games-staging.fnx-studios.com'));
 
   it('joins launchPath onto the environment origin', () => {
     expect(resolveGameLaunch(lantern!, origins)).toEqual({
-      url: 'https://games-staging.fnxstudio.com/lantern-quarter/index.html',
-      origin: 'https://games-staging.fnxstudio.com',
-      policy: { kind: 'first-party', origin: 'https://games-staging.fnxstudio.com' },
+      url: 'https://games-staging.fnx-studios.com/lantern-quarter/index.html',
+      origin: 'https://games-staging.fnx-studios.com',
+      policy: { kind: 'first-party', origin: 'https://games-staging.fnx-studios.com' },
     });
   });
 
   it('keeps a base path on the game origin', () => {
-    const withPath = getGameOrigins(env('https://cdn.fnxstudio.com/builds/'));
-    expect(resolveGameLaunch(tide!, withPath)?.url).toBe('https://cdn.fnxstudio.com/builds/tide-runner/');
+    const withPath = getGameOrigins(env('https://cdn.fnx-studios.com/builds/'));
+    expect(resolveGameLaunch(tide!, withPath)?.url).toBe('https://cdn.fnx-studios.com/builds/tide-runner/');
   });
 
   it('returns null for games that cannot launch', () => {
@@ -50,18 +50,18 @@ describe('resolveGameLaunch', () => {
   it('accepts absolute URLs on the first-party origin', () => {
     const absolute = gameSchema.parse({
       ...fixtureGames[0],
-      game: { orientation: 'landscape', launchUrl: 'https://games-staging.fnxstudio.com/a/?lang=en' },
+      game: { orientation: 'landscape', launchUrl: 'https://games-staging.fnx-studios.com/a/?lang=en' },
     });
-    expect(resolveGameLaunch(absolute, origins)?.url).toBe('https://games-staging.fnxstudio.com/a/?lang=en');
+    expect(resolveGameLaunch(absolute, origins)?.url).toBe('https://games-staging.fnx-studios.com/a/?lang=en');
   });
 });
 
 describe('security headers', () => {
-  const e = env('https://games.fnxstudio.com');
+  const e = env('https://games.fnx-studios.com');
 
   it('frames only the trusted game origin', () => {
     const csp = buildContentSecurityPolicy({ isDev: false, env: e });
-    expect(csp).toContain('frame-src https://games.fnxstudio.com;');
+    expect(csp).toContain('frame-src https://games.fnx-studios.com;');
     expect(csp).not.toMatch(/frame-src[^;]*\*/);
     expect(csp).toContain("frame-ancestors 'none'");
     expect(csp).not.toContain('unsafe-eval');
@@ -70,8 +70,8 @@ describe('security headers', () => {
   it('delegates only fullscreen and autoplay to the game origin', () => {
     const policy = buildPermissionsPolicy(e);
     expect(policy).toContain('camera=()');
-    expect(policy).toContain('fullscreen=(self "https://games.fnxstudio.com")');
-    expect(policy).toContain('autoplay=(self "https://games.fnxstudio.com")');
+    expect(policy).toContain('fullscreen=(self "https://games.fnx-studios.com")');
+    expect(policy).toContain('autoplay=(self "https://games.fnx-studios.com")');
   });
 
   it('adds HSTS only when explicitly enabled in production', () => {

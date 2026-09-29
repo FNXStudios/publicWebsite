@@ -9,7 +9,7 @@ export const siteConfig = parseConfig('site', siteSchema, {
   footerLine: 'Original games built with character, craft and production discipline.',
   locale: 'en_GB',
   defaultOgImage: '/og.jpg',
-  email: 'hello@fnxstudio.com',
+  email: 'hello@fnx-studios.com',
   social: [{ label: 'LinkedIn', href: 'https://www.linkedin.com/company/fnx-studio' }],
   responsibleGaming: {
     ageLabel: '18+',

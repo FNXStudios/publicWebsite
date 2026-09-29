@@ -13,8 +13,8 @@ export default defineConfig({
     setupFiles: ['./tests/setup.ts'],
     include: ['tests/unit/**/*.test.ts', 'tests/component/**/*.test.tsx'],
     env: {
-      NEXT_PUBLIC_SITE_URL: 'https://www.fnxstudio.com',
-      NEXT_PUBLIC_GAME_BASE_URL: 'https://games.fnxstudio.com',
+      NEXT_PUBLIC_SITE_URL: 'https://www.fnx-studios.com',
+      NEXT_PUBLIC_GAME_BASE_URL: 'https://games.fnx-studios.com',
     },
   },
 });

@@ -47,7 +47,7 @@ See `.env.example`. `.env.development` and `.env.production` hold safe defaults.
 | `CONTACT_SUBMIT_TOKEN` | server | Optional bearer token for that endpoint |
 | `ENABLE_HSTS` | server | `true` adds `Strict-Transport-Security` (only on hosts that are HTTPS end to end) |
 
-Per environment, `NEXT_PUBLIC_GAME_BASE_URL` is `https://games.fnxstudio.com` (production), `https://games-staging.fnxstudio.com` (staging) or `http://localhost:4000` (local).
+Per environment, `NEXT_PUBLIC_GAME_BASE_URL` is `https://games.fnx-studios.com` (production), `https://games-staging.fnx-studios.com` (staging) or `http://localhost:4000` (local).
 
 ## Information architecture
 

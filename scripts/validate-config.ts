@@ -8,7 +8,7 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 
-process.env.NEXT_PUBLIC_GAME_BASE_URL ??= 'https://games.fnxstudio.com';
+process.env.NEXT_PUBLIC_GAME_BASE_URL ??= 'https://games.fnx-studios.com';
 
 const problems: string[] = [];
 const publicDir = path.resolve(import.meta.dirname, '../public');

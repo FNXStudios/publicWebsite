@@ -17,7 +17,7 @@ describe('SEO helpers', () => {
   it('never emits ratings or reviews in structured data', () => {
     const json = JSON.stringify(gameJsonLd(lantern));
     expect(json).not.toMatch(/aggregateRating|review/i);
-    expect(gameJsonLd(lantern).url).toBe('https://www.fnxstudio.com/games/lantern-quarter');
+    expect(gameJsonLd(lantern).url).toBe('https://www.fnx-studios.com/games/lantern-quarter');
   });
 
   it('escapes "<" in inline JSON-LD', () => {
@@ -27,7 +27,7 @@ describe('SEO helpers', () => {
 
 describe('game frame messages', () => {
   const source = {} as MessageEventSource;
-  const origin = 'https://games.fnxstudio.com';
+  const origin = 'https://games.fnx-studios.com';
 
   it('accepts protocol messages from the expected origin and frame', () => {
     expect(readGameFrameMessage({ origin, source, data: { type: 'fnx:ready' } }, origin, source)).toEqual({

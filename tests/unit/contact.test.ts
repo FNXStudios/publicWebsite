@@ -44,6 +44,7 @@ describe('deliverContactSubmission', () => {
     const [url, init] = fetchImpl.mock.calls[0]!;
     expect(url).toBe('https://forms.example/hook');
     expect(init.headers.authorization).toBe('Bearer t0k');
+    expect(init.headers.accept).toBe('application/json');
     expect(JSON.parse(init.body)).toMatchObject({ email: valid.email, interest: 'game-production' });
   });
 
