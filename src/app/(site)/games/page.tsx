@@ -4,7 +4,6 @@ import { getDisplayGames } from '@/lib/games/catalog';
 import { routes } from '@/lib/routes';
 import { pageMetadata } from '@/lib/seo/metadata';
 import { ContactTrigger } from '@/components/contact/ContactTrigger';
-import { GameFeature } from '@/components/games/GameFeature';
 import { GameRail } from '@/components/games/GameShowcase';
 import { FinalCta } from '@/components/home/FinalCta';
 import { Container } from '@/components/layout/Container';
@@ -19,35 +18,29 @@ export const metadata: Metadata = pageMetadata({
 });
 
 /**
- * A portfolio, not a grid of rectangles. Editorial opener, then the catalogue on the
- * wide visual grid: the lead title large, the rest as substantial landscape cards.
+ * Centered editorial opener, then an even 3-up thumbnail grid — same card style as the homepage rail.
  */
 export default function GamesPage() {
   const games = getDisplayGames();
-  const [lead, ...rest] = games;
   const { empty, closing } = gamesPageContent;
 
   return (
     <>
       <PageIntro
+        layout="centered"
         eyebrow={gamesPageContent.eyebrow}
         headline={gamesPageContent.headline}
-        body={<p>{gamesPageContent.body}</p>}
+        body={<p className="text-text">{gamesPageContent.body}</p>}
         atmosphere={
-          <div className="absolute inset-0 bg-[radial-gradient(34rem_22rem_at_62%_110%,rgb(226_64_42/0.12),transparent_70%),radial-gradient(34rem_22rem_at_82%_90%,rgb(106_63_224/0.16),transparent_70%),radial-gradient(30rem_20rem_at_100%_40%,rgb(31_165_106/0.08),transparent_70%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(36rem_24rem_at_50%_-6%,rgb(113_52_244/0.11),transparent_72%),radial-gradient(28rem_20rem_at_8%_100%,rgb(240_189_114/0.04),transparent_72%)]" />
         }
       />
 
-      <Container as="section" size="wide" aria-label={gamesPageContent.portfolioLabel} className="pt-14 pb-sec-md md:pt-20">
-        {lead ? (
-          <div className="flex flex-col gap-(--grid-gap)">
-            <GameFeature game={lead} priority />
-            {rest.length ? (
-              <Reveal>
-                <GameRail games={rest} placement="games" headingLevel="h2" ratio={rest.length > 2 ? 'feature' : 'landscape'} />
-              </Reveal>
-            ) : null}
-          </div>
+      <Container as="section" size="wide" aria-label={gamesPageContent.portfolioLabel} className="pt-10 pb-sec-md md:pt-14">
+        {games.length ? (
+          <Reveal>
+            <GameRail games={games} placement="games" headingLevel="h2" ratio="portrait" />
+          </Reveal>
         ) : (
           <EmptyState
             headline={empty.headline}
@@ -61,7 +54,7 @@ export default function GamesPage() {
         )}
       </Container>
 
-      {lead ? <FinalCta eyebrow={closing.eyebrow} headline={closing.headline} body={closing.body} cta={closing.cta} placement="games-closing" /> : null}
+      {games.length ? <FinalCta eyebrow={closing.eyebrow} headline={closing.headline} body={closing.body} cta={closing.cta} placement="games-closing" /> : null}
     </>
   );
 }

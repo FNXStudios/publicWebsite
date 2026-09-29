@@ -2,10 +2,11 @@ import Link from 'next/link';
 import { navigationConfig } from '@/config/navigation.config';
 import { siteConfig } from '@/config/site.config';
 import { routes } from '@/lib/routes';
+import { iconForDirectLink } from '@/lib/site/direct-link-icon';
 import { Wordmark } from '@/components/ui/Wordmark';
 
 const linkClass =
-  'group inline-flex py-2 text-[0.9375rem] font-medium text-text-secondary transition-colors duration-(--duration-interaction) ease-premium hover:text-text';
+  'group inline-flex items-center gap-2 py-2 text-[0.9375rem] font-medium text-text-secondary transition-colors duration-(--duration-interaction) ease-premium hover:text-text';
 
 /**
  * Compact close (~240px on desktop). Row 1: logo + one line left, horizontal
@@ -15,7 +16,7 @@ export function Footer() {
   const year = new Date().getFullYear();
   const rg = siteConfig.responsibleGaming;
   const direct = [
-    ...(siteConfig.email ? [{ label: 'Email', href: `mailto:${siteConfig.email}` }] : []),
+    ...(siteConfig.email ? [{ label: siteConfig.email, href: `mailto:${siteConfig.email}` }] : []),
     ...siteConfig.social,
   ];
 
@@ -39,14 +40,18 @@ export function Footer() {
                 </Link>
               </li>
             ))}
-            {direct.map((item) => (
-              <li key={item.href}>
-                <a href={item.href} className={linkClass} {...(item.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
-                  <span className="link-rule">{item.label}</span>
-                  {item.href.startsWith('http') ? <span className="sr-only"> (opens in a new tab)</span> : null}
-                </a>
-              </li>
-            ))}
+            {direct.map((item) => {
+              const Icon = iconForDirectLink(item.href);
+              return (
+                <li key={item.href}>
+                  <a href={item.href} className={linkClass} {...(item.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+                    {Icon ? <Icon className="size-[1.05em] shrink-0 opacity-80 transition-opacity group-hover:opacity-100" /> : null}
+                    <span className="link-rule">{item.label}</span>
+                    {item.href.startsWith('http') ? <span className="sr-only"> (opens in a new tab)</span> : null}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </nav>
       </div>

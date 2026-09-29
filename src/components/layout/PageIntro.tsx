@@ -12,10 +12,11 @@ interface PageIntroProps {
   id?: string;
   className?: string;
   /**
-   * `stacked`: headline at its natural width, supporting copy below (Games).
-   * `split`: headline ~7 columns beside ~4 columns of copy, bottom-aligned (Careers).
+   * `stacked`: headline at its natural width, supporting copy below.
+   * `split`: headline beside supporting copy, top-aligned.
+   * `centered`: manifesto opener, centred on the wide grid (Games, Careers).
    */
-  layout?: 'stacked' | 'split';
+  layout?: 'stacked' | 'split' | 'centered';
   /** Decorative atmosphere painted edge to edge behind the intro. */
   atmosphere?: ReactNode;
   children?: ReactNode;
@@ -23,34 +24,51 @@ interface PageIntroProps {
 
 /**
  * Type B — editorial typographic opener for inner pages (Games, Careers).
- * Aligned to the wide grid so it shares an edge with the visuals below it. The headline
- * is never squeezed into a narrow column: either it runs at its natural width with the
- * copy below (stacked), or it takes ~7 columns beside the copy (split). Both give the
- * opener real visual mass without consuming a whole viewport.
- * Entrance is CSS-only (above the fold).
+ * Wide grid so the opener shares an edge with the visuals below. Compact type
+ * and padding — mass without eating the viewport.
  */
 export function PageIntro({ eyebrow, headline, body, action, id, layout = 'stacked', className, atmosphere, children }: PageIntroProps) {
   const split = layout === 'split';
+  const centered = layout === 'centered';
   return (
     <header className={cn('relative isolate w-full', className)}>
       {atmosphere ? <FullBleed className="-bottom-40 fade-bottom">{atmosphere}</FullBleed> : null}
-      <Container size="wide" className="pt-[calc(var(--header-height)+3.5rem)] md:pt-[calc(var(--header-height)+6.5rem)]">
-        <div className={cn('grid-fnx gap-y-7', split && 'md:items-end')}>
-          <div className={split ? 'md:col-span-7' : 'md:col-span-12'}>
-            <Eyebrow rule className="enter-rise">
+      <Container
+        size="wide"
+        className={cn(
+          'pt-[calc(var(--header-height)+2.5rem)] md:pt-[calc(var(--header-height)+4rem)]',
+          centered && 'flex flex-col items-center pb-sec-sm text-center md:pb-sec-md',
+        )}
+      >
+        {centered ? (
+          <>
+            <Eyebrow rule className="enter-rise justify-center">
               {eyebrow}
             </Eyebrow>
-            <h1 id={id} className="enter-rise mt-6 text-hero text-white [--enter-step:1] md:mt-7">
+            <h1 id={id} className="enter-rise mt-5 text-hero text-white [--enter-step:1]">
               <HeadlineLines lines={headline} />
             </h1>
-          </div>
-          {body || action ? (
-            <div className={cn('enter-rise [--enter-step:2]', split ? 'md:col-span-4 md:col-start-9 md:pb-2' : 'md:col-span-12 md:mt-2')}>
-              {body ? <div className={cn('text-lead text-text-secondary', split ? 'max-w-[30rem]' : 'max-w-[40rem]')}>{body}</div> : null}
-              {action ? <div className="mt-7">{action}</div> : null}
+            {body ? <div className="enter-rise measure-reading mt-7 space-y-4 text-lead text-text-secondary [--enter-step:2] md:mt-8">{body}</div> : null}
+            {action ? <div className="enter-rise mt-7 [--enter-step:3]">{action}</div> : null}
+          </>
+        ) : (
+          <div className={cn('grid-fnx gap-y-5', split && 'md:items-start')}>
+            <div className={split ? 'md:col-span-6' : 'md:col-span-12'}>
+              <Eyebrow rule className="enter-rise">
+                {eyebrow}
+              </Eyebrow>
+              <h1 id={id} className="enter-rise mt-4 text-hero text-white [--enter-step:1] md:mt-5">
+                <HeadlineLines lines={headline} />
+              </h1>
             </div>
-          ) : null}
-        </div>
+            {body || action ? (
+              <div className={cn('enter-rise [--enter-step:2]', split ? 'md:col-span-5 md:col-start-8 md:pt-10' : 'md:col-span-12 md:mt-1')}>
+                {body ? <div className={cn('text-lead text-text-secondary', split ? 'max-w-[28rem]' : 'max-w-[36rem]')}>{body}</div> : null}
+                {action ? <div className="mt-5">{action}</div> : null}
+              </div>
+            ) : null}
+          </div>
+        )}
         {children}
       </Container>
     </header>

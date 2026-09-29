@@ -7,8 +7,8 @@ import { Eyebrow, HeadlineLines } from '@/components/ui/Typography';
 import { Reveal } from '@/motion/Reveal';
 
 /**
- * The first visual payoff: the games bring the colour. Uses the wide visual grid so the
- * three cards stay substantial at 1440–1920. Renders nothing without games.
+ * Featured titles as compact thumbnails — colour payoff without a full-bleed game wall.
+ * Renders nothing without games.
  */
 export function FeaturedGames() {
   const { featured } = homeConfig;
@@ -26,7 +26,7 @@ export function FeaturedGames() {
         className="absolute inset-x-0 top-[40%] -z-10 h-[50%] bg-[radial-gradient(40%_60%_at_20%_50%,rgb(226_64_42/0.07),transparent),radial-gradient(40%_60%_at_50%_50%,rgb(106_63_224/0.08),transparent),radial-gradient(40%_60%_at_82%_50%,rgb(31_165_106/0.06),transparent)]"
       />
       <Container size="wide">
-        <div className="mb-8 flex items-end justify-between gap-6 md:mb-12">
+        <div className="mb-6 flex items-end justify-between gap-6 md:mb-8">
           <div>
             <Eyebrow rule>{featured.eyebrow}</Eyebrow>
             <h2 id="featured-title" className="mt-5 text-display text-white">
@@ -38,7 +38,7 @@ export function FeaturedGames() {
           </TextLink>
         </div>
         <Reveal>
-          <GameRail games={games} placement="home" headingLevel="h3" ratio="feature" />
+          <GameRail games={games} placement="home" headingLevel="h3" ratio="portrait" />
         </Reveal>
         <TextLink href={featured.allGames.href} className="mt-2 sm:hidden">
           {featured.allGames.label}

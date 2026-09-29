@@ -9,10 +9,8 @@ export const siteConfig = parseConfig('site', siteSchema, {
   footerLine: 'Original games built with character, craft and production discipline.',
   locale: 'en_GB',
   defaultOgImage: '/og.jpg',
-  // TODO(business): add the real public inbox, e.g. "hello@fnxstudio.com". Omitted until confirmed.
-  email: undefined,
-  // TODO(business): add official profiles (LinkedIn etc.) once they exist.
-  social: [],
+  email: 'hello@fnxstudio.com',
+  social: [{ label: 'LinkedIn', href: 'https://www.linkedin.com/company/fnx-studio' }],
   responsibleGaming: {
     ageLabel: '18+',
     label: 'Please play responsibly.',

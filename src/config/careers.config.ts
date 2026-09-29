@@ -1,4 +1,4 @@
-import type { ArtContent, ContactAction, HeadlineLines, TitledCopy } from './content.types';
+import type { ContactAction, HeadlineLines, TitledCopy } from './content.types';
 import { jobCollectionSchema, type JobInput } from './schema/career.schema';
 import { parseConfig } from './schema/parse';
 
@@ -17,20 +17,28 @@ const jobsInput: JobInput[] = [
     applyUrl: '/careers',
     order: 1,
   },
+  {
+    id: '2d-game-artist',
+    title: '2D Game Artist',
+    type: 'full-time',
+    location: 'Remote',
+    description: 'Design symbols, characters and world art that read clearly at small sizes and carry a strong identity across the game.',
+    status: 'open',
+    applyUrl: '/careers',
+    order: 2,
+  },
 ];
 
 export const jobs = parseConfig('careers', jobCollectionSchema, jobsInput);
 
 export const careersPageContent = {
   eyebrow: 'Careers',
-  headline: ['Make games', 'with us.'],
-  body: 'FNX brings art, game design, math, motion and engineering together. We look for people who care about the small details that make a game feel right.',
+  headline: ["Let's make great games together"],
+  paragraphs: [
+    'We are a small company with big dreams. We look to each other to inspire creativity and spark innovation. We understand that dreaming big is what pushes us to think differently and be better.',
+    'Join us on our mission to develop the next generation of innovative casino games.',
+  ],
   listHeading: 'Open roles',
-  // Interim production visual (scripts/visual-fixtures). Replace with real studio work.
-  art: {
-    src: '/art/careers-frames.webp',
-    alt: 'A row of pencil drawings refining a gem symbol, frame by frame, ending in the finished violet gem.',
-  },
   values: {
     eyebrow: 'What we care about',
     headline: 'Small details, taken seriously.',
@@ -49,9 +57,8 @@ export const careersPageContent = {
 } satisfies {
   eyebrow: string;
   headline: HeadlineLines;
-  body: string;
+  paragraphs: readonly [string, ...string[]];
   listHeading: string;
-  art: ArtContent;
   values: { eyebrow: string; headline: string; items: TitledCopy[] };
   empty: { headline: string; body: string; cta: ContactAction };
 };

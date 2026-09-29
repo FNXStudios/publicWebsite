@@ -477,14 +477,139 @@
     return s;
   };
 
+  /* =====================================================================
+     Neon Heist — electric cyan / magenta
+     ===================================================================== */
+  SC.neonArt = (w, h) => {
+    const R = rng(21);
+    const wide = w > h * 1.2;
+    const m = Math.min(w, h);
+    const cx = wide ? w * 0.58 : w * 0.5;
+    const cy = wide ? h * 0.48 : h * 0.42;
+    const sky = uid('nsk'), vault = uid('nv'), rim = uid('nr');
+    let s = `<defs>
+      ${lin(sky, [[0, '#05010f'], [0.4, '#1a0a3a'], [0.72, '#3a1268'], [1, '#0a0418']])}
+      ${rad(vault, [[0, '#e8f7ff'], [0.35, '#5ce1ff'], [0.7, '#c84dff'], [1, '#2a0850']], 0.45, 0.4, 0.65)}
+      ${lin(rim, [[0, '#5ce1ff', 0], [0.5, '#ff4fd8', 0.35], [1, '#05010f', 0.95]])}
+    </defs>`;
+    s += `<rect width="${w}" height="${h}" fill="url(#${sky})"/>`;
+    // city grid glow
+    for (let i = 0; i < 18; i++) {
+      const x = (i / 17) * w;
+      s += `<line x1="${x}" y1="${h * 0.55}" x2="${x + (R() - 0.5) * w * 0.04}" y2="${h}" stroke="#5ce1ff" stroke-opacity="${0.04 + R() * 0.06}" stroke-width="1"/>`;
+    }
+    s += glowAt(cx, cy, m * 0.55, '#c84dff', 0.35);
+    s += glowAt(cx, cy, m * 0.28, '#5ce1ff', 0.45);
+    // vault diamond
+    const s0 = m * 0.22;
+    s += `<g transform="translate(${cx},${cy})">
+      <polygon points="0,${-s0} ${s0 * 0.72},${-s0 * 0.15} ${s0 * 0.55},${s0 * 0.7} 0,${s0} ${-s0 * 0.55},${s0 * 0.7} ${-s0 * 0.72},${-s0 * 0.15}" fill="url(#${vault})" stroke="#e8f7ff" stroke-opacity=".55" stroke-width="2"/>
+      <polygon points="0,${-s0 * 0.55} ${s0 * 0.32},0 0,${s0 * 0.45} ${-s0 * 0.32},0" fill="#fff" fill-opacity=".35"/>
+    </g>`;
+    // neon rings
+    for (let i = 1; i <= 4; i++) {
+      s += `<ellipse cx="${cx}" cy="${cy}" rx="${m * (0.18 + i * 0.08)}" ry="${m * (0.12 + i * 0.05)}" fill="none" stroke="${i % 2 ? '#5ce1ff' : '#ff4fd8'}" stroke-opacity="${0.28 - i * 0.04}" stroke-width="${i === 1 ? 2.5 : 1.2}" transform="rotate(${-12 * i} ${cx} ${cy})"/>`;
+    }
+    s += `<rect y="${h * 0.55}" width="${w}" height="${h * 0.45}" fill="url(#${rim})"/>`;
+    s += particles(R, 90, 0, 0, w, h * 0.7, ['#5ce1ff', '#ff4fd8', '#ffffff'], 0.6, 2.2, 0.15, 0.7);
+    s += vignette(w, h, 0.75, 0.5);
+    s += noise(w, h, 0.07);
+    return s;
+  };
+
+  /* =====================================================================
+     Golden Harbour — warm teal / gold dusk
+     ===================================================================== */
+  SC.harbourArt = (w, h) => {
+    const R = rng(33);
+    const wide = w > h * 1.2;
+    const m = Math.min(w, h);
+    const cx = wide ? w * 0.62 : w * 0.52;
+    const cy = wide ? h * 0.4 : h * 0.36;
+    const sky = uid('hsk'), sun = uid('hsn'), sea = uid('hse');
+    let s = `<defs>
+      ${lin(sky, [[0, '#1a0f28'], [0.35, '#5a2a48'], [0.55, '#e07a3a'], [0.75, '#f0bd72'], [1, '#1a3040']])}
+      ${rad(sun, [[0, '#fff6d6'], [0.4, '#f0bd72'], [0.8, '#e07a3a'], [1, '#8a3018']], 0.45, 0.4, 0.55)}
+      ${lin(sea, [[0, '#0a2838', 0], [0.2, '#0e4058', 0.55], [1, '#041018', 1]])}
+    </defs>`;
+    s += `<rect width="${w}" height="${h}" fill="url(#${sky})"/>`;
+    s += glowAt(cx, cy, m * 0.5, '#f0bd72', 0.4);
+    s += `<circle cx="${cx}" cy="${cy}" r="${m * 0.16}" fill="url(#${sun})"/>`;
+    s += hills(R, w, h, h * 0.58, h * 0.08, 8, '#2a1830');
+    s += hills(R, w, h, h * 0.64, h * 0.06, 10, '#1a2430');
+    // lighthouse
+    const lx = wide ? w * 0.22 : w * 0.18;
+    const ly = h * 0.62;
+    s += `<rect x="${lx - m * 0.018}" y="${ly - m * 0.28}" width="${m * 0.036}" height="${m * 0.28}" fill="#f5e6c8"/>`;
+    s += `<polygon points="${lx},${ly - m * 0.34} ${lx + m * 0.05},${ly - m * 0.26} ${lx - m * 0.05},${ly - m * 0.26}" fill="#f0bd72"/>`;
+    s += glowAt(lx, ly - m * 0.3, m * 0.12, '#ffe39a', 0.55);
+    // water
+    s += `<rect y="${h * 0.66}" width="${w}" height="${h * 0.34}" fill="url(#${sea})"/>`;
+    for (let i = 0; i < 12; i++) {
+      const y = h * (0.68 + i * 0.025);
+      s += `<path d="M0 ${y} Q${w * 0.25} ${y - 4} ${w * 0.5} ${y} T${w} ${y}" fill="none" stroke="#7ec8e0" stroke-opacity="${0.08 + (i % 3) * 0.03}" stroke-width="1.5"/>`;
+    }
+    s += particles(R, 60, 0, h * 0.2, w, h * 0.4, ['#ffe39a', '#ffffff'], 0.5, 1.8, 0.2, 0.65);
+    s += vignette(w, h, 0.7, 0.5);
+    s += noise(w, h, 0.06);
+    return s;
+  };
+
+  /* =====================================================================
+     Crystal Vault — ice / silver / violet
+     ===================================================================== */
+  SC.crystalArt = (w, h) => {
+    const R = rng(44);
+    const wide = w > h * 1.2;
+    const m = Math.min(w, h);
+    const cx = wide ? w * 0.55 : w * 0.5;
+    const cy = wide ? h * 0.46 : h * 0.4;
+    const sky = uid('csk'), ice = uid('cic'), floor = uid('cfl');
+    let s = `<defs>
+      ${lin(sky, [[0, '#04060f'], [0.45, '#12183a'], [0.75, '#2a2460'], [1, '#0a0c18']])}
+      ${rad(ice, [[0, '#ffffff'], [0.3, '#d4e8ff'], [0.65, '#9a68ff'], [1, '#3a2a80']], 0.4, 0.35, 0.7)}
+      ${lin(floor, [[0, '#9a68ff', 0], [0.5, '#4a3a90', 0.35], [1, '#04060f', 0.95]])}
+    </defs>`;
+    s += `<rect width="${w}" height="${h}" fill="url(#${sky})"/>`;
+    s += glowAt(cx, cy, m * 0.48, '#9a68ff', 0.4);
+    s += glowAt(cx, cy - m * 0.05, m * 0.22, '#d4e8ff', 0.5);
+    // crystal shards
+    const shards = [
+      [0, -1, 0.55, -0.2, 0.35, 0.85, -0.35, 0.85, -0.55, -0.2],
+      [-0.85, 0.1, -0.35, -0.55, -0.1, 0.2, -0.45, 0.75],
+      [0.85, 0.05, 0.4, -0.5, 0.15, 0.25, 0.5, 0.7],
+      [-0.2, 0.95, 0.25, 0.55, 0, 1.15, -0.35, 0.6],
+    ];
+    shards.forEach((pts, i) => {
+      const pairs = [];
+      for (let k = 0; k < pts.length; k += 2) pairs.push(`${cx + pts[k] * m * 0.28},${cy + pts[k + 1] * m * 0.28}`);
+      s += `<polygon points="${pairs.join(' ')}" fill="url(#${ice})" fill-opacity="${0.75 - i * 0.08}" stroke="#e8f0ff" stroke-opacity=".5" stroke-width="1.5"/>`;
+    });
+    s += `<rect y="${h * 0.62}" width="${w}" height="${h * 0.38}" fill="url(#${floor})"/>`;
+    // frost floor lines
+    for (let i = 0; i < 8; i++) {
+      s += `<line x1="${cx - m * 0.4}" y1="${h * (0.68 + i * 0.03)}" x2="${cx + m * 0.4}" y2="${h * (0.68 + i * 0.03)}" stroke="#cfd9ff" stroke-opacity="${0.06 + i * 0.015}" stroke-width="1"/>`;
+    }
+    s += particles(R, 100, 0, 0, w, h * 0.65, ['#ffffff', '#cfd9ff', '#b99bff'], 0.4, 2, 0.2, 0.75);
+    s += vignette(w, h, 0.78, 0.48);
+    s += noise(w, h, 0.06);
+    return s;
+  };
+
   FX.OUTPUTS.push(
     { name: 'heroArt', w: 2560, h: 1440, file: 'art/hero.png', quality: 86 },
     { name: 'heroArt', w: 1200, h: 1500, file: 'art/hero-mobile.png', quality: 86 },
     { name: 'dragonArt', w: 1200, h: 1500, file: 'visual-fixtures/games/dragons-fortune.jpg' },
-    { name: 'dragonArt', w: 2560, h: 1280, file: 'visual-fixtures/games/dragons-fortune- hero.png' },
+    { name: 'dragonArt', w: 2560, h: 1280, file: 'visual-fixtures/games/dragons-fortune-hero.jpg' },
     { name: 'tideArt', w: 1200, h: 1500, file: 'visual-fixtures/games/mystic-tides.jpg' },
-    { name: 'tideArt', w: 2560, h: 1280, file: 'visual-fixtures/games/mystic-tides- hero.png' },
+    { name: 'tideArt', w: 2560, h: 1280, file: 'visual-fixtures/games/mystic-tides-hero.jpg' },
     { name: 'templeArt', w: 1200, h: 1500, file: 'visual-fixtures/games/temple-of-valor.jpg' },
-    { name: 'templeArt', w: 2560, h: 1280, file: 'visual-fixtures/games/temple-of-valor- hero.png' },
+    { name: 'templeArt', w: 2560, h: 1280, file: 'visual-fixtures/games/temple-of-valor-hero.jpg' },
+    { name: 'neonArt', w: 1200, h: 1500, file: 'visual-fixtures/games/neon-heist.jpg' },
+    { name: 'neonArt', w: 2560, h: 1280, file: 'visual-fixtures/games/neon-heist-hero.jpg' },
+    { name: 'harbourArt', w: 1200, h: 1500, file: 'visual-fixtures/games/golden-harbour.jpg' },
+    { name: 'harbourArt', w: 2560, h: 1280, file: 'visual-fixtures/games/golden-harbour-hero.jpg' },
+    { name: 'crystalArt', w: 1200, h: 1500, file: 'visual-fixtures/games/crystal-vault.jpg' },
+    { name: 'crystalArt', w: 2560, h: 1280, file: 'visual-fixtures/games/crystal-vault-hero.jpg' },
   );
 })();

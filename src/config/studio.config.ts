@@ -8,7 +8,7 @@ import type { ArtContent, HeadlineLines, TitledCopy } from './content.types';
  */
 export const studioConfig = {
   about: {
-    eyebrow: 'Studio',
+    eyebrow: 'About',
     headline: ['Independent by design.', 'Built around the game.'],
     /** One-sentence summary for metadata and sharing. */
     summary: 'FNX Studio is an independent iGaming studio founded by developers and game makers with more than five years of hands-on experience building games.',

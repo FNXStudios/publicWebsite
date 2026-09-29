@@ -7,14 +7,8 @@
    through the Tailwind theme below or via var(--token); no inline magic colours.
    ========================================================================== */
 :root {
-  /* Graphite ladder */
+  /* Graphite base (depth tokens carry the ladder) */
   --fnx-black-950: #030405;
-  --fnx-black-900: #050607;
-  --fnx-black-850: #07090c;
-  --fnx-black-800: #0a0c10;
-  --fnx-black-750: #0d1015;
-  --fnx-black-700: #12151b;
-  --fnx-black-650: #171a21;
 
   /* Type */
   --fnx-white: #f5f4f7;
@@ -22,7 +16,6 @@
   --fnx-text-secondary: #a8a5ae;
   /* Tuned up from #706d77 so small muted text still clears WCAG AA on every surface. */
   --fnx-text-muted: #817e89;
-  --fnx-text-disabled: #5c5a63;
 
   /* Lines — functional cards must stay identifiable on mediocre displays */
   --fnx-border: rgb(255 255 255 / 0.09);
@@ -53,19 +46,6 @@
   --depth-section: #07090c;
   --depth-section-alt: #090b0f;
   --depth-raised: #0d1015;
-  --depth-hover: #12161d;
-  --depth-raised-hover: var(--depth-hover);
-
-  /* Semantic aliases (components may use either name) */
-  --background-primary: var(--depth-page);
-  --background-elevated: var(--depth-section);
-  --background-card: var(--depth-raised);
-  --text-disabled: var(--fnx-text-disabled);
-  --border-subtle: var(--fnx-border);
-  --border-interactive: var(--fnx-border-hover);
-  --accent-primary: var(--fnx-violet-500);
-  --accent-hover: var(--fnx-violet-400);
-  --accent-muted: var(--fnx-violet-soft);
 
   /* Homepage rhythm: tone changes carry transitions, not divider lines */
   --tone-hero: var(--depth-page);
@@ -77,8 +57,6 @@
 
   /* Shadows — used deliberately, not on every component */
   --shadow-soft: 0 16px 50px rgb(0 0 0 / 0.28);
-  --shadow-card-hover: 0 24px 70px rgb(0 0 0 / 0.38);
-  --shadow-violet: 0 12px 36px rgb(95 45 220 / 0.16);
 
   /* ------------------------------------------------------------------------
      Composition widths. Text is disciplined; artwork has freedom.
@@ -86,7 +64,6 @@
        content  1180  two-column editorial, process, structured information
        focus    1320  focused closers (CTA) — deliberately narrower than wide
        wide     1480  games, portfolio grids, large artwork, header, footer
-       ultra    1600  reserved ceiling for exceptional art direction
        full bleed     100vw — hero art, world imagery, atmospheric backgrounds
      Every container is `min(100% − 2 × gutter, width)`, centred. Use <Container size>
      (or the container-* utilities) instead of one-off max-widths.
@@ -95,24 +72,23 @@
   --fnx-content: 73.75rem;
   --fnx-focus: 82.5rem;
   --fnx-wide: 92.5rem;
-  --fnx-ultra: 100rem;
-  /* 20px on phones → ~58px at 1440 → 72px at 1800+. */
-  --fnx-gutter: clamp(1.25rem, 4vw, 4.5rem);
+  /* 20px on phones → ~50px at 1440 → 56px at 1800+. */
+  --fnx-gutter: clamp(1.25rem, 3.5vw, 3.5rem);
   --gutter: var(--fnx-gutter);
   --grid-gap: clamp(1rem, 0.4rem + 1.6vw, 2rem);
   /* Gap between the two halves of an editorial split (headline ↔ argument). */
-  --gap-editorial: clamp(2.5rem, 7vw, 8rem);
+  --gap-editorial: clamp(2rem, 5vw, 5.5rem);
   --header-height: 4rem; /* 64px; 72px from md */
 
   /* ------------------------------------------------------------------------
      Section spacing. Semantic, not uniform: small gaps where one section continues
      another, large ones where the subject changes. Never invent a one-off gap.
-       sm  56 → 96    md  72 → 128    lg  88 → 176    xl  104 → 208
+       sm  40 → 64    md  48 → 80    lg  56 → 104    xl  64 → 128
      ------------------------------------------------------------------------ */
-  --space-section-sm: clamp(3.5rem, 6vw, 6rem);
-  --space-section-md: clamp(4.5rem, 8vw, 8rem);
-  --space-section-lg: clamp(5.5rem, 11vw, 11rem);
-  --space-section-xl: clamp(6.5rem, 13vw, 13rem);
+  --space-section-sm: clamp(2.5rem, 4vw, 4rem);
+  --space-section-md: clamp(3rem, 5vw, 5rem);
+  --space-section-lg: clamp(3.5rem, 7vw, 6.5rem);
+  --space-section-xl: clamp(4rem, 8vw, 8rem);
 
   /* Radii */
   --radius-sm: 0.5rem;
@@ -120,7 +96,7 @@
   --radius-lg: 0.875rem; /* 14px — cards */
   --radius-xl: 1.0625rem; /* 17px — contained surfaces, dialogs */
 
-  /* Motion — mirrored in src/motion/tokens.ts */
+  /* Motion */
   --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --duration-micro: 170ms;
@@ -147,12 +123,10 @@
   --color-section: var(--depth-section);
   --color-section-alt: var(--depth-section-alt);
   --color-raised: var(--depth-raised);
-  --color-raised-hover: var(--depth-raised-hover);
 
   --color-text: var(--fnx-text-primary);
   --color-text-secondary: var(--fnx-text-secondary);
   --color-text-muted: var(--fnx-text-muted);
-  --color-text-disabled: var(--fnx-text-disabled);
   --color-white: var(--fnx-white);
 
   --color-line: var(--fnx-border);
@@ -181,8 +155,6 @@
   --radius-xl: var(--radius-xl);
 
   --shadow-soft: var(--shadow-soft);
-  --shadow-card-hover: var(--shadow-card-hover);
-  --shadow-violet: var(--shadow-violet);
 
   --ease-premium: var(--ease-premium);
   --ease-standard: var(--ease-standard);
@@ -197,35 +169,37 @@
   --breakpoint-2xl: initial;
 
   /* Editorial type scale (fluid). One hierarchy for every page:
-       hero      44 → 80   page openers (capped so a two-line hero headline stays ≈760px)
-       display   36 → 77   major section headlines
-       principle 32 → 64   editorial statements (Studio philosophy, manifestos)
-       heading   24 → 32   subsection
-       title     20 → 26   item / stage titles
-       lead      17 → 20   intros and supporting copy
-       body      16 → 18   running text — never tiny on large desktops
-       small     13 → 14.4 */
-  --text-hero: clamp(2.75rem, 5.4vw, 5rem);
+       hero         40 → 68   page openers
+       display-xl   40 → 72   rare emphasis (kept below a blown-up feel)
+       display      32 → 60   major section headlines
+       principle    28 → 52   editorial statements (Studio philosophy, manifestos)
+       display-sm   24 → 36   secondary display
+       heading      24 → 32   subsection
+       title        20 → 26   item / stage titles
+       lead         17 → 20   intros and supporting copy
+       body         16 → 18   running text — never tiny on large desktops
+       small        13 → 14.4 */
+  --text-hero: clamp(2.5rem, 4.2vw, 4.25rem);
   --text-hero--line-height: 0.98;
   --text-hero--letter-spacing: -0.035em;
   --text-hero--font-weight: 600;
 
-  --text-display-xl: clamp(3rem, 1.6rem + 5.4vw, 6.5rem);
+  --text-display-xl: clamp(2.5rem, 1.4rem + 4vw, 4.5rem);
   --text-display-xl--line-height: 0.92;
   --text-display-xl--letter-spacing: -0.045em;
   --text-display-xl--font-weight: 600;
 
-  --text-display: clamp(2.25rem, 4.2vw, 4.8rem);
+  --text-display: clamp(2rem, 3.2vw, 3.75rem);
   --text-display--line-height: 1.02;
   --text-display--letter-spacing: -0.032em;
   --text-display--font-weight: 600;
 
-  --text-principle: clamp(2rem, 3.4vw, 4rem);
+  --text-principle: clamp(1.75rem, 2.8vw, 3.25rem);
   --text-principle--line-height: 1.04;
   --text-principle--letter-spacing: -0.03em;
   --text-principle--font-weight: 600;
 
-  --text-display-sm: clamp(1.875rem, 1.35rem + 1.8vw, 2.875rem);
+  --text-display-sm: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem);
   --text-display-sm--line-height: 1.05;
   --text-display-sm--letter-spacing: -0.028em;
   --text-display-sm--font-weight: 600;
@@ -362,10 +336,6 @@
 @utility breakout-left {
   margin-left: calc(var(--bleed, var(--fnx-gutter)) * -1);
 }
-@utility full-bleed {
-  width: 100vw;
-  margin-inline: calc(50% - 50vw);
-}
 
 /* The canonical 12-column editorial grid inside a container. One column on phones. */
 @utility grid-fnx {
@@ -474,9 +444,6 @@ img[loading='lazy'] {
 /* Art fades — images melt into the page instead of sitting in rectangles. */
 @utility fade-bottom {
   mask-image: linear-gradient(180deg, #000 55%, transparent);
-}
-@utility fade-edges {
-  mask-image: radial-gradient(120% 100% at 50% 45%, #000 55%, transparent 100%);
 }
 
 /* ==========================================================================

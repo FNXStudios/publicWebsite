@@ -15,7 +15,6 @@ typed config (Zod-validated)  →  static pages (Server Components)  →  small 
 | `zod` 4 | Validates all product configuration at build/test time. The contact form uses `zod/mini`, so browsers only download the validators the form uses. |
 | `tailwindcss` 4 | Token-driven utilities. Design tokens live as CSS custom properties in `src/app/globals.css`. |
 | `class-variance-authority`, `clsx`, `tailwind-merge` | The one canonical `Button` (variants/sizes) and class composition |
-| `motion` | Scroll-linked progress and small client islands (`LazyMotion` + `m`, so only the DOM animation features load). Never used to hide content. |
 | `@radix-ui/react-dialog` | Accessible behaviour for the contact dialog, mobile menu and age gate (focus trap, inert page, focus return). All visuals are FNX's own. |
 | `@radix-ui/react-select` | Keyboard-accessible "I'm interested in" selector, styled by FNX. |
 | `lucide-react` | Two generic utility icons in the select (chevron, check). Brand-facing icons live in `src/components/ui/Icons.tsx`. |
@@ -72,14 +71,14 @@ src/
   content/visual-fixtures/        fixture games (development only, see below)
   lib/                 catalogue, launch URLs, contact schema, SEO, analytics, security headers, routes
   components/
-    layout/            Header, Footer, SiteChrome, Container/Section, PageIntro
+    layout/            Header, Footer, SiteChrome, Container, FullBleed, PageIntro
     ui/                Button, TextLink, ResponsiveArt, Typography, Icons, EmptyState
     contact/           ContactProvider (dialog), ContactTrigger, ContactForm
-    games/             GameCard, GameRail, GameFeature, GameHero, GameInfo, GamePlayer
+    games/             GameCard, GameShowcase (GameRail), GameHero, GameInfo, GamePlayer
     home/              Hero, FeaturedGames, MadeToHit, IdeaToGame + StageStory, Operators, FinalCta
     studio/            ProcessStages
     age-gate/          AgeGate, AgeGateDialog
-  motion/              tokens.ts, variants.ts, Reveal.tsx
+  motion/              Reveal.tsx (IntersectionObserver + CSS; content never hidden waiting for JS)
 scripts/
   validate-config.ts
   visual-fixtures/     SVG scene generator for fixture art (render.mjs)
@@ -105,9 +104,9 @@ Text is disciplined; artwork has freedom. They never share one container by defa
 
 - Use `<Container size="reading | content | focus | wide">` (or the `container-*` utilities). Don't write one-off `max-w-[1376px]`-style frames.
 - Full-bleed art: put it on the section itself with `<FullBleed>` (absolute, edge to edge) and keep the copy in a Container.
-- Breaking out of the grid: `breakout-right` / `breakout-left` extend an item to the viewport edge from whatever container it sits in (each container exposes `--bleed`). The section must use `overflow-x-clip`. `full-bleed` makes an in-container element 100vw.
+- Breaking out of the grid: `breakout-right` / `breakout-left` extend an item to the viewport edge from whatever container it sits in (each container exposes `--bleed`). The section must use `overflow-x-clip`.
 - Section spacing is semantic: `pt/pb-sec-sm | md | lg | xl`. Small when one section continues another; large or extra-large when the subject changes.
-- Type scale: `text-hero`, `text-display`, `text-principle`, `text-heading`, `text-title`, `text-lead`, `text-body`, `text-small`. Avoid character-count clamps (`max-w-[9ch]`) on headlines; use art-directed lines or a rem max-width.
+- Type scale: `text-hero`, `text-display-xl`, `text-display`, `text-principle`, `text-display-sm`, `text-heading`, `text-title`, `text-lead`, `text-body`, `text-small`, `text-eyebrow`. Avoid character-count clamps (`max-w-[9ch]`) on headlines; use art-directed lines or a rem max-width.
 - Depth: `--depth-page` → `--depth-section` → `--depth-section-alt` → `--depth-raised` → `--depth-hover`. Violet is an accent; game art is the colour.
 
 ## Adding a game
@@ -176,12 +175,12 @@ The homepage, `/games`, the detail page, the player, metadata, JSON-LD and the s
 
 **Quiet brand frame, loud games.** Graphite, precise and editorial; the games bring colour, character and movement and are never desaturated to fit the UI.
 
-- **Tokens** (`src/app/globals.css`, exposed to Tailwind via `@theme`): the graphite ladder `--fnx-black-950…650`, text (`primary/secondary/muted`), borders, violet `700…300` + `soft/border/glow`, warm light, shadows (`soft`, `card-hover`, `violet`), radii, motion.
-- **Depth:** page (`950/900`) → section (`850/800`) → raised interactive (`750/700`) → featured (imagery + controlled violet). Homepage tones: hero 900 → featured 850 → made 900 → idea 800 → operators 900 → CTA raised → footer 950. Transitions come from tone and imagery, not divider lines.
-- **Type** (Manrope variable, self-hosted): `text-hero` (≈88px, lh .96, −0.035em), `text-display` (≈64px), `text-display-sm`, `text-title`, `text-lead`, `text-body`, `text-small`, `text-eyebrow` (12px, .2em).
+- **Tokens** (`src/app/globals.css`, exposed to Tailwind via `@theme`): graphite base `--fnx-black-950`, text (`primary/secondary/muted`), borders, violet `700…300` + `soft/border/glow`, warm light, `shadow-soft`, radii, motion durations/easing.
+- **Depth:** page → section → section-alt → raised. Homepage tones: hero → featured → made → idea → operators → CTA raised → footer. Transitions come from tone and imagery, not divider lines.
+- **Type** (Manrope variable, self-hosted): `text-hero` (≈68px), `text-display-xl` (≈72px), `text-display` (≈60px), `text-principle` (≈52px), `text-display-sm` (≈36px), `text-heading`, `text-title`, `text-lead`, `text-body`, `text-small`, `text-eyebrow` (12px, .2em).
 - **Button:** one CVA component — `primary | secondary | ghost | text` × `sm | md | lg`. Primary: barely-there `#8951ff → #7134f4` gradient, 1px violet rim, lit top edge, soft violet contact shadow; hover −1px/+4% brightness, press .985, 2px violet focus ring. `TextLink` / `ContactTrigger appearance="link"` share one text-action style (animated rule, arrow nudge).
 - **Game colour:** games may declare `theme: { accent, glow, deep }`. Game pages let it dominate (hero gradients, title, chips); cards use the glow for hover light. FNX violet stays on primary actions.
-- **Motion** (`src/motion/tokens.ts`): micro 170 · interaction 260 · standard 340 · editorial 550 · hero 850 ms, easing `[0.16, 1, 0.3, 1]`, no bouncy springs. Above-the-fold entrances and ambient light are CSS only. `Reveal` fades below-the-fold content once but content is **server-rendered visible** and only armed after hydration if still off-screen. `prefers-reduced-motion` removes ambient motion, scroll-linked transforms and reveals.
+- **Motion** (CSS custom properties in `globals.css`): micro 170 · interaction 260 · standard 340 · editorial 550 · hero 850 ms, easing `[0.16, 1, 0.3, 1]`, no bouncy springs. Above-the-fold entrances and ambient light are CSS only. `Reveal` fades below-the-fold content once but content is **server-rendered visible** and only armed after hydration if still off-screen. `prefers-reduced-motion` removes ambient motion and reveals.
 
 ## Age gate
 

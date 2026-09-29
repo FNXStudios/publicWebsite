@@ -17,11 +17,8 @@ interface StageStoryProps {
 }
 
 /**
- * One process, one media panel. Desktop: the four stages run across the full width;
- * choosing one (click or ←/→/Home/End) crossfades the artwork (~65%) and swaps the
- * active title and description (~35%). The stage row is the only navigation — no
- * counter, caption or "next" link competing with it. No sticky wrapper. Phones: a plain ordered
- * sequence, each stage with its own visual. Everything is server-rendered visible.
+ * Process panel on the wide 12-column grid. Tabs span full width; media (7) sits
+ * beside copy (5) so edges match MadeToHit / Operators.
  */
 export function StageStory({ label, stages, visuals }: StageStoryProps) {
   const [active, setActive] = useState(0);
@@ -51,10 +48,8 @@ export function StageStory({ label, stages, visuals }: StageStoryProps) {
 
   return (
     <>
-      {/* Desktop: stage row + one media panel */}
       <div className="hidden md:block">
         <div role="tablist" aria-label={label} className="relative grid grid-cols-4 gap-(--grid-gap)">
-          {/* Active line: one bar that travels between stages. */}
           <span
             aria-hidden="true"
             className="pointer-events-none absolute top-0 left-0 z-10 h-px w-[calc((100%-3*var(--grid-gap))/4)] bg-violet-400 transition-transform duration-[520ms] ease-premium motion-reduce:transition-none"
@@ -80,12 +75,12 @@ export function StageStory({ label, stages, visuals }: StageStoryProps) {
                 tabIndex={on ? 0 : -1}
                 onClick={() => select(index)}
                 onKeyDown={onKeyDown}
-                className="group/tab flex items-baseline gap-4 border-t border-white/[0.12] pt-5 pb-1 text-left focus-visible:outline-offset-4"
+                className="group/tab flex items-baseline gap-3 border-t border-white/[0.12] pt-3.5 pb-1 text-left focus-visible:outline-offset-4"
               >
                 <span
                   aria-hidden="true"
                   className={cn(
-                    'text-[0.8125rem] font-semibold tabular-nums tracking-[0.06em] transition-colors duration-(--duration-standard)',
+                    'text-[0.75rem] font-semibold tabular-nums tracking-[0.06em] transition-colors duration-(--duration-standard)',
                     on ? 'text-violet-300' : 'text-text-muted group-hover/tab:text-text-secondary',
                   )}
                 >
@@ -101,43 +96,41 @@ export function StageStory({ label, stages, visuals }: StageStoryProps) {
           id={`${baseId}-panel`}
           role="tabpanel"
           aria-labelledby={`${baseId}-tab-${active}`}
-          className="mt-12 grid grid-cols-[minmax(0,65fr)_minmax(0,35fr)] items-center gap-x-[clamp(2rem,4vw,5rem)] lg:mt-16"
+          className="mt-8 grid-fnx items-center lg:mt-10"
         >
-          <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-white/[0.09] bg-raised">
+          <div className="relative aspect-[16/10] overflow-hidden rounded-md bg-raised md:col-span-7">
             {visuals.map((visual, index) => (
               <div
                 key={index}
                 aria-hidden={index !== active}
                 className={cn(
                   'absolute inset-0 transition-[opacity,transform] duration-[560ms] ease-premium motion-reduce:transition-none',
-                  index === active ? 'scale-100 opacity-100' : 'scale-[1.012] opacity-0',
+                  index === active ? 'scale-100 opacity-100' : 'scale-[1.01] opacity-0',
                 )}
               >
                 {visual}
               </div>
             ))}
-            <div aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-xl shadow-[inset_0_-80px_120px_-60px_rgb(0_0_0/0.5)]" />
           </div>
 
-          <div aria-live="polite">
-            <h3 className="text-display-sm text-white">{current?.title}</h3>
-            <p className="prose-side mt-5 text-lead text-text-secondary">{current?.body}</p>
+          <div aria-live="polite" className="md:col-span-4 md:col-start-9">
+            <h3 className="text-title text-white">{current?.title}</h3>
+            <p className="prose-side mt-3 text-body text-text-secondary">{current?.body}</p>
           </div>
         </div>
       </div>
 
-      {/* Phones and small tablets: an ordered sequence */}
-      <ol aria-label={label} className="grid gap-12 sm:grid-cols-2 sm:gap-x-(--grid-gap) sm:gap-y-14 md:hidden">
+      <ol aria-label={label} className="grid gap-7 sm:grid-cols-2 sm:gap-x-(--grid-gap) sm:gap-y-8 md:hidden">
         {stages.map((stage, index) => (
           <li key={stage.title}>
-            <div className="relative aspect-[5/4] overflow-hidden rounded-lg border border-white/[0.09] bg-raised">{visuals[index]}</div>
-            <div className="mt-5 flex items-baseline gap-3">
-              <span aria-hidden="true" className="text-[0.8125rem] font-semibold tabular-nums tracking-[0.06em] text-violet-300">
+            <div className="relative aspect-[16/10] overflow-hidden rounded-md bg-raised">{visuals[index]}</div>
+            <div className="mt-3 flex items-baseline gap-2.5">
+              <span aria-hidden="true" className="text-[0.75rem] font-semibold tabular-nums tracking-[0.06em] text-violet-300">
                 {String(index + 1).padStart(2, '0')}
               </span>
               <h3 className="text-title text-white">{stage.title}</h3>
             </div>
-            <p className="prose-measure mt-2.5 text-body text-text-secondary">{stage.body}</p>
+            <p className="mt-2 text-body text-text-secondary">{stage.body}</p>
           </li>
         ))}
       </ol>

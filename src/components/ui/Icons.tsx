@@ -61,3 +61,17 @@ export const CloseIcon = (props: IconProps) => (
     <path d="m5 5 10 10M15 5 5 15" />
   </svg>
 );
+
+export const MailIcon = (props: IconProps) => (
+  <svg {...base} {...props}>
+    <rect x="2.5" y="4.5" width="15" height="11" rx="1.5" />
+    <path d="m3.5 5.5 6.5 5 6.5-5" />
+  </svg>
+);
+
+/** LinkedIn wordmark glyph — filled so it reads at small sizes. */
+export const LinkedInIcon = (props: IconProps) => (
+  <svg {...base} fill="currentColor" stroke="none" {...props}>
+    <path d="M17.5 17.5h-3.1v-5.2c0-1.24-.02-2.84-1.73-2.84-1.73 0-2 1.35-2 2.75v5.29H7.55V7.75h2.98v1.33h.04c.42-.79 1.43-1.62 2.95-1.62 3.15 0 3.73 2.07 3.73 4.77v5.27ZM5.4 6.42a1.8 1.8 0 1 1 0-3.6 1.8 1.8 0 0 1 0 3.6ZM6.95 17.5H3.84V7.75h3.11V17.5Z" />
+  </svg>
+);

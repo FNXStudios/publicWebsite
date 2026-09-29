@@ -39,8 +39,8 @@ export const buttonVariants = cva(
       },
       size: {
         sm: 'h-10 px-4 text-small',
-        md: 'h-12 px-[1.375rem] text-[0.9375rem]',
-        lg: 'h-[3.25rem] px-[1.625rem] text-body',
+        md: 'h-11 px-[1.375rem] text-[0.9375rem]',
+        lg: 'h-12 px-[1.625rem] text-body',
       },
     },
     compoundVariants: [{ variant: 'text', className: 'h-auto px-0 py-2' }],

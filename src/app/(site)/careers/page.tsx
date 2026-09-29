@@ -9,13 +9,12 @@ import { Container } from '@/components/layout/Container';
 import { PageIntro } from '@/components/layout/PageIntro';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ArrowRight, ArrowUpRight } from '@/components/ui/Icons';
-import { ResponsiveArt } from '@/components/ui/ResponsiveArt';
 import { Eyebrow, Index } from '@/components/ui/Typography';
 import { Reveal } from '@/motion/Reveal';
 
 export const metadata: Metadata = pageMetadata({
   title: 'Careers',
-  description: careersPageContent.body,
+  description: careersPageContent.paragraphs.join(' '),
   path: routes.careers,
 });
 
@@ -31,7 +30,7 @@ function JobRow({ job }: { job: Job }) {
   const opensCareersContact = job.applyUrl === routes.careers;
   const Icon = external ? ArrowUpRight : ArrowRight;
   const className =
-    'group grid gap-3 border-b border-white/[0.09] py-8 transition-[colors,transform] duration-[220ms] ease-premium hover:border-white/[0.16] md:grid-cols-12 md:items-baseline md:gap-6 md:hover:translate-x-0.5';
+    'group grid gap-2.5 border-b border-white/[0.09] py-5 transition-[colors,transform] duration-[220ms] ease-premium hover:border-white/[0.16] md:grid-cols-12 md:items-baseline md:gap-5 md:hover:translate-x-0.5';
   const content = (
     <>
       <h3 className="text-title text-white md:col-span-4">{job.title}</h3>
@@ -39,17 +38,19 @@ function JobRow({ job }: { job: Job }) {
         {JOB_TYPE_LABELS[job.type]} · {job.location}
       </p>
       <p className="text-body text-text-secondary transition-colors duration-[220ms] group-hover:text-text md:col-span-4">{job.description}</p>
-      <Icon className="arrow-nudge hidden size-5 justify-self-end text-text-secondary group-hover:translate-x-1 group-hover:text-white md:col-span-1 md:block" />
+      <Icon className="arrow-nudge hidden size-4 justify-self-end text-text-secondary group-hover:translate-x-1 group-hover:text-white md:col-span-1 md:block" />
     </>
   );
   const contactContent = (
     <>
-      <span role="heading" aria-level={3} className="text-title text-white md:col-span-4">{job.title}</span>
+      <span role="heading" aria-level={3} className="text-title text-white md:col-span-4">
+        {job.title}
+      </span>
       <span className="text-small text-text-muted md:col-span-3">
         {JOB_TYPE_LABELS[job.type]} · {job.location}
       </span>
       <span className="text-body text-text-secondary transition-colors duration-[220ms] group-hover:text-text md:col-span-4">{job.description}</span>
-      <Icon className="arrow-nudge hidden size-5 justify-self-end text-text-secondary group-hover:translate-x-1 group-hover:text-white md:col-span-1 md:block" />
+      <Icon className="arrow-nudge hidden size-4 justify-self-end text-text-secondary group-hover:translate-x-1 group-hover:text-white md:col-span-1 md:block" />
     </>
   );
   return (
@@ -73,27 +74,27 @@ function JobRow({ job }: { job: Job }) {
 }
 
 /**
- * Editorial split opener (headline ~7 columns ↔ copy), then real production work at the
- * wide width, the roles (or a compact "nothing open" line), and the values on a wide
- * four-column editorial grid. No floating cards.
+ * Centered manifesto opener, compact roles list, values on a content grid.
  */
 export default function CareersPage() {
   const openJobs = jobs.filter((job) => job.status === 'open').sort((a, b) => a.order - b.order);
-  const { empty, values, art } = careersPageContent;
+  const { empty, values, paragraphs } = careersPageContent;
 
   return (
     <>
       <PageIntro
-        layout="split"
+        layout="centered"
         eyebrow={careersPageContent.eyebrow}
         headline={careersPageContent.headline}
-        body={<p>{careersPageContent.body}</p>}
-        atmosphere={<div className="absolute inset-0 bg-[radial-gradient(40rem_28rem_at_85%_10%,rgb(113_52_244/0.12),transparent_70%),radial-gradient(30rem_22rem_at_10%_0%,rgb(240_189_114/0.05),transparent_70%)]" />}
-      >
-        <figure className="enter-settle relative mt-14 aspect-[4/3] overflow-hidden rounded-xl bg-raised sm:aspect-[16/8] md:mt-20 md:aspect-[21/9]">
-          <ResponsiveArt src={art.src} alt={art.alt} priority quality={80} sizes="(max-width: 1600px) 100vw, 1480px" imgClassName="object-[62%_50%]" />
-        </figure>
-      </PageIntro>
+        body={paragraphs.map((paragraph, index) => (
+          <p key={paragraph} className={index === 0 ? 'text-text' : undefined}>
+            {paragraph}
+          </p>
+        ))}
+        atmosphere={
+          <div className="absolute inset-0 bg-[radial-gradient(36rem_24rem_at_50%_-6%,rgb(113_52_244/0.11),transparent_72%),radial-gradient(28rem_20rem_at_8%_100%,rgb(240_189_114/0.04),transparent_72%)]" />
+        }
+      />
 
       <Container as="section" size="wide" aria-labelledby="roles-title" className="pt-sec-md">
         {openJobs.length > 0 ? (
@@ -101,7 +102,7 @@ export default function CareersPage() {
             <h2 id="roles-title" className="text-eyebrow text-text-muted uppercase">
               {careersPageContent.listHeading}
             </h2>
-            <ul className="mt-6 border-t border-white/[0.08]">
+            <ul className="mt-4 border-t border-white/[0.08]">
               {openJobs.map((job) => (
                 <JobRow key={job.id} job={job} />
               ))}
@@ -114,7 +115,7 @@ export default function CareersPage() {
             headline={empty.headline}
             body={empty.body}
             action={
-              <ContactTrigger size="lg" placement="careers-empty" interest={empty.cta.interest}>
+              <ContactTrigger size="md" placement="careers-empty" interest={empty.cta.interest}>
                 {empty.cta.label}
               </ContactTrigger>
             }
@@ -122,19 +123,19 @@ export default function CareersPage() {
         )}
       </Container>
 
-      <section aria-labelledby="careers-values-title" className="w-full pt-sec-lg pb-sec-md">
+      <section aria-labelledby="careers-values-title" className="w-full pt-sec-md pb-sec-md">
         <Container size="wide">
           <Eyebrow rule>{values.eyebrow}</Eyebrow>
-          <h2 id="careers-values-title" className="mt-5 text-display text-white">
+          <h2 id="careers-values-title" className="mt-4 text-display-sm text-white md:text-display">
             {values.headline}
           </h2>
-          <ul className="mt-14 grid gap-x-(--grid-gap) gap-y-10 sm:grid-cols-2 md:mt-20 lg:grid-cols-4">
+          <ul className="mt-8 grid gap-x-(--grid-gap) gap-y-8 sm:grid-cols-2 md:mt-10 lg:grid-cols-4">
             {values.items.map((item, index) => (
-              <Reveal as="li" key={item.title} delay={index * 70} className="group relative border-t border-white/[0.12] pt-7">
+              <Reveal as="li" key={item.title} delay={index * 60} className="group relative border-t border-white/[0.12] pt-5">
                 <span aria-hidden="true" className="absolute -top-px left-0 h-px w-8 bg-violet-400 transition-[width] duration-[560ms] ease-premium group-hover:w-full" />
                 <Index n={index + 1} className="text-text-muted transition-colors duration-(--duration-interaction) group-hover:text-violet-300" />
-                <h3 className="mt-5 text-heading text-white">{item.title}</h3>
-                <p className="mt-3 max-w-[20rem] text-body text-text-secondary">{item.body}</p>
+                <h3 className="mt-4 text-title text-white">{item.title}</h3>
+                <p className="mt-2.5 max-w-[18rem] text-body text-text-secondary">{item.body}</p>
               </Reveal>
             ))}
           </ul>

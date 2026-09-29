@@ -51,23 +51,23 @@ export function Hero() {
 
       <Container
         size="wide"
-        className="flex min-h-[max(40rem,calc(100svh-4rem))] flex-col justify-end pt-[calc(var(--header-height)+2rem)] pb-10 sm:min-h-[44rem] md:min-h-[clamp(44rem,78vh,58rem)] md:justify-center md:pt-(--header-height) md:pb-16"
+        className="flex min-h-svh flex-col justify-end pt-[calc(var(--header-height)+2rem)] pb-10 md:justify-center md:pt-(--header-height) md:pb-16"
       >
-        <div className="max-w-[40rem] md:max-w-[53rem]">
+        <div className="max-w-[36rem] md:max-w-[42rem]">
           <Eyebrow rule style={step(0)} className="enter-rise text-text-secondary">
             {hero.eyebrow}
           </Eyebrow>
-          <h1 id="hero-title" style={step(1)} className="enter-rise mt-6 text-hero text-white md:mt-7">
+          <h1 id="hero-title" style={step(1)} className="enter-rise mt-4 text-hero text-white md:mt-5">
             <HeadlineLines lines={hero.headline} />
           </h1>
-          <p style={step(2)} className="enter-rise mt-6 max-w-[34rem] text-lead text-text-secondary md:mt-7">
+          <p style={step(2)} className="enter-rise mt-4 max-w-[34rem] text-lead text-text-secondary md:mt-5">
             {hero.body}
           </p>
-          <div style={step(3)} className="enter-rise mt-8 flex flex-wrap gap-3 md:mt-10">
-            <ButtonLink href={hero.primaryCta.href} size="lg" arrow>
+          <div style={step(3)} className="enter-rise mt-6 flex flex-wrap items-center gap-3 md:mt-7">
+            <ButtonLink href={hero.primaryCta.href} size="md" arrow>
               {hero.primaryCta.label}
             </ButtonLink>
-            <ButtonLink href={hero.secondaryCta.href} size="lg" variant="secondary" arrow>
+            <ButtonLink href={hero.secondaryCta.href} size="md" variant="text" arrow>
               {hero.secondaryCta.label}
             </ButtonLink>
           </div>

@@ -123,7 +123,7 @@ export function AgeGateDialog({ copy, version, rememberDays, exitUrl }: AgeGateD
                 <span aria-hidden="true" className="h-px w-5 bg-current" />
                 {copy.eyebrow}
               </p>
-              <Dialog.Title className="mt-4 text-[clamp(1.75rem,1.45rem+1.3vw,2.375rem)] leading-[1.04] font-semibold tracking-[-0.032em] text-text">
+              <Dialog.Title className="mt-4 text-display-sm text-text">
                 {rejected ? copy.rejected.title : copy.title}
               </Dialog.Title>
               <Dialog.Description className="mt-4 max-w-[26rem] text-body text-text-secondary">

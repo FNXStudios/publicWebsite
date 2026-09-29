@@ -4,6 +4,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { ContactInterest } from '@/config/schema/contact.schema';
 import { track } from '@/lib/analytics';
+import { iconForDirectLink } from '@/lib/site/direct-link-icon';
 import { CloseIcon } from '@/components/ui/Icons';
 import { Eyebrow } from '@/components/ui/Typography';
 import { ContactForm, type ContactFormCopy } from './ContactForm';
@@ -120,17 +121,21 @@ export function ContactProvider({ children, interests, copy, direct }: ContactPr
                   <div className="mt-8">
                     <p className="text-eyebrow uppercase text-text-muted">{copy.directHeading}</p>
                     <ul className="mt-3 space-y-1">
-                      {direct.map((link) => (
-                        <li key={link.href}>
-                          <a
-                            href={link.href}
-                            {...(link.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                            className="group inline-flex py-1.5 text-body font-medium text-text"
-                          >
-                            <span className="link-rule">{link.label}</span>
-                          </a>
-                        </li>
-                      ))}
+                      {direct.map((link) => {
+                        const Icon = iconForDirectLink(link.href);
+                        return (
+                          <li key={link.href}>
+                            <a
+                              href={link.href}
+                              {...(link.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                              className="group inline-flex items-center gap-2.5 py-1.5 text-body font-medium text-text"
+                            >
+                              {Icon ? <Icon className="size-[1.05em] shrink-0 text-text-secondary transition-colors group-hover:text-text" /> : null}
+                              <span className="link-rule">{link.label}</span>
+                            </a>
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
                 ) : null}

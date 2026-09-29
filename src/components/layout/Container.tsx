@@ -46,29 +46,3 @@ export function FullBleed({ className, children }: { className?: string; childre
     </div>
   );
 }
-
-type Space = 'none' | 'sm' | 'md' | 'lg' | 'xl';
-
-const TOP: Record<Space, string> = { none: '', sm: 'pt-sec-sm', md: 'pt-sec-md', lg: 'pt-sec-lg', xl: 'pt-sec-xl' };
-const BOTTOM: Record<Space, string> = { none: '', sm: 'pb-sec-sm', md: 'pb-sec-md', lg: 'pb-sec-lg', xl: 'pb-sec-xl' };
-
-interface SectionProps extends ComponentPropsWithoutRef<'section'> {
-  /** Id of the section's heading; gives the landmark an accessible name. */
-  labelledBy?: string;
-  /**
-   * Semantic spacing. The gap between two sections is this section's `top` plus the
-   * previous one's `bottom`: small when one section continues another, large when the
-   * subject changes.
-   */
-  top?: Space;
-  bottom?: Space;
-}
-
-/** A full-width page section (100% of the viewport). Content inside chooses its Container. */
-export function Section({ labelledBy, top = 'md', bottom = 'md', className, children, ...props }: SectionProps) {
-  return (
-    <section aria-labelledby={labelledBy} className={cn('relative isolate w-full', TOP[top], BOTTOM[bottom], className)} {...props}>
-      {children}
-    </section>
-  );
-}

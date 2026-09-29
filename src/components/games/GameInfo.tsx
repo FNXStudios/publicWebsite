@@ -28,7 +28,7 @@ export function GameInfo({ game }: { game: Game }) {
         {paragraphs.length ? (
           <div className="space-y-6 md:col-span-6">
             {paragraphs.map((paragraph, index) => (
-              <p key={paragraph} className={index === 0 ? 'text-[clamp(1.25rem,1.1rem+0.5vw,1.5rem)] leading-[1.5] tracking-[-0.01em] text-text' : 'text-lead text-text-secondary'}>
+              <p key={paragraph} className={index === 0 ? 'text-title text-text' : 'text-lead text-text-secondary'}>
                 {paragraph}
               </p>
             ))}

@@ -22,7 +22,7 @@ export const homeConfig = {
     eyebrow: 'Featured games',
     headline: ['Original worlds.', 'Built to play.'],
     /** Maximum number of featured games shown on the homepage. */
-    limit: 3,
+    limit: 6,
     allGames: { label: 'View all games', href: routes.games },
   },
 

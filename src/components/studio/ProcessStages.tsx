@@ -41,7 +41,7 @@ export function ProcessStages({ label, stages }: ProcessStagesProps) {
           }}
           data-index={index}
           data-active={index === active || undefined}
-          className="group relative grid grid-cols-[2rem_1fr] gap-x-5 py-5 md:gap-x-7 md:py-7"
+          className="group relative grid grid-cols-[2rem_1fr] gap-x-4 py-4 md:gap-x-5 md:py-5"
         >
           <span
             aria-hidden="true"
@@ -51,7 +51,7 @@ export function ProcessStages({ label, stages }: ProcessStagesProps) {
           </span>
           <div className="pt-0.5">
             <h3 className="text-title text-white/80 transition-colors duration-(--duration-standard) group-hover:text-white group-data-active:text-white">{stage.title}</h3>
-            <p className="prose-measure mt-2 text-[clamp(0.9375rem,0.89rem+0.15vw,1.0625rem)] leading-[1.62] text-text-secondary">{stage.body}</p>
+            <p className="prose-measure mt-2 text-body text-text-secondary">{stage.body}</p>
           </div>
         </li>
       ))}

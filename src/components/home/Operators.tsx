@@ -14,10 +14,10 @@ import { Reveal } from '@/motion/Reveal';
 export function Operators() {
   const { operators } = homeConfig;
   return (
-    <section aria-labelledby="operators-title" className="relative isolate w-full overflow-hidden bg-(--tone-operators) md:pt-sec-lg md:pb-sec-lg">
+    <section aria-labelledby="operators-title" className="relative isolate w-full overflow-hidden bg-(--tone-operators) md:pt-sec-md md:pb-sec-md">
       {/* Phones: the world opens the section. Desktop: a full-height layer on the right. */}
-      <div aria-hidden="true" className="relative h-[17rem] sm:h-[22rem] md:absolute md:inset-y-0 md:right-0 md:-z-10 md:h-auto md:w-[74%]">
-        <ResponsiveArt src={operators.art.src} alt="" sizes="(max-width: 899px) 100vw, 74vw" quality={80} imgClassName="object-[72%_50%] md:object-[88%_50%]" />
+      <div aria-hidden="true" className="relative h-[12rem] sm:h-[16rem] md:absolute md:inset-y-0 md:right-0 md:-z-10 md:h-auto md:w-[58%]">
+        <ResponsiveArt src={operators.art.src} alt="" sizes="(max-width: 899px) 100vw, 58vw" quality={80} imgClassName="object-[72%_50%] md:object-[88%_50%]" />
         <div className="absolute inset-0 hidden bg-[linear-gradient(90deg,var(--tone-operators)_0%,rgb(4_5_6/0.7)_22%,rgb(4_5_6/0.12)_52%,transparent_75%)] md:block" />
         <div className="absolute inset-x-0 top-0 h-1/3 bg-linear-to-b from-(--tone-operators) to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-(--tone-operators) to-transparent md:h-1/3" />
@@ -37,7 +37,7 @@ export function Operators() {
           </div>
         </div>
 
-        <div className="grid-fnx mt-16 md:mt-22">
+        <div className="grid-fnx mt-10 md:mt-14">
           <Reveal as="ul" className="grid gap-x-(--grid-gap) sm:grid-cols-3 md:col-span-7">
             {operators.capabilities.map((item, index) => (
               <li key={item.label} className="group relative border-t border-white/[0.09] py-5">

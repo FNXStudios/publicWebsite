@@ -22,14 +22,14 @@ export function FinalCta({ eyebrow, headline = homeConfig.finalCta.headline, bod
   return (
     <section aria-labelledby="final-cta-title" className="w-full pb-sec-sm">
       <Container size="focus">
-        <Reveal className="grain relative isolate overflow-hidden rounded-xl border border-white/[0.09] bg-raised px-6 py-10 sm:px-12 md:px-16 md:py-16 xl:px-20">
+        <Reveal className="grain relative isolate overflow-hidden rounded-xl border border-white/[0.09] bg-raised px-6 py-10 sm:px-10 md:px-12 md:py-10">
           <div
             aria-hidden="true"
             className="absolute inset-0 -z-10 bg-[radial-gradient(40rem_26rem_at_100%_50%,rgb(113_52_244/0.24),transparent_70%),radial-gradient(16rem_14rem_at_100%_50%,rgb(185_155_255/0.12),transparent_70%)]"
           />
           <div aria-hidden="true" className="fnx-diagonals absolute inset-0 -z-10" />
           <div aria-hidden="true" className="absolute inset-x-10 top-0 h-px bg-linear-to-r from-transparent via-white/15 to-transparent" />
-          <div className="relative z-10 flex flex-col gap-9 md:flex-row md:items-end md:justify-between md:gap-12">
+          <div className="relative z-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between md:gap-8">
             <div className="max-w-[46rem]">
               {eyebrow ? (
                 <Eyebrow rule className="mb-5 text-violet-300">
