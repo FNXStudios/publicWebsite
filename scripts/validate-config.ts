@@ -16,7 +16,7 @@ const checkAsset = (owner: string, asset: string | undefined) => {
   if (asset && !existsSync(path.join(publicDir, asset))) problems.push(`${owner}: missing /public${asset}`);
 };
 
-const [{ games }, { jobs, careersPageContent }, { siteConfig }, { homeConfig }, { studioConfig }, { resolveGameLaunch }, { demoGames }, { gameCollectionSchema }] = await Promise.all([
+const [{ games }, { jobs }, { siteConfig }, { homeConfig }, { studioConfig }, { resolveGameLaunch }, { demoGames }, { gameCollectionSchema }] = await Promise.all([
   import('../src/config/games.config'),
   import('../src/config/careers.config'),
   import('../src/config/site.config'),
@@ -54,7 +54,6 @@ const pageArt: { src: string; mobileSrc?: string }[] = [
   ...studioConfig.thinking.principles.map((p) => p.art),
   studioConfig.process.art,
   ...studioConfig.work.gallery,
-  careersPageContent.art,
 ];
 // Fixture games are validated too, so their artwork never renders as a fallback.
 for (const game of gameCollectionSchema.parse(demoGames)) {
