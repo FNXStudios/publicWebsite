@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 import type { ReactNode } from 'react';
+import { Analytics } from '@vercel/analytics/next';
 import { AgeGate, AgeGateHeadScript } from '@/components/age-gate/AgeGate';
 import { siteConfig } from '@/config/site.config';
 import { getSiteUrl } from '@/lib/site-url';
@@ -50,6 +51,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         {children}
         <AgeGate />
+        <Analytics />
       </body>
     </html>
   );
