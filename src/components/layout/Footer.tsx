@@ -1,71 +1,83 @@
+import type { ReactNode } from 'react';
 import Link from 'next/link';
+import { ContactTrigger } from '@/components/contact/ContactTrigger';
+import { LinkedInIcon, MailIcon } from '@/components/ui/Icons';
+import { Wordmark } from '@/components/ui/Wordmark';
 import { navigationConfig } from '@/config/navigation.config';
 import { siteConfig } from '@/config/site.config';
 import { routes } from '@/lib/routes';
-import { iconForDirectLink } from '@/lib/site/direct-link-icon';
-import { Wordmark } from '@/components/ui/Wordmark';
 
-const linkClass =
-  'group inline-flex items-center gap-2 py-2 text-[0.9375rem] font-medium text-text-secondary transition-colors duration-(--duration-interaction) ease-premium hover:text-text';
+const navLinkClass =
+  'inline-flex cursor-pointer items-center py-1.5 text-small font-medium text-text-secondary transition-colors duration-(--duration-interaction) ease-premium hover:text-text focus-visible:text-text';
+
+const iconLinkClass =
+  'relative inline-flex text-text-muted transition-[color,transform] duration-(--duration-interaction) ease-premium before:absolute before:-inset-1.5 before:content-[""] hover:-translate-y-px hover:text-text focus-visible:-translate-y-px focus-visible:text-text';
 
 /**
- * Compact close (~240px on desktop). Row 1: logo + one line left, horizontal
- * navigation right. Row 2: copyright and the responsible-gaming line.
+ * Quiet close: brand and destinations on one row, copyright and the
+ * responsible-gaming line on the next. Contact icons stay unlabeled in the
+ * layout; each link carries its own accessible name.
  */
 export function Footer() {
   const year = new Date().getFullYear();
   const rg = siteConfig.responsibleGaming;
-  const direct = [
-    ...(siteConfig.email ? [{ label: siteConfig.email, href: `mailto:${siteConfig.email}` }] : []),
-    ...siteConfig.social,
-  ];
+  const linkedIn = siteConfig.social.find((item) => isLinkedIn(item.href));
 
   return (
     <footer className="relative bg-(--tone-footer)">
-      <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/[0.08] to-transparent" />
-      <div className="container-wide flex flex-col gap-7 py-10 md:flex-row md:items-center md:justify-between md:gap-10 md:py-12">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:gap-7">
-          <Link href={routes.home} className="-m-2 inline-block self-start rounded-md p-2" aria-label="FNX Studio — home">
-            <Wordmark className="h-7" />
-          </Link>
-          <p className="max-w-[23rem] text-small text-text-muted md:border-l md:border-white/[0.08] md:pl-7">{siteConfig.footerLine}</p>
+      <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-white/[0.08]" />
+      <div className="container-wide pt-12 pb-[max(1.25rem,env(safe-area-inset-bottom))] md:pt-14 md:pb-6">
+        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between md:gap-12">
+          <div className="flex w-full max-w-[22.5rem] flex-col gap-3.5">
+            <Link href={routes.home} className="w-fit rounded-md" aria-label="FNX Studio — home">
+              <Wordmark className="h-6 md:h-[1.625rem]" />
+            </Link>
+            <p className="text-small leading-snug text-text-muted">{siteConfig.footerLine}</p>
+            {siteConfig.email || linkedIn ? (
+              <ul className="flex w-fit items-center gap-3.5 leading-none">
+                {siteConfig.email ? (
+                  <li className="flex">
+                    <IconLink href={`mailto:${siteConfig.email}`} label="Email FNX Studio" title={siteConfig.email}>
+                      <MailIcon className="size-[1.125rem]" />
+                    </IconLink>
+                  </li>
+                ) : null}
+                {linkedIn ? (
+                  <li className="flex">
+                    <IconLink href={linkedIn.href} label="FNX Studio on LinkedIn" title="LinkedIn" external>
+                      <LinkedInIcon className="size-[1.125rem]" />
+                    </IconLink>
+                  </li>
+                ) : null}
+              </ul>
+            ) : null}
+          </div>
+
+          <nav aria-label="Footer" className="md:pt-1">
+            <ul className="flex flex-wrap gap-x-6 gap-y-1 md:justify-end md:gap-x-8">
+              {navigationConfig.footer.map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href} className={navLinkClass}>
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <ContactTrigger appearance="row" placement="footer" arrow={false} className={navLinkClass}>
+                  Contact
+                </ContactTrigger>
+              </li>
+            </ul>
+          </nav>
         </div>
 
-        <nav aria-label="Footer">
-          <ul className="flex flex-wrap items-center gap-x-8 gap-y-1">
-            {navigationConfig.footer.map((item) => (
-              <li key={item.href}>
-                <Link href={item.href} className={linkClass}>
-                  <span className="link-rule">{item.label}</span>
-                </Link>
-              </li>
-            ))}
-            {direct.map((item) => {
-              const Icon = iconForDirectLink(item.href);
-              return (
-                <li key={item.href}>
-                  <a href={item.href} className={linkClass} {...(item.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
-                    {Icon ? <Icon className="size-[1.05em] shrink-0 opacity-80 transition-opacity group-hover:opacity-100" /> : null}
-                    <span className="link-rule">{item.label}</span>
-                    {item.href.startsWith('http') ? <span className="sr-only"> (opens in a new tab)</span> : null}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-      </div>
-
-      <div className="border-t border-white/[0.06]">
-        <div className="container-wide flex flex-col gap-1.5 py-4 text-[0.8125rem] text-text-muted sm:h-14 sm:flex-row sm:items-center sm:justify-between sm:py-0">
+        <div className="mt-3.5 flex flex-col gap-1.5 border-t border-white/[0.06] pt-3 text-[0.8125rem] leading-snug text-text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {year} {siteConfig.name}
           </p>
           {rg ? (
             <p>
-              {rg.ageLabel}
-              <span aria-hidden="true"> · </span>
-              <span className="sr-only">. </span>
+              {rg.ageLabel}{' '}
               {rg.url ? (
                 <a
                   href={rg.url}
@@ -85,4 +97,39 @@ export function Footer() {
       </div>
     </footer>
   );
+}
+
+function IconLink({
+  href,
+  label,
+  title,
+  external,
+  children,
+}: {
+  href: string;
+  label: string;
+  title: string;
+  external?: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <a
+      href={href}
+      aria-label={external ? `${label} (opens in a new tab)` : label}
+      title={title}
+      className={iconLinkClass}
+      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+    >
+      {children}
+    </a>
+  );
+}
+
+function isLinkedIn(href: string) {
+  try {
+    const host = new URL(href).hostname.replace(/^www\./, '');
+    return host === 'linkedin.com' || host.endsWith('.linkedin.com');
+  } catch {
+    return false;
+  }
 }

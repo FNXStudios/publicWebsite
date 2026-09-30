@@ -50,6 +50,18 @@ export function ResponsiveArt({
   const common = { fill: true, quality, loading, fetchPriority } as const;
   const imgStyle: CSSProperties | undefined = objectPosition ? { objectPosition } : undefined;
   const imgClass = cn('object-cover', imgClassName);
+  /** Picture images must fill the frame. Next's fill styles are easy to drop, and a
+   *  portrait file would otherwise sit at its own width and leave the hero empty. */
+  const coverClass = 'absolute inset-0 h-full w-full max-w-none object-cover';
+  const coverStyle: CSSProperties = {
+    position: 'absolute',
+    inset: 0,
+    width: '100%',
+    height: '100%',
+    maxWidth: 'none',
+    objectFit: 'cover',
+    ...(objectPosition ? { objectPosition } : {}),
+  };
 
   if (!mobileSrc) {
     return (
@@ -66,10 +78,10 @@ export function ResponsiveArt({
   } = getImageProps({ ...common, src: mobileSrc, alt, sizes: mobileSizes });
 
   return (
-    <picture className={cn('art-slot absolute inset-0', className)}>
+    <picture className={cn('art-slot absolute inset-0 block', className)}>
       <source media={`(max-width: ${mobileMaxWidth}px)`} srcSet={mobileSrcSet} sizes={mobileSizes} />
       <source media={`(min-width: ${mobileMaxWidth + 1}px)`} srcSet={desktop.srcSet} sizes={sizes} />
-      <img {...desktop} alt={alt} className={imgClass} style={imgStyle} />
+      <img {...desktop} alt={alt} className={cn(coverClass, imgClassName)} style={{ ...desktop.style, ...coverStyle }} />
     </picture>
   );
 }

@@ -3,7 +3,7 @@ import { E2E_GAME_ORIGIN, serveFakeGame } from './helpers';
 
 test('games index lists visible games only', async ({ page }) => {
   await page.goto('/games');
-  // Lead title as a wide feature, the rest as cards — every game is one article.
+  // Every visible game is one portrait card.
   await expect(page.getByRole('article').getByRole('heading')).toHaveText(['Lantern Quarter', 'Tide Runner', 'Ember Crown']);
   await expect(page.getByText('Hidden Vault')).toHaveCount(0);
 });

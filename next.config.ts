@@ -13,6 +13,11 @@ const e2eFixtures = process.env.FNX_E2E_FIXTURES === '1';
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // Dev only. A phone on the LAN loads this server by IP. Next refuses /_next
+  // scripts from any host other than localhost, so CSS paints the age-gate blur
+  // and the dialog never hydrates. Private ranges cover a changing DHCP address.
+  allowedDevOrigins: ['192.168.*.*', '10.*.*.*'],
+  agentRules: false,
   ...(e2eFixtures
     ? {
         distDir: '.next-e2e',

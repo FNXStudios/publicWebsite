@@ -18,9 +18,8 @@ export function FeaturedGames() {
   return (
     <section
       aria-labelledby="featured-title"
-      className="relative isolate w-full pt-sec-sm pb-sec-sm bg-[linear-gradient(180deg,var(--tone-hero)_0%,var(--tone-featured)_18rem,var(--tone-featured)_calc(100%-12rem),var(--tone-made)_100%)]"
+      className="relative isolate w-full bg-[linear-gradient(180deg,var(--tone-hero)_0%,var(--tone-featured)_18rem,var(--tone-featured)_calc(100%-12rem),var(--tone-made)_100%)]"
     >
-      {/* A low wash of the games' own colour under the rail. */}
       <div
         aria-hidden="true"
         className="absolute inset-x-0 top-[40%] -z-10 h-[50%] bg-[radial-gradient(40%_60%_at_20%_50%,rgb(226_64_42/0.07),transparent),radial-gradient(40%_60%_at_50%_50%,rgb(106_63_224/0.08),transparent),radial-gradient(40%_60%_at_82%_50%,rgb(31_165_106/0.06),transparent)]"

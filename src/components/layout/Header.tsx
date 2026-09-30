@@ -45,7 +45,7 @@ export function Header({ primary, ctaLabel, notice }: HeaderProps) {
       className={cn(
         'fixed inset-x-0 top-0 z-40 h-(--header-height) border-b border-transparent',
         'transition-[background-color,border-color,backdrop-filter] duration-(--duration-standard) ease-premium',
-        'data-scrolled:border-white/[0.07] data-scrolled:bg-[rgb(4_5_7/0.8)] data-scrolled:backdrop-blur-[18px]',
+        'data-scrolled:border-white/[0.07] data-scrolled:bg-[#07090c]',
       )}
     >
       <a

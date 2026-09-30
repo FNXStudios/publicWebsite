@@ -16,10 +16,10 @@ type Phase = 'idle' | 'submitting' | 'success' | 'failure';
 const EMPTY: Values = { name: '', email: '', company: '', interest: '', message: '', website: '' };
 
 const fieldClass = cn(
-  'block h-12 w-full appearance-none rounded-[0.625rem] border border-white/[0.1] bg-white/[0.02] px-4 text-body text-text',
+  'block h-12 w-full appearance-none rounded-md border border-white/[0.1] bg-white/[0.02] px-4 text-body text-text',
   'shadow-[inset_0_1px_0_rgb(255_255_255/0.025)]',
   'transition-[border-color,box-shadow,background-color] duration-(--duration-micro) ease-premium',
-  'placeholder:text-text-muted hover:border-white/[0.18] hover:bg-white/[0.035]',
+  'scroll-my-4 placeholder:text-text-muted hover:border-white/[0.18] hover:bg-white/[0.035]',
   'focus:border-violet-500 focus:bg-white/[0.04] focus:shadow-[0_0_0_3px_rgb(130_71_255/0.22)] focus:outline-none',
   'aria-invalid:border-danger/80 aria-invalid:focus:shadow-[0_0_0_3px_rgb(255_143_143/0.2)]',
 );
@@ -194,7 +194,7 @@ export function ContactForm({ interests, copy: form, defaultInterest = '' }: Con
             <Select.Content
               position="popper"
               sideOffset={6}
-              className="fnx-select-content z-[95] max-h-(--radix-select-content-available-height) w-(--radix-select-trigger-width) overflow-hidden rounded-[0.75rem] border border-white/[0.1] bg-raised shadow-soft"
+              className="fnx-select-content z-[95] max-h-(--radix-select-content-available-height) w-(--radix-select-trigger-width) overflow-hidden rounded-lg border border-white/[0.1] bg-raised shadow-soft"
             >
               <Select.Viewport className="p-1.5">
                 {interests.map((option) => (
@@ -232,7 +232,7 @@ export function ContactForm({ interests, copy: form, defaultInterest = '' }: Con
           onChange={(e) => update('message', e.target.value)}
           aria-invalid={Boolean(errors.message) || undefined}
           aria-describedby={errors.message ? `${uid}-message-error` : undefined}
-          className={cn(fieldClass, 'h-auto min-h-36 resize-y py-3 leading-relaxed')}
+          className={cn(fieldClass, 'h-auto min-h-28 resize-y py-3 leading-relaxed sm:min-h-36')}
         />
       </Field>
 

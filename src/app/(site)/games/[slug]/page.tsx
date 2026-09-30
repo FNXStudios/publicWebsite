@@ -10,6 +10,7 @@ import { GameHero } from '@/components/games/GameHero';
 import { GameInfo } from '@/components/games/GameInfo';
 import { GameRail } from '@/components/games/GameShowcase';
 import { ButtonLink } from '@/components/ui/Button';
+import { MediaFrame } from '@/components/ui/MediaFrame';
 import { ResponsiveArt } from '@/components/ui/ResponsiveArt';
 import { TextLink } from '@/components/ui/TextLink';
 import { TrackOnMount } from '@/components/ui/TrackOnMount';
@@ -65,7 +66,8 @@ export default async function GamePage({ params }: Props) {
                 delay={index * 60}
                 className={index === 0 && screenshots.length % 2 === 1 ? 'md:col-span-12' : 'md:col-span-6'}
               >
-                <figure className="group relative aspect-[16/9] overflow-hidden rounded-lg border border-white/[0.08] bg-raised">
+                <figure className="group">
+                  <MediaFrame slot={index === 0 && screenshots.length % 2 === 1 ? 'archiveWide' : 'archive'}>
                   <Image
                     src={src}
                     alt={`${game.title} — in-game screen ${index + 1}`}
@@ -74,6 +76,7 @@ export default async function GamePage({ params }: Props) {
                     sizes={index === 0 && screenshots.length % 2 === 1 ? '(max-width: 1600px) 100vw, 1480px' : '(max-width: 899px) 100vw, (max-width: 1600px) 50vw, 740px'}
                     className="object-cover transition-transform duration-[900ms] ease-premium group-hover:scale-[1.02]"
                   />
+                  </MediaFrame>
                 </figure>
               </Reveal>
             ))}
@@ -85,8 +88,10 @@ export default async function GamePage({ params }: Props) {
       {game.artwork.thumbnail !== game.artwork.hero ? (
         <section aria-labelledby="art-title" className="container-wide pb-sec-md">
           <div className="grid items-center gap-10 overflow-hidden rounded-xl border border-white/[0.08] bg-[radial-gradient(60%_80%_at_20%_50%,color-mix(in_srgb,var(--game-glow)_22%,transparent),transparent_70%)] p-4 md:grid-cols-12 md:gap-6 md:p-6">
-            <Reveal as="figure" className="relative aspect-[4/5] overflow-hidden rounded-lg md:col-span-5">
-              <ResponsiveArt src={game.artwork.thumbnail} alt={`${game.title} — key art`} sizes="(max-width: 899px) 100vw, (max-width: 1600px) 42vw, 620px" quality={80} />
+            <Reveal as="figure" className="md:col-span-5">
+              <MediaFrame slot="gameCard">
+                <ResponsiveArt src={game.artwork.thumbnail} alt={`${game.title} — key art`} sizes="(max-width: 899px) 100vw, (max-width: 1600px) 42vw, 620px" quality={80} />
+              </MediaFrame>
             </Reveal>
             <div className="px-2 pb-6 md:col-span-6 md:col-start-7 md:px-0 md:pb-0">
               <Eyebrow rule id="art-title" className="[&>span]:bg-(--game-accent)">

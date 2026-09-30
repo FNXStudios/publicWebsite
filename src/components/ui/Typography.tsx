@@ -26,10 +26,11 @@ export function Eyebrow({
 /**
  * Renders an art-directed headline. Each configured line breaks on screens ≥640px
  * and flows as a single sentence on phones, so wrapping never fights the composition.
+ * `preserve` keeps those breaks at every width (Games intro).
  */
-export function HeadlineLines({ lines }: { lines: readonly string[] }) {
+export function HeadlineLines({ lines, preserve = false }: { lines: readonly string[]; preserve?: boolean }) {
   return lines.map((line, index) => (
-    <span key={line} className="headline-line">
+    <span key={line} className={preserve ? 'block' : 'headline-line'}>
       {line}
       {index < lines.length - 1 ? ' ' : null}
     </span>

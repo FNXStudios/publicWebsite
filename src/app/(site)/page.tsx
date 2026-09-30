@@ -19,11 +19,13 @@ export default function HomePage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(organizationJsonLd()) }} />
       <Hero />
-      <FeaturedGames />
-      <MadeToHit />
-      <IdeaToGame />
-      <Operators />
-      <FinalCta />
+      <div className="page-flow">
+        <FeaturedGames />
+        <MadeToHit />
+        <IdeaToGame />
+        <Operators />
+        <FinalCta />
+      </div>
     </>
   );
 }

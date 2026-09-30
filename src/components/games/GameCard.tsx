@@ -1,4 +1,3 @@
-import type { CSSProperties } from 'react';
 import type { Game } from '@/config/schema/game.schema';
 import { cn } from '@/lib/cn';
 import { gameArtAlt, gameCardFacts } from '@/lib/games/catalog';
@@ -11,8 +10,11 @@ interface GameCardProps {
   game: Game;
   placement: 'home' | 'games';
   headingLevel?: 'h2' | 'h3';
-  /** Frame shape. `landscape` uses the wide hero art. */
-  ratio?: 'portrait' | 'feature' | 'landscape';
+  /**
+   * Frame shape. `landscape` uses the wide hero art.
+   * `catalogue` is the Games index: 4:5 on phones, 4:3 from 768px, a shallow ~1.12 crop from 1200px.
+   */
+  ratio?: 'portrait' | 'feature' | 'landscape' | 'catalogue';
   sizes: string;
   /** Above-the-fold cards load eagerly. */
   priority?: boolean;
@@ -26,6 +28,8 @@ const RATIO = {
   portrait: 'aspect-[4/5]',
   feature: 'aspect-[4/5]',
   landscape: 'aspect-[16/10]',
+  /** Width / height. Bottom ~quarter stays clear for the title lockup. */
+  catalogue: 'aspect-[4/5] min-[48rem]:aspect-[4/3] lg:aspect-[1.12/1]',
 } as const;
 
 /**
@@ -37,11 +41,10 @@ export function GameCard({ game, placement, headingLevel = 'h3', ratio = 'portra
   const facts = gameCardFacts(game);
   const status = game.status === 'coming-soon' && !game.isDemo ? 'Coming soon' : null;
   const landscape = ratio === 'landscape';
-  const style = game.theme ? ({ '--game-glow': game.theme.glow } as CSSProperties) : undefined;
-  const factLine = facts.slice(0, 2).join(' · ');
+  const shown = facts.slice(0, 2);
 
   return (
-    <article className={cn('group relative', className)} style={style}>
+    <article className={cn('group relative', className)}>
       <TrackedLink
         href={routes.game(game.slug)}
         event={{ name: 'game_card_clicked', props: { slug: game.slug, placement } }}
@@ -50,9 +53,9 @@ export function GameCard({ game, placement, headingLevel = 'h3', ratio = 'portra
         <div
           className={cn(
             'relative isolate overflow-hidden rounded-lg border border-white/[0.09] bg-raised',
-            'transition-[border-color,box-shadow] duration-[280ms] ease-premium',
-            'group-hover:border-white/[0.16] group-hover:shadow-soft',
-            'group-focus-within:border-white/[0.16]',
+            'lg:transition-[border-color] lg:duration-[280ms] lg:ease-premium',
+            'lg:group-hover:border-white/[0.2]',
+            'group-focus-within:border-white/[0.2]',
             RATIO[ratio],
           )}
         >
@@ -63,15 +66,12 @@ export function GameCard({ game, placement, headingLevel = 'h3', ratio = 'portra
             sizes={sizes}
             priority={priority}
             objectPosition={game.artwork.objectPosition}
-            imgClassName="transition-transform duration-[280ms] ease-premium group-hover:scale-[1.025] group-focus-within:scale-[1.025]"
+            imgClassName="lg:transition-transform lg:duration-[280ms] lg:ease-premium lg:group-hover:scale-[1.02] lg:group-focus-within:scale-[1.02] motion-reduce:lg:group-hover:scale-100 motion-reduce:lg:group-focus-within:scale-100"
           />
+          {/* Title lockup sits in the bottom quarter. Gate 2 key art should keep focal detail above it. */}
           <div
             aria-hidden="true"
-            className="absolute inset-x-0 bottom-0 h-1/2 bg-[radial-gradient(70%_80%_at_50%_100%,var(--game-glow,transparent),transparent)] opacity-0 mix-blend-screen transition-opacity duration-[280ms] group-hover:opacity-20"
-          />
-          <div
-            aria-hidden="true"
-            className="absolute inset-x-0 bottom-0 h-[55%] bg-[linear-gradient(180deg,transparent,rgb(4_5_7/0.25)_38%,rgb(4_5_7/0.94))] transition-opacity duration-[280ms] ease-premium group-hover:opacity-88"
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-[46%] bg-[linear-gradient(180deg,transparent_0%,rgb(4_5_7/0.14)_30%,rgb(4_5_7/0.62)_62%,rgb(4_5_7/0.9)_100%)]"
           />
 
           {status ? (
@@ -85,14 +85,26 @@ export function GameCard({ game, placement, headingLevel = 'h3', ratio = 'portra
             </span>
           ) : null}
 
-          <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-2.5 sm:p-3">
+          <div className="absolute inset-x-0 bottom-0 flex items-center gap-2 p-2.5 min-[48rem]:p-3.5">
             <div className="min-w-0 flex-1">
-              <Heading className="truncate text-small font-semibold tracking-[-0.01em] text-white transition-transform duration-[280ms] ease-premium group-hover:-translate-y-px sm:text-[0.9375rem]">
+              <Heading className="text-[0.875rem] leading-[1.25] font-semibold tracking-[-0.015em] text-balance text-white min-[48rem]:text-[0.9375rem] lg:text-base">
                 {game.title}
               </Heading>
-              {factLine ? <p className="mt-0.5 truncate text-[0.6875rem] leading-4 text-white/70">{factLine}</p> : null}
+              {shown.length ? (
+                <p className="mt-0.5 text-[0.75rem] leading-snug text-white/70">
+                  {shown.map((fact, index) => (
+                    <span key={fact}>
+                      {index > 0 ? <span aria-hidden="true"> · </span> : null}
+                      {fact}
+                    </span>
+                  ))}
+                </p>
+              ) : null}
             </div>
-            <ArrowRight aria-hidden="true" className="arrow-nudge mb-0.5 size-3.5 shrink-0 text-white/80 group-hover:translate-x-0.5 group-hover:text-white" />
+            <ArrowRight
+              aria-hidden="true"
+              className="arrow-nudge size-3.5 shrink-0 text-white/80 lg:size-4 lg:group-hover:translate-x-1 lg:group-hover:text-white motion-reduce:lg:group-hover:translate-x-0"
+            />
           </div>
         </div>
       </TrackedLink>

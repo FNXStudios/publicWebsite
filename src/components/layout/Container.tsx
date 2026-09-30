@@ -3,10 +3,10 @@ import { cn } from '@/lib/cn';
 
 /**
  * FNX composition widths (tokens in globals.css):
- *   reading  ~760px   long paragraphs, manifestos, forms
- *   content  ~1180px  two-column editorial, process, structured information
- *   focus    ~1320px  focused closers such as the CTA
- *   wide     ~1480px  games, portfolio grids, large artwork, header and footer
+ *   reading  640px    paragraphs
+ *   content  1152px   two-column editorial
+ *   focus    1280px   closing panels
+ *   wide     1440px   the site container: games, galleries, header and footer
  * Full-bleed artwork is not a container: it sits on the section itself (see FullBleed).
  */
 export type ContainerSize = 'reading' | 'content' | 'focus' | 'wide';

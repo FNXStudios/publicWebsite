@@ -30,15 +30,15 @@ function JobRow({ job }: { job: Job }) {
   const opensCareersContact = job.applyUrl === routes.careers;
   const Icon = external ? ArrowUpRight : ArrowRight;
   const className =
-    'group grid gap-2.5 border-b border-white/[0.09] py-5 transition-[colors,transform] duration-[220ms] ease-premium hover:border-white/[0.16] md:grid-cols-12 md:items-baseline md:gap-5 md:hover:translate-x-0.5';
+    'group grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-4 gap-y-1.5 border-b border-white/[0.09] py-5 transition-colors duration-[220ms] ease-premium hover:border-white/[0.16] md:grid-cols-12 md:items-center md:gap-5 md:py-6';
   const content = (
     <>
       <h3 className="text-title text-white md:col-span-4">{job.title}</h3>
-      <p className="text-small text-text-muted md:col-span-3">
+      <p className="col-start-1 text-small text-text-muted md:col-span-3 md:col-start-auto">
         {JOB_TYPE_LABELS[job.type]} · {job.location}
       </p>
-      <p className="text-body text-text-secondary transition-colors duration-[220ms] group-hover:text-text md:col-span-4">{job.description}</p>
-      <Icon className="arrow-nudge hidden size-4 justify-self-end text-text-secondary group-hover:translate-x-1 group-hover:text-white md:col-span-1 md:block" />
+      <p className="col-span-2 text-body text-text-secondary transition-colors duration-[220ms] group-hover:text-text md:col-span-4 md:col-start-auto">{job.description}</p>
+      <Icon className="arrow-nudge col-start-2 row-start-1 size-4 text-text-secondary group-hover:translate-x-1 group-hover:text-white md:col-span-1 md:col-start-auto md:row-start-auto md:justify-self-end" />
     </>
   );
   const contactContent = (
@@ -46,11 +46,11 @@ function JobRow({ job }: { job: Job }) {
       <span role="heading" aria-level={3} className="text-title text-white md:col-span-4">
         {job.title}
       </span>
-      <span className="text-small text-text-muted md:col-span-3">
+      <span className="col-start-1 text-small text-text-muted md:col-span-3 md:col-start-auto">
         {JOB_TYPE_LABELS[job.type]} · {job.location}
       </span>
-      <span className="text-body text-text-secondary transition-colors duration-[220ms] group-hover:text-text md:col-span-4">{job.description}</span>
-      <Icon className="arrow-nudge hidden size-4 justify-self-end text-text-secondary group-hover:translate-x-1 group-hover:text-white md:col-span-1 md:block" />
+      <span className="col-span-2 text-body text-text-secondary transition-colors duration-[220ms] group-hover:text-text md:col-span-4 md:col-start-auto">{job.description}</span>
+      <Icon className="arrow-nudge col-start-2 row-start-1 size-4 text-text-secondary group-hover:translate-x-1 group-hover:text-white md:col-span-1 md:col-start-auto md:row-start-auto md:justify-self-end" />
     </>
   );
   return (
@@ -96,7 +96,8 @@ export default function CareersPage() {
         }
       />
 
-      <Container as="section" size="wide" aria-labelledby="roles-title" className="pt-sec-md">
+      <div className="page-flow">
+      <Container as="section" size="wide" aria-labelledby="roles-title">
         {openJobs.length > 0 ? (
           <>
             <h2 id="roles-title" className="text-eyebrow text-text-muted uppercase">
@@ -123,24 +124,25 @@ export default function CareersPage() {
         )}
       </Container>
 
-      <section aria-labelledby="careers-values-title" className="w-full pt-sec-md pb-sec-md">
+      <section aria-labelledby="careers-values-title" className="w-full">
         <Container size="wide">
           <Eyebrow rule>{values.eyebrow}</Eyebrow>
-          <h2 id="careers-values-title" className="mt-4 text-display-sm text-white md:text-display">
+          <h2 id="careers-values-title" className="mt-4 text-display text-white">
             {values.headline}
           </h2>
-          <ul className="mt-8 grid gap-x-(--grid-gap) gap-y-8 sm:grid-cols-2 md:mt-10 lg:grid-cols-4">
+          <ul className="mt-header grid gap-x-(--grid-gap) gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
             {values.items.map((item, index) => (
               <Reveal as="li" key={item.title} delay={index * 60} className="group relative border-t border-white/[0.12] pt-5">
                 <span aria-hidden="true" className="absolute -top-px left-0 h-px w-8 bg-violet-400 transition-[width] duration-[560ms] ease-premium group-hover:w-full" />
                 <Index n={index + 1} className="text-text-muted transition-colors duration-(--duration-interaction) group-hover:text-violet-300" />
                 <h3 className="mt-4 text-title text-white">{item.title}</h3>
-                <p className="mt-2.5 max-w-[18rem] text-body text-text-secondary">{item.body}</p>
+                <p className="mt-2.5 text-body text-text-secondary">{item.body}</p>
               </Reveal>
             ))}
           </ul>
         </Container>
       </section>
+      </div>
     </>
   );
 }

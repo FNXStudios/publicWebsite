@@ -104,10 +104,11 @@ export function AgeGateDialog({ copy, version, rememberDays, exitUrl }: AgeGateD
             event.preventDefault();
             document.getElementById('main')?.focus({ preventScroll: true });
           }}
-          className="fnx-dialog fixed top-1/2 left-1/2 z-[101] w-[min(30rem,calc(100vw-2rem))] max-h-[calc(100dvh-2rem)] -translate-x-1/2 -translate-y-1/2 overflow-auto outline-none data-[phase=leaving]:opacity-0 data-[phase=leaving]:transition-opacity data-[phase=leaving]:duration-200"
+          className="fnx-dialog fixed inset-0 z-[101] overflow-y-auto overscroll-contain outline-none data-[phase=leaving]:opacity-0 data-[phase=leaving]:transition-opacity data-[phase=leaving]:duration-200"
           data-phase={phase}
         >
-          <div className="relative isolate overflow-hidden rounded-xl border border-white/[0.09] bg-raised px-6 pt-8 pb-6 shadow-[0_40px_100px_rgb(0_0_0/0.6)] sm:px-10 sm:pt-10 sm:pb-8">
+          <div className="flex min-h-full items-center justify-center px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))]">
+            <div className="relative isolate w-full max-w-[30rem] overflow-hidden rounded-xl border border-white/[0.09] bg-raised px-6 pt-8 pb-6 shadow-[0_40px_100px_rgb(0_0_0/0.6)] sm:px-10 sm:pt-10 sm:pb-8">
             {/* One controlled violet edge and the faintest bloom behind it. */}
             <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent_4%,rgb(185_155_255/0.7)_30%,rgb(113_52_244/0.25)_64%,transparent_94%)]" />
             <div aria-hidden="true" className="absolute -top-28 -left-10 -z-10 h-56 w-80 rounded-full bg-[radial-gradient(closest-side,rgb(113_52_244/0.22),transparent)]" />
@@ -165,6 +166,7 @@ export function AgeGateDialog({ copy, version, rememberDays, exitUrl }: AgeGateD
                 )}
               </p>
             ) : null}
+            </div>
           </div>
         </Dialog.Content>
       </Dialog.Portal>

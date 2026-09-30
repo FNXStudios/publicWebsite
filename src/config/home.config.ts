@@ -15,7 +15,7 @@ export const homeConfig = {
     body: 'We design and build original slot and instant games from concept through production.',
     primaryCta: { label: 'Explore Games', href: routes.games },
     secondaryCta: { label: 'Meet the Studio', href: routes.studio },
-    art: { src: '/art/hero.webp', mobileSrc: '/art/hero-mobile.webp', alt: '' },
+    art: { src: '/art/hero.png', mobileSrc: '/art/hero-mobile.png', alt: '' },
   },
 
   featured: {

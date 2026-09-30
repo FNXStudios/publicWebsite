@@ -35,14 +35,26 @@ export const studioConfig = {
       {
         title: 'Original games',
         body: 'Slots and instant games built around a distinct hook, visual identity and player experience.',
+        art: {
+          src: '/visual-fixtures/production/made-impact.jpg',
+          alt: 'Hero symbols from three original worlds, shown as one set.',
+        },
       },
       {
         title: 'Game production',
         body: 'Design, math, art, animation and runtime developed together — not handed between isolated stages.',
+        art: {
+          src: '/visual-fixtures/production/character-sheet.jpg',
+          alt: 'A character sheet with poses, expressions and colour studies for one game.',
+        },
       },
       {
         title: 'Operator delivery',
         body: 'Responsive builds prepared around real integration, deployment and production requirements.',
+        art: {
+          src: '/visual-fixtures/production/made-devices.jpg',
+          alt: 'The same game running on a desktop monitor, a tablet and a phone.',
+        },
       },
     ],
   },
@@ -66,7 +78,7 @@ export const studioConfig = {
         title: 'Every world needs a reason.',
         body: 'Every title should have a reason to look and behave the way it does. Shape, palette, motion and sound come from the game’s personality, so a world is recognisable before you read its name — never assembled from a shared kit.',
         art: {
-          src: '/art/studio.webp',
+          src: '/art/studio.png',
           alt: 'Key art for three original game worlds pinned above a symbol set, palette swatches and timing notes.',
         },
       },
@@ -75,7 +87,7 @@ export const studioConfig = {
         title: 'Mechanics and math are one design.',
         body: 'What happens and how often it happens are part of the same decision. Mechanics and the math model are built together, so pacing and reward support the feeling the mechanic was made for instead of fighting it.',
         art: {
-          src: '/art/process.webp',
+          src: '/art/process.png',
           alt: 'A concept board with symbol sketches, an in-game reel layout, a palette and animation timing curves.',
         },
       },
@@ -95,7 +107,7 @@ export const studioConfig = {
     headline: ['One team.', 'One game.'],
     body: 'Concept, math, art and engineering aren’t separate production lines. The same people carry a game from its first question to its final build — played, reviewed and refined the whole way through.',
     art: {
-      src: '/art/studio-layers.webp',
+      src: '/art/studio-layers.png',
       alt: 'The layers of a slot game — background, reel frame, symbols and interface — stacked into one build.',
     },
     stages: [
@@ -182,7 +194,7 @@ export const studioConfig = {
     eyebrow: string;
     headline: string;
     intro: string;
-    items: TitledCopy[];
+    items: (TitledCopy & { art: ArtContent })[];
   };
   thinking: {
     eyebrow: string;

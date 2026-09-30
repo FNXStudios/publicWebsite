@@ -23,7 +23,7 @@ export function IdeaToGame() {
   return (
     <section
       aria-labelledby="idea-title"
-      className="grain relative w-full pt-sec-md pb-sec-md bg-[linear-gradient(180deg,var(--tone-made)_0%,var(--tone-idea)_10rem,var(--tone-idea)_calc(100%-10rem),var(--tone-operators)_100%)]"
+      className="relative w-full bg-(--tone-idea)"
     >
       <Container size="wide" className="relative z-10">
         <div className="grid-fnx gap-y-5 md:items-end">
@@ -35,7 +35,7 @@ export function IdeaToGame() {
           </div>
           <p className="prose-side text-lead text-text-secondary md:col-span-4 md:col-start-9 md:pb-1">{ideaToGame.body}</p>
         </div>
-        <div className="mt-8 md:mt-10">
+        <div className="mt-header">
           <StageStory label="From idea to game" stages={ideaToGame.stages.map(({ title, body }) => ({ title, body }))} visuals={visuals} />
         </div>
       </Container>

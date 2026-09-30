@@ -59,36 +59,38 @@
   --shadow-soft: 0 16px 50px rgb(0 0 0 / 0.28);
 
   /* ------------------------------------------------------------------------
-     Composition widths. Text is disciplined; artwork has freedom.
-       reading  760   long paragraphs, manifestos, forms, supporting prose
-       content  1180  two-column editorial, process, structured information
-       focus    1320  focused closers (CTA) — deliberately narrower than wide
-       wide     1480  games, portfolio grids, large artwork, header, footer
-       full bleed     100vw — hero art, world imagery, atmospheric backgrounds
-     Every container is `min(100% − 2 × gutter, width)`, centred. Use <Container size>
-     (or the container-* utilities) instead of one-off max-widths.
+     Composition widths. One page container; text is a narrower tier inside it.
+       reading  640   paragraphs (about 62–68 characters)
+       content  1152  two-column editorial
+       focus    1280  closing panels that should still share the page edge rhythm
+       wide     1440  the site container: games, galleries, header, footer
+     Every container is `min(100% − 2 × gutter, width)`, centred.
+     Gutters: 22px mobile, 36px tablet, 56px desktop.
      ------------------------------------------------------------------------ */
-  --fnx-reading: 47.5rem;
-  --fnx-content: 73.75rem;
-  --fnx-focus: 82.5rem;
-  --fnx-wide: 92.5rem;
-  /* 20px on phones → ~50px at 1440 → 56px at 1800+. */
-  --fnx-gutter: clamp(1.25rem, 3.5vw, 3.5rem);
+  --fnx-reading: 40rem;
+  --fnx-content: 72rem;
+  --fnx-focus: 80rem;
+  --fnx-wide: 90rem;
+  --fnx-gutter: 1.375rem;
   --gutter: var(--fnx-gutter);
-  --grid-gap: clamp(1rem, 0.4rem + 1.6vw, 2rem);
-  /* Gap between the two halves of an editorial split (headline ↔ argument). */
-  --gap-editorial: clamp(2rem, 5vw, 5.5rem);
+  --grid-gap: 1rem;
+  --gap-editorial: 2rem;
   --header-height: 4rem; /* 64px; 72px from md */
 
   /* ------------------------------------------------------------------------
-     Section spacing. Semantic, not uniform: small gaps where one section continues
-     another, large ones where the subject changes. Never invent a one-off gap.
-       sm  40 → 64    md  48 → 80    lg  56 → 104    xl  64 → 128
+     Section rhythm. `page-flow` applies --space-section once between sections
+     (padding-top), so adjacent sections do not stack two paddings into a void.
+       section  64 → 84 → 104    the gap between major sections
+       tight    40 → 52 → 64     related blocks inside one section
+       header   32 → 40 → 48     eyebrow / heading / supporting copy
      ------------------------------------------------------------------------ */
-  --space-section-sm: clamp(2.5rem, 4vw, 4rem);
-  --space-section-md: clamp(3rem, 5vw, 5rem);
-  --space-section-lg: clamp(3.5rem, 7vw, 6.5rem);
-  --space-section-xl: clamp(4rem, 8vw, 8rem);
+  --space-section: 4rem;
+  --space-tight: 2.5rem;
+  --space-header: 2rem;
+  --space-section-sm: var(--space-tight);
+  --space-section-md: var(--space-section);
+  --space-section-lg: var(--space-section);
+  --space-section-xl: var(--space-section);
 
   /* Radii */
   --radius-sm: 0.5rem;
@@ -111,9 +113,31 @@
   scrollbar-gutter: stable;
 }
 
+@media (min-width: 48rem) {
+  :root {
+    --fnx-gutter: 2.25rem;
+    --grid-gap: 1.25rem;
+    --gap-editorial: 2.5rem;
+    --space-section: 5.25rem;
+    --space-tight: 3.25rem;
+    --space-header: 2.5rem;
+  }
+}
+
 @media (min-width: 56.25rem) {
   :root {
     --header-height: 4.5rem;
+  }
+}
+
+@media (min-width: 75rem) {
+  :root {
+    --fnx-gutter: 3.5rem;
+    --grid-gap: 1.5rem;
+    --gap-editorial: 3.5rem;
+    --space-section: 6.5rem;
+    --space-tight: 4rem;
+    --space-header: 3rem;
   }
 }
 
@@ -179,18 +203,18 @@
        lead         17 → 20   intros and supporting copy
        body         16 → 18   running text — never tiny on large desktops
        small        13 → 14.4 */
-  --text-hero: clamp(2.5rem, 4.2vw, 4.25rem);
-  --text-hero--line-height: 0.98;
+  --text-hero: clamp(2.35rem, 3.4vw, 4rem);
+  --text-hero--line-height: 1.04;
   --text-hero--letter-spacing: -0.035em;
   --text-hero--font-weight: 600;
 
-  --text-display-xl: clamp(2.5rem, 1.4rem + 4vw, 4.5rem);
-  --text-display-xl--line-height: 0.92;
-  --text-display-xl--letter-spacing: -0.045em;
+  --text-display-xl: clamp(2.35rem, 1.2rem + 3.2vw, 4rem);
+  --text-display-xl--line-height: 1.04;
+  --text-display-xl--letter-spacing: -0.04em;
   --text-display-xl--font-weight: 600;
 
-  --text-display: clamp(2rem, 3.2vw, 3.75rem);
-  --text-display--line-height: 1.02;
+  --text-display: clamp(1.875rem, 1rem + 2.2vw, 3.25rem);
+  --text-display--line-height: 1.06;
   --text-display--letter-spacing: -0.032em;
   --text-display--font-weight: 600;
 
@@ -261,12 +285,12 @@
     text-wrap: pretty;
   }
 
-  /* Body copy measure: 50ch; short editorial side copy: 30–42ch (.prose-side). */
+  /* Body copy measure: ~62 characters. Side copy stays shorter. */
   .prose-measure {
-    max-width: 50ch;
+    max-width: 62ch;
   }
   .prose-side {
-    max-width: 40ch;
+    max-width: 42ch;
   }
 
   ::selection {
@@ -389,6 +413,20 @@
 @utility mt-sec-lg {
   margin-top: var(--space-section-lg);
 }
+@utility mt-header {
+  margin-top: var(--space-header);
+}
+@utility pt-header {
+  padding-top: calc(var(--header-height) + var(--space-header));
+}
+
+/* One vertical rhythm for a page: each section contributes its top padding only. */
+.page-flow > section {
+  padding-top: var(--space-section);
+}
+.page-flow > section:last-child {
+  padding-bottom: var(--space-section);
+}
 
 /* Arrow nudge shared by buttons, text links and cards. */
 @utility arrow-nudge {
@@ -456,6 +494,10 @@ img[loading='lazy'] {
     opacity: 0;
     transform: translate3d(0, 16px, 0);
   }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes fnx-settle {
@@ -489,6 +531,9 @@ img[loading='lazy'] {
   from {
     opacity: 0;
   }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes fnx-fade-out {
@@ -497,24 +542,72 @@ img[loading='lazy'] {
   }
 }
 
+/* Opacity only. A transform here used to override centering and, with
+   fill-mode `both`, could leave the panel at opacity 0 — blur and no card. */
 @keyframes fnx-dialog-in {
   from {
     opacity: 0;
-    transform: translate3d(0, 14px, 0) scale(0.985);
+  }
+  to {
+    opacity: 1;
   }
 }
 
 @keyframes fnx-dialog-out {
+  from {
+    opacity: 1;
+  }
   to {
     opacity: 0;
-    transform: translate3d(0, 8px, 0) scale(0.99);
   }
 }
 
 @keyframes fnx-sheet-in {
   from {
     opacity: 0;
-    transform: translate3d(0, 2%, 0);
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fnx-contact-sheet-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.25rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fnx-contact-sheet-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(0, 0.75rem, 0);
+  }
+}
+
+@keyframes fnx-contact-dialog-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fnx-contact-dialog-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
   }
 }
 
@@ -584,18 +677,52 @@ img[loading='lazy'] {
   animation: fnx-fade-out 220ms var(--ease-standard) both;
 }
 
+/* Contact: sheet below md, centered dialog from md. Open uses `backwards`
+   (not `both`) so a skipped animation cannot hold the hidden first frame. */
+@media (max-width: 47.999rem) {
+  .fnx-contact[data-state='open'] {
+    animation: fnx-contact-sheet-in 420ms var(--ease-premium) backwards;
+  }
+  .fnx-contact[data-state='closed'] {
+    animation: fnx-contact-sheet-out 220ms var(--ease-standard) forwards;
+  }
+}
+@media (min-width: 48rem) {
+  .fnx-contact[data-state='open'] {
+    animation: fnx-contact-dialog-in 280ms var(--ease-premium) backwards;
+  }
+  .fnx-contact[data-state='closed'] {
+    animation: fnx-contact-dialog-out 180ms var(--ease-standard) forwards;
+  }
+}
+
 .fnx-dialog[data-state='open'] {
-  animation: fnx-dialog-in 420ms var(--ease-premium) both;
+  animation: fnx-dialog-in 280ms var(--ease-premium) backwards;
 }
 .fnx-dialog[data-state='closed'] {
-  animation: fnx-dialog-out 200ms var(--ease-standard) both;
+  animation: fnx-dialog-out 180ms var(--ease-standard) forwards;
 }
 
 .fnx-sheet[data-state='open'] {
-  animation: fnx-sheet-in var(--duration-standard) var(--ease-premium) both;
+  animation: fnx-sheet-in var(--duration-standard) var(--ease-premium) backwards;
 }
 .fnx-sheet[data-state='closed'] {
-  animation: fnx-fade-out 200ms var(--ease-standard) both;
+  animation: fnx-fade-out 200ms var(--ease-standard) forwards;
+}
+
+/* Phones with Reduce Motion collapse every animation to 1ms. `both` used to
+   freeze these surfaces on the hidden first frame: scrim visible, panel gone. */
+@media (prefers-reduced-motion: reduce) {
+  .fnx-dialog[data-state='open'],
+  .fnx-contact[data-state='open'],
+  .fnx-sheet[data-state='open'],
+  .fnx-overlay[data-state='open'],
+  .fnx-select-content[data-state='open'],
+  .fnx-sheet[data-state='open'] [data-menu-item] {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 .fnx-sheet[data-state='open'] [data-menu-item] {
@@ -605,7 +732,7 @@ img[loading='lazy'] {
 
 /* Radix Select popover */
 .fnx-select-content[data-state='open'] {
-  animation: fnx-dialog-in 220ms var(--ease-premium) both;
+  animation: fnx-dialog-in 220ms var(--ease-premium) backwards;
 }
 
 /* ---- Age gate ----------------------------------------------------------- */

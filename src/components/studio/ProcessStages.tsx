@@ -41,7 +41,7 @@ export function ProcessStages({ label, stages }: ProcessStagesProps) {
           }}
           data-index={index}
           data-active={index === active || undefined}
-          className="group relative grid grid-cols-[2rem_1fr] gap-x-4 py-4 md:gap-x-5 md:py-5"
+          className="group relative grid grid-cols-[2rem_1fr] gap-x-4 py-3 md:gap-x-5 md:py-3.5"
         >
           <span
             aria-hidden="true"
